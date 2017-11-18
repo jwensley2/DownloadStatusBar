@@ -1,0 +1,75 @@
+#DownloadStatusBarContainer {
+  position: fixed;
+  bottom: 0;
+  background: #CCC;
+  line-height: 1;
+  width: 100%;
+  z-index: 100000;
+  left: 0;
+}
+
+#DownloadStatusBar {
+  font: normal 400 16px Arial, SansSerif;
+  color: black;
+  padding: 5px;
+  box-sizing: content-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  line-height: 1;
+
+  > * {
+    vertical-align: middle
+  }
+
+  .clearDownloads {
+    font: normal bold 16px Arial, SansSerif;
+    padding: 0 10px;
+    font-size: 1em;
+    border: 1px solid #AAA;
+    width: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 2.5px 5px;
+    cursor: pointer;
+    color: #000;
+    background: #EEE;
+    box-shadow: none;
+  }
+
+  .item {
+    position: relative;
+    background: #AAA;
+    display: inline-block;
+    width: 250px;
+    color: black;
+    overflow: hidden;
+    margin: 2.5px 5px;
+    padding: 5px;
+    font-size: 0.9em;
+    border-radius: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    * {
+      z-index: 10;
+      position: relative;
+    }
+
+    .progress {
+      width: 100%;
+      height: 100%;
+      background: green;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      display: block;
+      border-radius: 0;
+    }
+  }
+
+  .filename {
+
+  }
+}

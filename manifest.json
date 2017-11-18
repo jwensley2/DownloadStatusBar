@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "WX Download Status Bar",
+  "version": "1.0.1",
+  "description": "Adds a bar to show the status of your downloads",
+  "icons": {
+    "48": "icons/icon-48.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "downloads",
+    "downloads.open"
+  ]
+}
