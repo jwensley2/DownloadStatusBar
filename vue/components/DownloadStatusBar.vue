@@ -10,8 +10,13 @@
 </template>
 
 <script>
-    module.exports = {
+    import Download from './Download.vue';
+
+    export default {
         name: "download-status-bar",
+        components: {
+            'download': Download,
+        },
         props: ['downloads'],
         watch: {
             downloads() {

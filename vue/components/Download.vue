@@ -17,7 +17,7 @@
         return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
     }
 
-    module.exports = {
+    export default {
         name: "download",
         props: ['download'],
         computed: {

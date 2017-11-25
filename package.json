@@ -26,6 +26,7 @@
     "watch": "webpack --watch --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
     "prod": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
+    "lint": "web-ext lint -s build",
     "webext": "web-ext run -s build --bc -u https://josephwensley.com/test.html --ignore-files=*.ts node_modules",
     "webext-build": "web-ext build -s build"
   },

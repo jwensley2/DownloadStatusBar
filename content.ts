@@ -1,52 +1,49 @@
-import Vue from 'vue';
+import Vue, {VNode} from 'vue';
 import ContextMenu from './vue/context-menu/ContextMenu';
-import DownloadStatusBarComponent from './vue/components/DownloadStatusBar.vue';
-import DownloadComponent from './vue/components/Download.vue';
+import App from './vue/components/App.vue'
 import './content.scss';
 
 class DownloadStatusBar {
     private app: Vue;
-    protected statusBar: HTMLElement = document.createElement('div');
+    protected _downloads: DownloadItem[] = [];
+    protected statusBar: HTMLElement = DownloadStatusBar.makeStatusBarElement();
 
     constructor() {
+        let self = this;
+
         if (document.getElementById("DownloadStatusBarContainer")) {
             this.statusBar = document.getElementById("DownloadStatusBarContainer")!;
         } else {
-            this.statusBar.id = "DownloadStatusBarContainer";
-            this.statusBar.setAttribute('v-on:mouseleave', "hideContextMenu");
-            this.statusBar.innerHTML = `
-                <download-status-bar :downloads="downloads"></download-status-bar>
-                <context-menu></context-menu>
-            `;
             document.body.appendChild(this.statusBar);
         }
 
         Vue.use(ContextMenu);
-        Vue.component(DownloadStatusBarComponent.name, DownloadStatusBarComponent);
-        Vue.component(DownloadComponent.name, DownloadComponent);
 
-        this.app = new Vue({
+        let app = this.app = new Vue({
             el: "#DownloadStatusBarContainer",
-            data: {
-                downloads: [],
-            },
-            methods: {
-                hideContextMenu() {
-                    this.$contextMenu.close();
-                }
+            render(render): VNode {
+                return render(App, {
+                    props: {
+                        downloads: self._downloads
+                    }
+                });
             }
         });
 
-        this.app.$on('clearDownloads', () => {
+        app.$on('clearDownloads', () => {
             // Clear the locally stored downloads
             this.downloads = [];
+
             // Tell the background to clear it's downloads
             browser.runtime.sendMessage({event: 'clearDownloads'});
+
+            // Close the context menu
             this.app.$contextMenu.close();
         });
 
-        this.app.$on('clearDownload', (download: DownloadItem) => {
-            this.downloads = this.app.$data['downloads'].filter(function (dl: DownloadItem) {
+        app.$on('clearDownload', (download: DownloadItem) => {
+            // Filter out the cleared download
+            this.downloads = this._downloads.filter(function (dl: DownloadItem) {
                 return dl.id !== download.id;
             });
 
@@ -54,14 +51,24 @@ class DownloadStatusBar {
             browser.runtime.sendMessage({event: 'clearDownload', download: download});
         });
 
-        this.app.$on('showDownload', (download: DownloadItem) => {
+        app.$on('showDownload', (download: DownloadItem) => {
             // Tell the background process to open the download
             browser.runtime.sendMessage({event: 'showDownload', download: download});
         });
     }
 
     set downloads(downloads: DownloadItem[]) {
-        this.app.$data['downloads'] = downloads;
+        this._downloads = downloads;
+
+        this.app.$forceUpdate();
+    }
+
+    private static makeStatusBarElement(): HTMLElement {
+        let container = document.createElement('div');
+
+        container.id = "DownloadStatusBarContainer";
+
+        return container;
     }
 }
 
