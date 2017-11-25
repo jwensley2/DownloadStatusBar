@@ -1,0 +1,1 @@
+web-ext sign -s build --api-key=user:8331468:242 --api-secret=d5da3559db29a4b1b2bbdf5aadab43d140cf931dff5892ade197df623cf19aef

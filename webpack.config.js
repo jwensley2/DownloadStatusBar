@@ -1,13 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        background: './src/background.ts',
-        content: './src/content.ts',
-        options: './src/options.ts',
+        background: './background.ts',
+        content: './content.ts',
     },
     output: {
         path: path.resolve(__dirname, './build'),
@@ -20,17 +18,13 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     loaders: {
-                        sass: ExtractTextPlugin.extract({
-                            use: [
-                                {
-                                    loader: 'css-loader',
-                                    options: {url: false}
-                                },
-                                'sass-loader'
-                            ],
-                            fallback: 'vue-style-loader'
-                        })
+                        // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
+                        // the "scss" and "sass" values for the lang attribute to the right configs here.
+                        // other preprocessors should work out of the box, no loader config like this necessary.
+                        'scss': 'vue-style-loader!css-loader!sass-loader',
+                        'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
                     }
+                    // other vue-loader options go here
                 }
             },
             {
@@ -51,11 +45,11 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [{
-                    loader: 'style-loader' // creates style nodes from JS strings
+                    loader: "style-loader" // creates style nodes from JS strings
                 }, {
-                    loader: 'css-loader' // translates CSS into CommonJS
+                    loader: "css-loader" // translates CSS into CommonJS
                 }, {
-                    loader: 'sass-loader' // compiles Sass to CSS
+                    loader: "sass-loader" // compiles Sass to CSS
                 }]
             }
         ]
@@ -70,16 +64,10 @@ module.exports = {
         hints: false
     },
     plugins: [
-        new ExtractTextPlugin({
-            filename: '[name].css',
-        }),
         new CopyWebpackPlugin([
             {from: 'manifest.json', to: './'},
             {from: '.web-extension-id', to: './'},
-            {from: 'src/options.html', to: './'},
-            {from: 'icons', to: './icons'},
-            {from: 'icomoon/fonts', to: './fonts'}
+            {from: 'icons', to: './icons'}
         ]),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
 };
