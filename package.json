@@ -5,32 +5,31 @@
   "main": "background.js",
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.17",
-    "copy-webpack-plugin": "^4.2.1",
+    "copy-webpack-plugin": "^4.2.3",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
-    "node-sass": "^4.7.1",
+    "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
-    "uglifyjs-webpack-plugin": "^1.1.0",
+    "uglifyjs-webpack-plugin": "^1.1.1",
+    "vue": "^2.5.8",
     "vue-loader": "^13.5.0",
     "vue-property-decorator": "^6.0.0",
-    "vue-template-compiler": "^2.2.1",
+    "vue-template-compiler": "^2.5.8",
     "web-ext-types": "^1.1.1",
     "webpack": "^3.8.1",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.1",
+    "style-loader": "^0.19.0"
   },
   "scripts": {
     "watch": "webpack --watch --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
     "prod": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
-    "webext": "web-ext run --bc -i node_modules -i *.ts -u https://josephwensley.com/test.html",
+    "webext": "web-ext run -s build --bc -u https://josephwensley.com/test.html --ignore-files=*.ts node_modules",
     "webext-build": "web-ext build -s build"
   },
   "author": "Joseph Wensley",
   "license": "MIT",
-  "dependencies": {
-    "style-loader": "^0.19.0",
-    "vue": "git+https://github.com/DanielRosenwasser/vue.git#540a38fb21adb7a7bc394c65e23e6cffb36cd867"
-  }
+  "dependencies": {}
 }

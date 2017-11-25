@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
-import DownloadComponent from './components/Download.vue';
+import ContextMenu from './vue/context-menu/ContextMenu';
+import DownloadStatusBarComponent from './vue/components/DownloadStatusBar.vue';
+import DownloadComponent from './vue/components/Download.vue';
 import './content.scss';
-import {AnyVue} from "vue/types/vue";
 
 class DownloadStatusBar {
-    private app: AnyVue;
+    private app: Vue;
     protected statusBar: HTMLElement = document.createElement('div');
 
     constructor() {
@@ -13,16 +13,28 @@ class DownloadStatusBar {
             this.statusBar = document.getElementById("DownloadStatusBarContainer")!;
         } else {
             this.statusBar.id = "DownloadStatusBarContainer";
-            this.statusBar.innerHTML = `<download-status-bar :downloads="downloads"></download-status-bar>`;
+            this.statusBar.setAttribute('v-on:mouseleave', "hideContextMenu");
+            this.statusBar.innerHTML = `
+                <download-status-bar :downloads="downloads"></download-status-bar>
+                <context-menu></context-menu>
+            `;
             document.body.appendChild(this.statusBar);
         }
 
-        Vue.component('download-status-bar', DownloadStatusBarComponent);
-        Vue.component('download', DownloadComponent);
+        Vue.use(ContextMenu);
+        Vue.component(DownloadStatusBarComponent.name, DownloadStatusBarComponent);
+        Vue.component(DownloadComponent.name, DownloadComponent);
 
         this.app = new Vue({
             el: "#DownloadStatusBarContainer",
-            data: {downloads: []}
+            data: {
+                downloads: [],
+            },
+            methods: {
+                hideContextMenu() {
+                    this.$contextMenu.close();
+                }
+            }
         });
 
         this.app.$on('clearDownloads', () => {
@@ -30,34 +42,26 @@ class DownloadStatusBar {
             this.downloads = [];
             // Tell the background to clear it's downloads
             browser.runtime.sendMessage({event: 'clearDownloads'});
+            this.app.$contextMenu.close();
         });
 
-        this.app.$on('openDownload', (download: DownloadItem) => {
+        this.app.$on('clearDownload', (download: DownloadItem) => {
+            this.downloads = this.app.$data['downloads'].filter(function (dl: DownloadItem) {
+                return dl.id !== download.id;
+            });
+
+            // Tell the background process to clear the download
+            browser.runtime.sendMessage({event: 'clearDownload', download: download});
+        });
+
+        this.app.$on('showDownload', (download: DownloadItem) => {
             // Tell the background process to open the download
-            browser.runtime.sendMessage({event: 'openDownload', download: download});
+            browser.runtime.sendMessage({event: 'showDownload', download: download});
         });
     }
 
     set downloads(downloads: DownloadItem[]) {
-        this.app.$data.downloads = downloads;
-    }
-
-    getFilename(url: string): string {
-        let m = url.toString().match(/.*[\/\\](.+)/);
-
-        if (m && m.length > 1) {
-            return m[m.length - 1];
-        }
-
-        return '';
-    }
-
-    formatFilesize(bytes: number) {
-        let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes == 0) return '0 Byte';
-        let i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-        return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+        this.app.$data['downloads'] = downloads;
     }
 }
 

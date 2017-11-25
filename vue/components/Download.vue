@@ -1,5 +1,5 @@
 <template>
-    <div class="item" @dblclick="openDownload">
+    <div class="item" @click="singleClick" @dblclick="doubleClick" @contextmenu.prevent="showContextMenu">
         <div class="progress" :style="`width: ${percentDone}%`"></div>
         <div>{{ filename }}</div>
         <div v-if="download.state === 'complete'">{{ filesize }} - Completed</div>
@@ -57,8 +57,33 @@
         },
 
         methods: {
-            openDownload() {
-                this.$root.$emit('openDownload', this.download);
+            singleClick() {
+                this.$root.$contextMenu.close();
+            },
+            doubleClick() {
+                this.$root.$emit('showDownload', this.download);
+            },
+            showContextMenu(event) {
+                let showTitle = window.navigator.oscpu.includes("Windows") ? 'Show in Explorer' : 'Reveal in Finder';
+
+                let items = [
+                    {
+                        name: 'Clear Download',
+                        clicked: () => {
+                            this.$root.$emit('clearDownload', this.download);
+                            this.$root.$contextMenu.close();
+                        }
+                    },
+                    {
+                        name: showTitle,
+                        clicked: () => {
+                            this.$root.$emit('showDownload', this.download)
+                            this.$root.$contextMenu.close();
+                        }
+                    }
+                ];
+
+                this.$root.$contextMenu.open(items, {x: event.clientX, y: event.clientY});
             }
         }
     }

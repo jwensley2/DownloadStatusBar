@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -7,7 +8,7 @@ module.exports = {
         content: './content.ts',
     },
     output: {
-        path: path.resolve(__dirname, './'),
+        path: path.resolve(__dirname, './build'),
         filename: '[name].js'
     },
     module: {
@@ -61,5 +62,12 @@ module.exports = {
     },
     performance: {
         hints: false
-    }
+    },
+    plugins: [
+        new CopyWebpackPlugin([
+            {from: 'manifest.json', to: './'},
+            {from: '.web-extension-id', to: './'},
+            {from: 'icons', to: './icons'}
+        ]),
+    ]
 };

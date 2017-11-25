@@ -23,8 +23,13 @@ class DownloadStatus {
             if (request.event === 'clearDownloads') {
                 self.downloads = [];
                 self.updateTabs();
-            } else if (request.event === 'openDownload') {
-                self.openDownload(request.download);
+            } else if (request.event === 'clearDownload') {
+                self.downloads = self.downloads.filter(function (dl: DownloadItem) {
+                    return dl.id !== request.download.id;
+                });
+                self.updateTabs();
+            } else if (request.event === 'showDownload') {
+                self.showDownload(request.download);
             }
         });
     }
@@ -68,7 +73,7 @@ class DownloadStatus {
         this.downloads.push(download);
     }
 
-    openDownload(download: DownloadItem) {
+    showDownload(download: DownloadItem) {
         browser.downloads.show(download.id);
     }
 }
