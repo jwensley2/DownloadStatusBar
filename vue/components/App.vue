@@ -1,7 +1,7 @@
 <template>
     <div id="DownloadStatusBarContainer" :class="`theme-${theme}`" @mouseleave="hideContextMenu">
         <download-status-bar :downloads="downloads" :theme="theme"></download-status-bar>
-        <context-menu></context-menu>
+        <context-menu :theme="theme"></context-menu>
     </div>
 </template>
 

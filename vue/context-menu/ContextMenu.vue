@@ -1,6 +1,9 @@
 <template>
     <div v-if="isOpen">
-        <ul id="DownloadStatusBarContextMenu" :style="{left: left, bottom: bottom}">
+        <ul id="DownloadStatusBarContextMenu"
+            :style="{left: left, bottom: bottom}"
+            :class="`theme-${theme}`"
+        >
             <li v-for="item in items" @click="item.clicked">{{ item.name }}</li>
         </ul>
     </div>
@@ -11,6 +14,7 @@
 
     module.exports = {
         name: "context-menu",
+        props: ['theme'],
         data: function () {
             return {
                 isOpen: false,
@@ -21,14 +25,14 @@
         computed: {
             left: function () {
                 if (this.position) {
-                    return this.position.x;
+                    return `${this.position.x}px`;
                 }
 
                 return 0;
             },
             bottom: function () {
                 if (this.position) {
-                    return window.innerHeight - this.position.y;
+                    return `${window.innerHeight - this.position.y}px`;
                 }
 
                 return 0;
@@ -40,8 +44,6 @@
                 this.isOpen = true;
                 this.items = items;
                 this.position = position;
-
-                console.log(this.position.x, this.position.y);
             });
 
             events.$on("closeMenu", () => {
@@ -61,11 +63,13 @@
         right: auto;
         top: auto;
         background: #FFF;
-        border: 1px solid #AAAAAA;
+        border: 1px solid #AAA;
         z-index: 100;
         list-style: none;
         padding: 0;
         margin: 0;
+        display: block;
+        color: black;
 
         li {
             cursor: pointer;
@@ -78,6 +82,15 @@
 
             + li {
                 border-top: 1px dotted #CCC;
+            }
+        }
+
+        &.theme-dark {
+            background: #333;
+            color: #EEE;
+
+            li:hover {
+                background: #666;
             }
         }
     }
