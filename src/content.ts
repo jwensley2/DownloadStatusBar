@@ -1,6 +1,6 @@
 import Vue, {VNode} from 'vue';
-import ContextMenu from './vue/context-menu/ContextMenu';
-import App from './vue/components/App.vue';
+import ContextMenu from './context-menu/ContextMenu';
+import App from './components/App.vue';
 import * as helpers from './helpers';
 import DownloadItem = browser.downloads.DownloadItem;
 

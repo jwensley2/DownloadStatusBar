@@ -5,9 +5,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        background: './background.ts',
-        content: './content.ts',
-        options: './options.ts',
+        background: './src/background.ts',
+        content: './src/content.ts',
+        options: './src/options.ts',
     },
     output: {
         path: path.resolve(__dirname, './build'),
@@ -76,7 +76,7 @@ module.exports = {
         new CopyWebpackPlugin([
             {from: 'manifest.json', to: './'},
             {from: '.web-extension-id', to: './'},
-            {from: 'options.html', to: './'},
+            {from: 'src/options.html', to: './'},
             {from: 'icons', to: './icons'},
             {from: 'icomoon/fonts', to: './fonts'}
         ]),
