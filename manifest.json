@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
   "name": "WX Download Status Bar",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Adds a bar to show the status of your downloads",
   "homepage_url": "https://github.com/jwensley2/DownloadStatusBar",
   "applications": {
     "gecko": {
-      "id": "{4fd0131e-0482-4d94-88a6-f600b47cee09}"
+      "id": "{a1c84bb7-d5fc-4906-90b4-965e520b29bf}"
     }
   },
   "icons": {

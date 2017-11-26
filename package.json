@@ -28,7 +28,7 @@
     "prod": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
     "lint": "web-ext lint -s build",
     "webext": "web-ext run -s build --bc -u https://josephwensley.com/test.html --ignore-files=*.ts node_modules",
-    "webext-build": "web-ext build -s build"
+    "webext-build": "web-ext build -s build --overwrite-dest"
   },
   "author": "Joseph Wensley",
   "license": "MIT",
