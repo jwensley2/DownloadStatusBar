@@ -2,6 +2,7 @@ import {PluginFunction, PluginObject} from 'vue';
 import {VueConstructor} from 'vue/types/vue';
 import ContextMenuComponent from './ContextMenu.vue';
 import events from './events';
+import DownloadItem = browser.downloads.DownloadItem;
 
 declare module 'vue/types/vue' {
     // 3. Declare augmentation for Vue

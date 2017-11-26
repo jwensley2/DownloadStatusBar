@@ -1,6 +1,8 @@
 import Vue, {VNode} from 'vue';
 import ContextMenu from './vue/context-menu/ContextMenu';
-import App from './vue/components/App.vue'
+import App from './vue/components/App.vue';
+import * as helpers from './helpers';
+import DownloadItem = browser.downloads.DownloadItem;
 
 class DownloadStatusBar {
     private app: Vue;
@@ -43,7 +45,7 @@ class DownloadStatusBar {
 
         app.$on('clearDownloads', () => {
             // Clear the locally stored downloads
-            this.downloads = [];
+            this.downloads = helpers.filterCompletedDownloads(this._downloads);
 
             // Tell the background to clear it's downloads
             browser.runtime.sendMessage({event: 'clearDownloads'});
@@ -54,9 +56,7 @@ class DownloadStatusBar {
 
         app.$on('clearDownload', (download: DownloadItem) => {
             // Filter out the cleared download
-            this.downloads = this._downloads.filter(function (dl: DownloadItem) {
-                return dl.id !== download.id;
-            });
+            this.downloads = helpers.removeSelectedDownload(download, this._downloads);
 
             // Tell the background process to clear the download
             browser.runtime.sendMessage({event: 'clearDownload', download: download});

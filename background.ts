@@ -1,5 +1,6 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import DownloadQuery = browser.downloads.DownloadQuery;
+import * as helpers from './helpers';
 
 class DownloadStatus {
     protected downloads: DownloadItem[] = [];
@@ -21,12 +22,10 @@ class DownloadStatus {
 
         browser.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
             if (request.event === 'clearDownloads') {
-                self.downloads = [];
+                self.downloads = helpers.filterCompletedDownloads(self.downloads);
                 self.updateTabs();
             } else if (request.event === 'clearDownload') {
-                self.downloads = self.downloads.filter(function (dl: DownloadItem) {
-                    return dl.id !== request.download.id;
-                });
+                self.downloads = helpers.removeSelectedDownload(request.download, self.downloads);
                 self.updateTabs();
             } else if (request.event === 'showDownload') {
                 self.showDownload(request.download);
