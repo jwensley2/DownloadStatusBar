@@ -1,5 +1,10 @@
 <template>
-    <div class="item" @click="singleClick" @dblclick="doubleClick" @contextmenu.prevent="showContextMenu">
+    <div class="item"
+         @click="singleClick"
+         @dblclick="doubleClick"
+         @contextmenu.prevent="showContextMenu"
+         :class="`theme-${theme}`"
+    >
         <div class="progress" :style="`width: ${percentDone}%`"></div>
         <div>{{ filename }}</div>
         <div>{{ status }}</div>
@@ -20,7 +25,7 @@
 
     export default {
         name: "download",
-        props: ['download'],
+        props: ['download', 'theme'],
         computed: {
             filename() {
                 let m = this.download.filename.toString().match(/.*[\/\\](.+)/);
@@ -63,6 +68,10 @@
 
                 if (download.state === 'complete') {
                     return `${this.filesize}`;
+                }
+
+                if (download.totalBytes === -1) {
+                    return `${this.downloaded}/Unknown`
                 }
 
                 return `${this.downloaded}/${this.totalsize} - ${this.percentDone}%`;
@@ -161,4 +170,44 @@
 </script>
 
 <style lang="scss" scoped>
+    .item {
+        position: relative;
+        background: #AAA;
+        display: inline-block;
+        width: 250px;
+        color: black;
+        overflow: hidden;
+        margin: 2.5px 5px;
+        padding: 5px;
+        font-size: 0.9em;
+        border-radius: 5px;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        * {
+            z-index: 10;
+            position: relative;
+        }
+
+        .progress {
+            width: 100%;
+            height: 100%;
+            background: green;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            display: block;
+            border-radius: 0;
+        }
+
+        &.theme-dark {
+            background: #777;
+            color: #EEE;
+
+            .progress {
+                background: #222;
+            }
+        }
+    }
 </style>

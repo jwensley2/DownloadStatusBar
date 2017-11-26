@@ -1,7 +1,6 @@
 import Vue, {VNode} from 'vue';
 import ContextMenu from './vue/context-menu/ContextMenu';
 import App from './vue/components/App.vue'
-import './content.scss';
 
 class DownloadStatusBar {
     private app: Vue;
@@ -21,12 +20,24 @@ class DownloadStatusBar {
 
         let app = this.app = new Vue({
             el: "#DownloadStatusBarContainer",
+            data: {
+                theme: 'light',
+                downloads: [],
+            },
             render(render): VNode {
                 return render(App, {
                     props: {
-                        downloads: self._downloads
+                        theme: this.theme,
+                        downloads: this.downloads,
                     }
                 });
+            }
+        });
+
+        // Get the theme from local storage
+        browser.storage.sync.get('theme').then(function (res) {
+            if (res.theme) {
+                app.$data.theme = res.theme;
             }
         });
 
@@ -71,8 +82,7 @@ class DownloadStatusBar {
 
     set downloads(downloads: DownloadItem[]) {
         this._downloads = downloads;
-
-        this.app.$forceUpdate();
+        this.app.$data.downloads = downloads;
     }
 
     private static makeStatusBarElement(): HTMLElement {

@@ -54,16 +54,18 @@
 
 <style lang="scss" scoped>
     #DownloadStatusBarContextMenu {
+        font: 400 normal 14px/1 Arial, sans-serif;
         position: absolute;
         bottom: 0;
         left: 0;
+        right: auto;
+        top: auto;
         background: #FFF;
         border: 1px solid #AAAAAA;
         z-index: 100;
         list-style: none;
         padding: 0;
         margin: 0;
-        font-family: Arial, sans-serif;
 
         li {
             cursor: pointer;

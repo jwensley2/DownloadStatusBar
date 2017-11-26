@@ -4,8 +4,17 @@
   "version": "1.1",
   "description": "Adds a bar to show the status of your downloads",
   "homepage_url": "https://github.com/jwensley2/DownloadStatusBar",
+  "applications": {
+    "gecko": {
+      "id": "{4fd0131e-0482-4d94-88a6-f600b47cee09}"
+    }
+  },
   "icons": {
     "48": "icons/icon-48.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
   },
   "background": {
     "scripts": [
@@ -24,6 +33,7 @@
   ],
   "permissions": [
     "downloads",
-    "downloads.open"
+    "downloads.open",
+    "storage"
   ]
 }

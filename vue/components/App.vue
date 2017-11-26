@@ -1,7 +1,6 @@
 <template>
-    <div id="DownloadStatusBarContainer" @mouseleave="hideContextMenu">
-        <download-status-bar :downloads="downloads"
-        ></download-status-bar>
+    <div id="DownloadStatusBarContainer" :class="`theme-${theme}`" @mouseleave="hideContextMenu">
+        <download-status-bar :downloads="downloads" :theme="theme"></download-status-bar>
         <context-menu></context-menu>
     </div>
 </template>
@@ -17,6 +16,7 @@
         },
 
         props: {
+            theme: String,
             downloads: {
                 type: Array,
                 default: () => {
@@ -34,6 +34,18 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    #DownloadStatusBarContainer {
+        position: fixed;
+        bottom: 0;
+        background: #CCC;
+        line-height: 1;
+        width: 100%;
+        z-index: 100000;
+        left: 0;
 
+        &.theme-dark {
+            background: #333;
+        }
+    }
 </style>
