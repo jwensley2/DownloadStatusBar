@@ -32,5 +32,7 @@
   },
   "author": "Joseph Wensley",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "moment": "^2.19.2"
+  }
 }

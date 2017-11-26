@@ -30,6 +30,12 @@ class DownloadStatus {
                 self.updateTabs();
             } else if (request.event === 'showDownload') {
                 self.showDownload(request.download);
+            } else if (request.event === 'cancelDownload') {
+                self.cancelDownload(request.download);
+            } else if (request.event === 'pauseDownload') {
+                self.pauseDownload(request.download);
+            } else if (request.event === 'resumeDownload') {
+                self.resumeDownload(request.download);
             }
         });
     }
@@ -75,6 +81,18 @@ class DownloadStatus {
 
     showDownload(download: DownloadItem) {
         browser.downloads.show(download.id);
+    }
+
+    cancelDownload(download: DownloadItem) {
+        browser.downloads.cancel(download.id);
+    }
+
+    pauseDownload(download: DownloadItem) {
+        browser.downloads.pause(download.id);
+    }
+
+    resumeDownload(download: DownloadItem) {
+        browser.downloads.resume(download.id);
     }
 }
 

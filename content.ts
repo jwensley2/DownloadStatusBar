@@ -55,6 +55,18 @@ class DownloadStatusBar {
             // Tell the background process to open the download
             browser.runtime.sendMessage({event: 'showDownload', download: download});
         });
+
+        app.$on('cancelDownload', (download: DownloadItem) => {
+            browser.runtime.sendMessage({event: 'cancelDownload', download: download});
+        });
+
+        app.$on('pauseDownload', (download: DownloadItem) => {
+            browser.runtime.sendMessage({event: 'pauseDownload', download: download});
+        });
+
+        app.$on('resumeDownload', (download: DownloadItem) => {
+            browser.runtime.sendMessage({event: 'resumeDownload', download: download});
+        });
     }
 
     set downloads(downloads: DownloadItem[]) {
