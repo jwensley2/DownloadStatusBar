@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -19,13 +20,17 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     loaders: {
-                        // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
-                        // the "scss" and "sass" values for the lang attribute to the right configs here.
-                        // other preprocessors should work out of the box, no loader config like this necessary.
-                        'scss': 'vue-style-loader!css-loader!sass-loader',
-                        'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
+                        sass: ExtractTextPlugin.extract({
+                            use: [
+                                {
+                                    loader: 'css-loader',
+                                    options: {url: false}
+                                },
+                                'sass-loader'
+                            ],
+                            fallback: 'vue-style-loader'
+                        })
                     }
-                    // other vue-loader options go here
                 }
             },
             {
@@ -65,11 +70,15 @@ module.exports = {
         hints: false
     },
     plugins: [
+        new ExtractTextPlugin({
+            filename: 'style.css',
+        }),
         new CopyWebpackPlugin([
             {from: 'manifest.json', to: './'},
             {from: '.web-extension-id', to: './'},
             {from: 'options.html', to: './'},
-            {from: 'icons', to: './icons'}
+            {from: 'icons', to: './icons'},
+            {from: 'icomoon/fonts', to: './fonts'}
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]

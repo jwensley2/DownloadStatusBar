@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "WX Download Status Bar",
-  "version": "1.2",
+  "version": "1.2.1",
   "description": "Adds a bar to show the status of your downloads",
   "homepage_url": "https://github.com/jwensley2/DownloadStatusBar",
   "applications": {
@@ -28,6 +28,9 @@
       ],
       "js": [
         "content.js"
+      ],
+      "css": [
+        "style.css"
       ]
     }
   ],
@@ -35,5 +38,8 @@
     "downloads",
     "downloads.open",
     "storage"
+  ],
+  "web_accessible_resources": [
+    "/fonts/*"
   ]
 }

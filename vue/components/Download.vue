@@ -116,6 +116,7 @@
                 let items = [
                     {
                         name: 'Clear Download',
+                        icon: 'eye-slash',
                         clicked: () => {
                             this.$root.$emit('clearDownload', this.download);
                             this.$root.$contextMenu.close();
@@ -123,6 +124,7 @@
                     },
                     {
                         name: showTitle,
+                        icon: 'folder-open',
                         clicked: () => {
                             this.$root.$emit('showDownload', this.download);
                             this.$root.$contextMenu.close();
@@ -134,6 +136,7 @@
                 if (IN_PROGRESS || PAUSED) {
                     items.push({
                         name: 'Cancel Download',
+                        icon: 'times',
                         clicked: () => {
                             this.$root.$emit('cancelDownload', this.download);
                             this.$root.$contextMenu.close();
@@ -145,6 +148,7 @@
                 if (IN_PROGRESS) {
                     items.push({
                         name: 'Pause Download',
+                        icon: 'pause',
                         clicked: () => {
                             this.$root.$emit('pauseDownload', this.download);
                             this.$root.$contextMenu.close();
@@ -156,6 +160,7 @@
                 if (PAUSED) {
                     items.push({
                         name: 'Resume Download',
+                        icon: 'play',
                         clicked: () => {
                             this.$root.$emit('resumeDownload', this.download);
                             this.$root.$contextMenu.close();

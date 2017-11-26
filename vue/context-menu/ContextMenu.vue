@@ -4,7 +4,10 @@
             :style="{left: left, bottom: bottom}"
             :class="`theme-${theme}`"
         >
-            <li v-for="item in items" @click="item.clicked">{{ item.name }}</li>
+            <li v-for="item in items" @click="item.clicked">
+                <i :class="`icon-${item.icon}`" aria-hidden="true" v-if="item.icon"></i>
+                {{ item.name }}
+            </li>
         </ul>
     </div>
 </template>
@@ -55,6 +58,9 @@
 </script>
 
 <style lang="scss" scoped>
+    $font-path: "moz-extension://__MSG_@@extension_id__/fonts";
+    @import "../../icomoon/style";
+
     #DownloadStatusBarContextMenu {
         font: 400 normal 14px/1 Arial, sans-serif;
         position: absolute;
