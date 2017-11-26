@@ -10,8 +10,8 @@ class DownloadStatusBar {
     constructor() {
         let self = this;
 
-        if (document.getElementById("DownloadStatusBarContainer")) {
-            this.statusBar = document.getElementById("DownloadStatusBarContainer")!;
+        if (document.getElementById('DownloadStatusBarContainer')) {
+            this.statusBar = document.getElementById('DownloadStatusBarContainer')!;
         } else {
             document.body.appendChild(this.statusBar);
         }
@@ -19,7 +19,7 @@ class DownloadStatusBar {
         Vue.use(ContextMenu);
 
         let app = this.app = new Vue({
-            el: "#DownloadStatusBarContainer",
+            el: '#DownloadStatusBarContainer',
             data: {
                 theme: 'light',
                 downloads: [],
@@ -88,7 +88,7 @@ class DownloadStatusBar {
     private static makeStatusBarElement(): HTMLElement {
         let container = document.createElement('div');
 
-        container.id = "DownloadStatusBarContainer";
+        container.id = 'DownloadStatusBarContainer';
 
         return container;
     }

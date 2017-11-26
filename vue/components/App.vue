@@ -9,7 +9,7 @@
     import DownloadStatusBarComponent from './DownloadStatusBar.vue';
 
     export default {
-        name: "app",
+        name: 'app',
 
         components: {
             'download-status-bar': DownloadStatusBarComponent,

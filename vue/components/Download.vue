@@ -24,7 +24,7 @@
     }
 
     export default {
-        name: "download",
+        name: 'download',
         props: ['download', 'theme'],
         computed: {
             filename() {
@@ -58,7 +58,7 @@
                 }
 
                 let now = moment();
-                let finish = moment(download.estimatedEndTime);
+                let finish = moment(download.estimatedEndTime, moment.ISO_8601);
 
                 return moment.duration(finish.diff(now), 'ms').humanize();
             },
@@ -111,7 +111,7 @@
                 const IN_PROGRESS = this.download.state === 'in_progress';
                 const PAUSED = this.download.state === 'interrupted' && this.download.paused;
 
-                let showTitle = window.navigator.oscpu.includes("Windows") ? 'Show in Explorer' : 'Reveal in Finder';
+                let showTitle = window.navigator.oscpu.includes('Windows') ? 'Show in Explorer' : 'Reveal in Finder';
 
                 let items = [
                     {

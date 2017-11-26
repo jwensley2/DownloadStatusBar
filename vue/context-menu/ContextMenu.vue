@@ -13,7 +13,7 @@
     const events = require('./events').default;
 
     module.exports = {
-        name: "context-menu",
+        name: 'context-menu',
         props: ['theme'],
         data: function () {
             return {
@@ -40,13 +40,13 @@
         },
 
         mounted() {
-            events.$on("openMenu", (items, position) => {
+            events.$on('openMenu', (items, position) => {
                 this.isOpen = true;
                 this.items = items;
                 this.position = position;
             });
 
-            events.$on("closeMenu", () => {
+            events.$on('closeMenu', () => {
                 this.isOpen = false;
                 this.items = [];
             });

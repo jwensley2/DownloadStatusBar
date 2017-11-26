@@ -14,7 +14,7 @@
     import Download from './Download.vue';
 
     export default {
-        name: "download-status-bar",
+        name: 'download-status-bar',
         components: {
             'download': Download,
         },
