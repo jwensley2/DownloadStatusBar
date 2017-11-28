@@ -2,11 +2,33 @@
 <html>
 <head>
     <meta charset="utf-8">
+
+    <style>
+        label {
+            font-size: 14px
+        }
+
+        button {
+            border-radius: 2px;
+            border: 1px solid #CCC;
+            background: #FEFEFE;
+            padding: 5px 20px;
+            font: 400 normal 14px Arial, sans-serif;
+        }
+
+        button:hover {
+            background: #EEE;
+        }
+
+        button:active {
+            background: #CCC;
+        }
+    </style>
 </head>
 
 <body>
 <form>
-    <label>Theme:</label>
+    <h3>Theme:</h3>
 
     <p>
         <label>
@@ -14,7 +36,7 @@
         </label>
 
         <label>
-            <input id="theme-dark"  type="radio" name="theme" value="dark"> Dark
+            <input id="theme-dark" type="radio" name="theme" value="dark"> Dark
         </label>
     </p>
 

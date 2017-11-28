@@ -5,10 +5,10 @@
          @contextmenu.prevent="showContextMenu"
          :class="`theme-${theme}`"
     >
-        <div class="progress" :style="`width: ${percentDone}%`"></div>
-        <div>{{ filename }}</div>
-        <div>{{ status }}</div>
-        <div>{{ progress }}</div>
+        <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
+        <div class="filename text-line">{{ filename }}</div>
+        <div class="status text-line">{{ status }}</div>
+        <div class="progress text-line">{{ progress }}</div>
     </div>
 </template>
 
@@ -71,10 +71,10 @@
                 }
 
                 if (download.totalBytes === -1) {
-                    return `${this.downloaded}/Unknown`
+                    return `${this.downloaded} / Unknown`
                 }
 
-                return `${this.downloaded}/${this.totalsize} - ${this.percentDone}%`;
+                return `${this.downloaded} / ${this.totalsize} - ${this.percentDone}%`;
             },
 
             downloaded() {
@@ -175,43 +175,61 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "../variables";
+
     .item {
-        position: relative;
-        background: #AAA;
-        display: inline-block;
-        width: 250px;
-        color: black;
-        overflow: hidden;
-        margin: 2.5px 5px;
-        padding: 5px;
-        font-size: 0.9em;
-        border-radius: 5px;
+        background: map-get($light-theme, "download");
+        border-radius: 0;
         box-sizing: border-box;
+        color: map-get($light-theme, "text");
         cursor: pointer;
+        display: inline-block;
+        font-size: 0.9em;
+        margin: 0 5px;
+        overflow: hidden;
+        padding: 3px 6px;
+        position: relative;
+        width: 250px;
 
         * {
             z-index: 10;
             position: relative;
         }
 
-        .progress {
-            width: 100%;
+        .progress-bar {
+            background: map-get($light-theme, "progress");
+            border-radius: 0;
+            display: block;
             height: 100%;
-            background: green;
+            left: 0;
             position: absolute;
             top: 0;
-            left: 0;
+            width: 100%;
             z-index: 0;
+        }
+
+        .text-line{
+            padding: 0;
             display: block;
-            border-radius: 0;
+            margin: 0;
+
+            + .text-line { margin-top: 2px }
+        }
+
+        .filename {
+            font-size: 14px;
+        }
+
+        .status, .progress {
+            font-size: 12px
         }
 
         &.theme-dark {
-            background: #777;
-            color: #EEE;
+            background: map-get($dark-theme, "download");
+            color: map-get($dark-theme, "text");
 
-            .progress {
-                background: #222;
+            .progress-bar {
+                background: map-get($dark-theme, "progress");
             }
         }
     }

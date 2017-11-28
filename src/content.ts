@@ -1,6 +1,6 @@
 import Vue, {VNode} from 'vue';
 import ContextMenu from './context-menu/ContextMenu';
-import App from './components/App.vue';
+import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
 import * as helpers from './helpers';
 import DownloadItem = browser.downloads.DownloadItem;
 
@@ -27,7 +27,7 @@ class DownloadStatusBar {
                 downloads: [],
             },
             render(render): VNode {
-                return render(App, {
+                return render(DownloadStatusBarComponent, {
                     props: {
                         theme: this.theme,
                         downloads: this.downloads,
