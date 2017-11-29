@@ -24,3 +24,15 @@ export function removeSelectedDownload(download: DownloadItem, downloads: Downlo
         return dl.id !== download.id;
     })
 }
+
+/**
+ * Get in progress downloads
+ *
+ * @param {browser.downloads.DownloadItem[]} downloads
+ * @returns {browser.downloads.DownloadItem[]}
+ */
+export function getInProgressDownloads(downloads: DownloadItem[]): DownloadItem[] {
+    return downloads.filter(function (dl: DownloadItem) {
+        return dl.state === 'in_progress';
+    })
+}

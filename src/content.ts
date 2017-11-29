@@ -78,6 +78,10 @@ class DownloadStatusBar {
         app.$on('resumeDownload', (download: DownloadItem) => {
             browser.runtime.sendMessage({event: 'resumeDownload', download: download});
         });
+
+        app.$on('deleteDownload', (download: DownloadItem) => {
+            browser.runtime.sendMessage({event: 'deleteDownload', download: download});
+        });
     }
 
     set downloads(downloads: DownloadItem[]) {

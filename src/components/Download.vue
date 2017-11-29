@@ -168,6 +168,17 @@
                     });
                 }
 
+                if (this.download.state === 'complete') {
+                    items.push({
+                        name: 'Delete Download',
+                        icon: 'trash-o',
+                        clicked: () => {
+                            this.$root.$emit('deleteDownload', this.download);
+                            this.$root.$contextMenu.close();
+                        }
+                    });
+                }
+
                 this.$root.$contextMenu.open(items, {x: event.clientX, y: event.clientY});
             }
         }
