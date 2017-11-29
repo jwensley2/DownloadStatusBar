@@ -58,7 +58,7 @@
 </script>
 
 <style lang="scss" scoped>
-    $font-path: "moz-extension://__MSG_@@extension_id__/fonts";
+    $icomoon-font-path: "moz-extension://__MSG_@@extension_id__/fonts";
     @import "../../icomoon/style";
 
     #DownloadStatusBarContextMenu {

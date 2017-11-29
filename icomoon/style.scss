@@ -1,12 +1,11 @@
-$font-path: "./fonts" !default;
+@import "variables";
 
 @font-face {
   font-family: 'icomoon';
-  src:  url('#{$font-path}/icomoon.eot?wic40p');
-  src:  url('#{$font-path}/icomoon.eot?wic40p#iefix') format('embedded-opentype'),
-    url('#{$font-path}/icomoon.ttf?wic40p') format('truetype'),
-    url('#{$font-path}/icomoon.woff?wic40p') format('woff'),
-    url('#{$font-path}/icomoon.svg?wic40p#icomoon') format('svg');
+  src:
+    url('#{$icomoon-font-path}/icomoon.ttf?gbkn1h') format('truetype'),
+    url('#{$icomoon-font-path}/icomoon.woff?gbkn1h') format('woff'),
+    url('#{$icomoon-font-path}/icomoon.svg?gbkn1h#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -26,24 +25,54 @@ $font-path: "./fonts" !default;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-folder-open:before {
-  content: "\e900";
+.icon-cog {
+  &:before {
+    content: $icon-cog;
+  }
 }
-.icon-close:before {
-  content: "\e901";
+.icon-gear {
+  &:before {
+    content: $icon-gear;
+  }
 }
-.icon-remove:before {
-  content: "\e901";
+.icon-trash-o {
+  &:before {
+    content: $icon-trash-o;
+  }
 }
-.icon-times:before {
-  content: "\e901";
+.icon-folder-open {
+  &:before {
+    content: $icon-folder-open;
+  }
 }
-.icon-eye-slash:before {
-  content: "\e902";
+.icon-close {
+  &:before {
+    content: $icon-close;
+  }
 }
-.icon-pause:before {
-  content: "\e903";
+.icon-remove {
+  &:before {
+    content: $icon-remove;
+  }
 }
-.icon-play:before {
-  content: "\e904";
+.icon-times {
+  &:before {
+    content: $icon-times;
+  }
 }
+.icon-eye-slash {
+  &:before {
+    content: $icon-eye-slash;
+  }
+}
+.icon-pause {
+  &:before {
+    content: $icon-pause;
+  }
+}
+.icon-play {
+  &:before {
+    content: $icon-play;
+  }
+}
+
