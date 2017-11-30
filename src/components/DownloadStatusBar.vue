@@ -21,13 +21,23 @@
             'download': Download,
         },
         props: {
-            theme: String,
+            options: {
+                type: Object,
+                default() {
+                    return {theme: 'light'}
+                }
+            },
             downloads: {
                 type: Array,
                 default() {
                     return []
                 },
             },
+        },
+        computed: {
+            theme() {
+                return this.options.theme || 'light';
+            }
         },
         methods: {
             hideContextMenu() {
@@ -82,7 +92,7 @@
             color: map-get($light-theme, "text");
             cursor: pointer;
             display: inline-block;
-            font: normal bold 1em Arial, sans-serif;
+            font: normal 600 0.8em Arial, sans-serif;
             margin: 0 5px 0 0;
             padding: 0 15px;
             width: auto;

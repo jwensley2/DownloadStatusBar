@@ -15,11 +15,11 @@ export function filterCompletedDownloads(downloads: DownloadItem[]): DownloadIte
 /**
  * Remove the passed download from the array of downloads
  *
- * @param {browser.downloads.DownloadItem} download
+ * @param {{ id: number }} download
  * @param {browser.downloads.DownloadItem[]} downloads
  * @returns {browser.downloads.DownloadItem[]}
  */
-export function removeSelectedDownload(download: DownloadItem, downloads: DownloadItem[]): DownloadItem[] {
+export function removeSelectedDownload(download: { id: number }, downloads: DownloadItem[]): DownloadItem[] {
     return downloads.filter(function (dl: DownloadItem) {
         return dl.id !== download.id;
     })

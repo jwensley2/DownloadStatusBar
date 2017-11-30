@@ -23,13 +23,15 @@ class DownloadStatusBar {
         let app = this.app = new Vue({
             el: '#DownloadStatusBarContainer',
             data: {
-                theme: 'light',
+                options: {
+                    theme: 'light',
+                },
                 downloads: [],
             },
             render(render): VNode {
                 return render(DownloadStatusBarComponent, {
                     props: {
-                        theme: this.theme,
+                        options: this.options,
                         downloads: this.downloads,
                     }
                 });
@@ -37,9 +39,15 @@ class DownloadStatusBar {
         });
 
         // Get the theme from local storage
-        browser.storage.sync.get('theme').then(function (res) {
-            if (res.theme) {
-                app.$data.theme = res.theme;
+        browser.storage.sync.get(null).then(function (options) {
+            if (options) {
+                app.$data.options = options;
+            }
+        });
+
+        browser.storage.onChanged.addListener((changedOptions) => {
+            for (let item of Object.keys(changedOptions)) {
+                app.$data.options[item] = changedOptions[item].newValue;
             }
         });
 

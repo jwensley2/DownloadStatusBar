@@ -33,6 +33,7 @@
   "author": "Joseph Wensley",
   "license": "MIT",
   "dependencies": {
+    "bootstrap": "^4.0.0-beta.2",
     "moment": "^2.19.2"
   }
 }

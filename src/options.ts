@@ -1,22 +1,24 @@
-function saveOptions(e: Event) {
-    let theme = document.querySelector('input[name=theme]:checked') as HTMLInputElement;
+import Vue, {VNode} from 'vue';
+import Options from './components/Options.vue';
 
-    e.preventDefault();
-
-    browser.storage.sync.set({
-        theme: theme.value
-    });
+export type Options = {
+    theme?: string,
+    autohideEnable?: boolean,
+    autohideDuration?: number
 }
 
-function restoreOptions() {
-    let gettingItem = browser.storage.sync.get('theme');
-    gettingItem.then((res) => {
-        if (res.theme) {
-            let theme = document.querySelector(`input[value=${res.theme}]`) as HTMLInputElement;
-            theme.checked = true;
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('form')!.addEventListener('submit', saveOptions);
+let app = new Vue({
+    el: '#options',
+    data: {
+        theme: 'light',
+        downloads: [],
+    },
+    render(render): VNode {
+        return render(Options, {
+            props: {
+                theme: this.theme,
+                downloads: this.downloads,
+            }
+        });
+    }
+});

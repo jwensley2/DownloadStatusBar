@@ -1,21 +1,42 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import DownloadQuery = browser.downloads.DownloadQuery;
 import * as helpers from './helpers';
+import {Options} from './options';
 
 class DownloadStatus {
     protected downloads: DownloadItem[] = [];
     protected interval: number | null;
+    protected options: Options;
 
     constructor() {
         const self = this;
+
+        browser.storage.sync.get(null)
+            .then((options) => {
+                this.options = options;
+            });
+
+        browser.storage.onChanged.addListener((changedOptions) => {
+            for (let item of Object.keys(changedOptions)) {
+                this.options[item] = changedOptions[item].newValue;
+            }
+        });
 
         browser.downloads.onCreated.addListener(function (download) {
             self.downloads.push(download);
             self.startInterval();
         });
 
-        browser.downloads.onChanged.addListener(function (download) {
-            self.startInterval();
+        browser.downloads.onChanged.addListener((download) => {
+            if (download.state && download.state.current === 'complete') {
+                if (this.options.autohideEnable && this.options.autohideDuration) {
+                    setTimeout(() => {
+                        self.clearDownload(download);
+                    }, this.options.autohideDuration * 1000);
+                }
+            } else {
+                self.startInterval();
+            }
         });
 
         browser.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
@@ -23,8 +44,7 @@ class DownloadStatus {
                 self.downloads = helpers.filterCompletedDownloads(self.downloads);
                 self.refresh();
             } else if (request.event === 'clearDownload') {
-                self.downloads = helpers.removeSelectedDownload(request.download, self.downloads);
-                self.refresh();
+                self.clearDownload(request.download);
             } else if (request.event === 'showDownload') {
                 self.showDownload(request.download);
             } else if (request.event === 'cancelDownload') {
@@ -36,6 +56,11 @@ class DownloadStatus {
             } else if (request.event === 'deleteDownload') {
                 self.deleteDownload(request.download);
             }
+        });
+
+        // Send the downloads to a tab when it loads
+        browser.webNavigation.onCompleted.addListener(function (arg: any) {
+            browser.tabs.sendMessage(arg.tabId, self.downloads);
         });
     }
 
@@ -127,6 +152,15 @@ class DownloadStatus {
         }
 
         return Promise.all(promises);
+    }
+
+    /**
+     * Clear a download from the status bar
+     * @param {{id: number}} download
+     */
+    clearDownload(download: { id: number }) {
+        this.downloads = helpers.removeSelectedDownload(download, this.downloads);
+        this.refresh();
     }
 
     /**

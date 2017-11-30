@@ -71,7 +71,7 @@ module.exports = {
     },
     plugins: [
         new ExtractTextPlugin({
-            filename: 'style.css',
+            filename: '[name].css',
         }),
         new CopyWebpackPlugin([
             {from: 'manifest.json', to: './'},

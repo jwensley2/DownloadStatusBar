@@ -221,12 +221,15 @@
             z-index: 0;
         }
 
-        .text-line{
+        .text-line {
             padding: 0;
             display: block;
             margin: 0;
+            background: transparent;
 
-            + .text-line { margin-top: 2px }
+            + .text-line {
+                margin-top: 2px
+            }
         }
 
         .filename {
