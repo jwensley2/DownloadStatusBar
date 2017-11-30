@@ -108,10 +108,12 @@
                 this.$root.$emit('showDownload', this.download);
             },
             showContextMenu(event) {
+                const OS = window.navigator.oscpu;
                 const IN_PROGRESS = this.download.state === 'in_progress';
                 const PAUSED = this.download.state === 'interrupted' && this.download.paused;
 
-                let showTitle = window.navigator.oscpu.includes('Windows') ? 'Show in Explorer' : 'Reveal in Finder';
+                let showTitle = OS.includes('Windows') ? 'Show in Explorer' :
+                    OS.includes('Mac OS') ? 'Reveal in Finder' : 'Show in Folder';
 
                 let items = [
                     {
