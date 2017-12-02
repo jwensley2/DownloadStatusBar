@@ -1,21 +1,38 @@
 <template>
-    <div class="item"
-         @click="singleClick"
-         @dblclick="doubleClick"
-         @contextmenu.prevent="showContextMenu"
-         :class="`theme-${theme}`"
-    >
-        <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
-        <div class="filename text-line">{{ filename }}</div>
-        <div class="status text-line">{{ status }}</div>
-        <div class="progress text-line">{{ progress }}</div>
+    <div>
+        <div class="item"
+             @click="singleClick"
+             @dblclick="doubleClick"
+             @mouseover="showTooltip = true"
+             @mouseleave="showTooltip = false"
+             @contextmenu.prevent="showContextMenu"
+             :class="`theme-${options.theme}`"
+        >
+            <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
+
+            <div class="text-container">
+                <p class="filename text-line">{{ filename }}</p>
+                <p v-if="options.showStatusText" class="status text-line">{{ status }}</p>
+                <p v-if="options.showProgressText" class="progress text-line">{{ progress }}</p>
+            </div>
+
+            <div class="tooltip" v-if="showTooltip">
+                <p><strong>Filename:</strong> {{ filename }}</p>
+                <p><strong>Url:</strong> {{ download.url }}</p>
+                <p><strong>Referrer:</strong> {{ download.referrer || 'None' }}</p>
+                <p><strong>Status:</strong> {{ status }}</p>
+                <p><strong>Progress:</strong> {{ progress }}</p>
+                <p><strong>MIME type:</strong> {{ download.mime || 'Unknown' }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+    import Vue from 'vue';
     import moment from 'moment';
 
-    function formatFileSize(bytes) {
+    function formatFileSize(bytes: number) {
         let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes === 0) return '0 Bytes';
         let i = Math.floor(Math.log(bytes) / Math.log(1024));
@@ -23,22 +40,25 @@
         return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
     }
 
-    export default {
+    export default Vue.extend({
         name: 'download',
-        props: ['download', 'theme'],
+        props: ['download', 'options'],
+        data() {
+            return {
+                showTooltip: false,
+            }
+        },
         computed: {
-            filename() {
+            filename(): String {
                 let m = this.download.filename.toString().match(/.*[\/\\](.+)/);
 
                 if (m && m.length > 1) {
-                    let name = m[m.length - 1];
-
-                    return name.length > 30 ? '...' + name.substr(-30, 30) : name;
+                    return m[m.length - 1];
                 }
 
                 return '';
             },
-            status() {
+            status(): string {
                 let download = this.download;
 
                 if (download.state === 'complete') {
@@ -63,7 +83,7 @@
                 return moment.duration(finish.diff(now), 'ms').humanize();
             },
 
-            progress() {
+            progress(): string {
                 let download = this.download;
 
                 if (download.state === 'complete') {
@@ -77,27 +97,27 @@
                 return `${this.downloaded} / ${this.totalsize} - ${this.percentDone}%`;
             },
 
-            downloaded() {
+            downloaded(): string {
                 return formatFileSize(this.download.bytesReceived);
             },
 
-            totalsize() {
+            totalsize(): string {
                 return formatFileSize(this.download.totalBytes);
             },
 
-            filesize() {
+            filesize(): string {
                 return formatFileSize(this.download.fileSize);
             },
 
-            percentDone() {
+            percentDone(): string {
                 if (this.download.state === 'complete') {
-                    return 100;
+                    return '100';
                 } else if (this.download.totalBytes < 0) {
-                    return 0;
+                    return '0';
                 }
 
                 return ((this.download.bytesReceived / this.download.totalBytes) * 100).toFixed(2);
-            }
+            },
         },
 
         methods: {
@@ -107,13 +127,13 @@
             doubleClick() {
                 this.$root.$emit('showDownload', this.download);
             },
-            showContextMenu(event) {
-                const OS = window.navigator.oscpu;
-                const IN_PROGRESS = this.download.state === 'in_progress';
-                const PAUSED = this.download.state === 'interrupted' && this.download.paused;
+            showContextMenu(event: MouseEvent) {
+                const userAgent = window.navigator.userAgent;
+                const inProgress = this.download.state === 'in_progress';
+                const paused = this.download.state === 'interrupted' && this.download.paused;
 
-                let showTitle = OS.includes('Windows') ? 'Show in Explorer' :
-                    OS.includes('Mac OS') ? 'Reveal in Finder' : 'Show in Folder';
+                let showTitle = userAgent.includes('Windows') ? 'Show in Explorer' :
+                    userAgent.includes('Mac') ? 'Reveal in Finder' : 'Show in Folder';
 
                 let items = [
                     {
@@ -122,7 +142,7 @@
                         clicked: () => {
                             this.$root.$emit('clearDownload', this.download);
                             this.$root.$contextMenu.close();
-                        }
+                        },
                     },
                     {
                         name: showTitle,
@@ -130,43 +150,43 @@
                         clicked: () => {
                             this.$root.$emit('showDownload', this.download);
                             this.$root.$contextMenu.close();
-                        }
+                        },
                     },
                 ];
 
                 // In progress or paused
-                if (IN_PROGRESS || PAUSED) {
+                if (inProgress || paused) {
                     items.push({
                         name: 'Cancel Download',
                         icon: 'times',
                         clicked: () => {
                             this.$root.$emit('cancelDownload', this.download);
                             this.$root.$contextMenu.close();
-                        }
+                        },
                     });
                 }
 
                 // Download in progress
-                if (IN_PROGRESS) {
+                if (inProgress) {
                     items.push({
                         name: 'Pause Download',
                         icon: 'pause',
                         clicked: () => {
                             this.$root.$emit('pauseDownload', this.download);
                             this.$root.$contextMenu.close();
-                        }
+                        },
                     });
                 }
 
                 // Download is paused
-                if (PAUSED) {
+                if (paused) {
                     items.push({
                         name: 'Resume Download',
                         icon: 'play',
                         clicked: () => {
                             this.$root.$emit('resumeDownload', this.download);
                             this.$root.$contextMenu.close();
-                        }
+                        },
                     });
                 }
 
@@ -177,14 +197,14 @@
                         clicked: () => {
                             this.$root.$emit('deleteDownload', this.download);
                             this.$root.$contextMenu.close();
-                        }
+                        },
                     });
                 }
 
                 this.$root.$contextMenu.open(items, {x: event.clientX, y: event.clientY});
-            }
-        }
-    }
+            },
+        },
+    });
 </script>
 
 <style lang="scss" scoped>
@@ -196,13 +216,17 @@
         box-sizing: border-box;
         color: map-get($light-theme, "text");
         cursor: pointer;
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
         font-size: 0.9em;
-        margin: 0 5px;
-        overflow: hidden;
+        justify-content: center;
+        line-height: 1;
+        margin: 5px 5px 0 5px;
+        min-height: 30px;
+        min-width: 200px;
+        max-width: 300px;
         padding: 3px 6px;
         position: relative;
-        width: 250px;
 
         * {
             z-index: 10;
@@ -215,6 +239,8 @@
             display: block;
             height: 100%;
             left: 0;
+            margin: 0;
+            padding: 0;
             position: absolute;
             top: 0;
             width: 100%;
@@ -222,10 +248,11 @@
         }
 
         .text-line {
-            padding: 0;
-            display: block;
-            margin: 0;
             background: transparent;
+            display: block;
+            height: auto;
+            margin: 0;
+            padding: 0;
 
             + .text-line {
                 margin-top: 2px
@@ -233,7 +260,13 @@
         }
 
         .filename {
+            line-height: 16px;
             font-size: 14px;
+            display: inline-block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            direction: rtl;
+            max-width: 100%;
         }
 
         .status, .progress {
@@ -246,6 +279,41 @@
 
             .progress-bar {
                 background: map-get($dark-theme, "progress");
+            }
+
+            .tooltip {
+                background: map-get($dark-theme, "background");
+                border: 1px solid map-get($dark-theme, "border");
+                color: map-get($dark-theme, "text");
+            }
+        }
+    }
+
+    .tooltip {
+        background: map-get($light-theme, "background");
+        border: 1px solid map-get($light-theme, "border");
+        bottom: 100%;
+        color: map-get($light-theme, "text");
+        cursor: default;
+        left: 0;
+        line-height: 1.2;
+        margin: 0;
+        max-width: 500px;
+        min-width: 100%;
+        overflow: hidden;
+        padding: 10px;
+        pointer-events: none;
+        position: absolute;
+
+        p {
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            text-overflow: ellipsis;
+            word-break: normal;
+
+            + p {
+                margin-top: 5px;
             }
         }
     }

@@ -3,39 +3,30 @@
         <button class="clearDownloads" @click="$root.$emit('clearDownloads')">
             Clear
         </button>
-        <download v-for="download in downloads"
-                  :key="download.id"
-                  :download="download"
-                  :theme="theme"></download>
+        <div class="downloads">
+            <download v-for="download in downloads"
+                      :key="download.id"
+                      :download="download"
+                      :options="options"></download>
+        </div>
 
         <context-menu :theme="theme"></context-menu>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+    import Vue from 'vue';
     import Download from './Download.vue';
+    import {Options, defaultOptions} from '../config/options';
 
-    export default {
+    export default Vue.extend({
         name: 'download-status-bar',
         components: {
             'download': Download,
         },
-        props: {
-            options: {
-                type: Object,
-                default() {
-                    return {theme: 'light'}
-                }
-            },
-            downloads: {
-                type: Array,
-                default() {
-                    return []
-                },
-            },
-        },
+        props: ['options', 'downloads'],
         computed: {
-            theme() {
+            theme(): String {
                 return this.options.theme || 'light';
             }
         },
@@ -52,11 +43,11 @@
                 if (downloadStatusBar && this.downloads.length > 0) {
                     body.style.marginBottom = `${downloadStatusBar.offsetHeight}px`;
                 } else {
-                    body.style.marginBottom = 0;
+                    body.style.marginBottom = '0';
                 }
             }
         }
-    }
+    });
 </script>
 
 <style scoped lang="scss">
@@ -70,7 +61,6 @@
         color: map-get($light-theme, "text");
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
         font: normal 400 16px Arial, sans-serif;
         left: 0;
         line-height: 1;
@@ -100,6 +90,13 @@
             &:hover {
                 background: map-get($light-theme, "button-hover");
             }
+        }
+
+        .downloads {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin-top: -5px;
         }
 
         &.theme-dark {

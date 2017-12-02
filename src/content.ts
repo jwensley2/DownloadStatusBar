@@ -3,6 +3,7 @@ import ContextMenu from './context-menu/ContextMenu';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
 import * as helpers from './helpers';
 import DownloadItem = browser.downloads.DownloadItem;
+import {defaultOptions} from './config/options';
 
 class DownloadStatusBar {
     private app: Vue;
@@ -40,9 +41,7 @@ class DownloadStatusBar {
 
         // Get the theme from local storage
         browser.storage.sync.get(null).then(function (options) {
-            if (options) {
-                app.$data.options = options;
-            }
+            app.$data.options = Object.assign({}, defaultOptions, options);
         });
 
         browser.storage.onChanged.addListener((changedOptions) => {
@@ -94,7 +93,7 @@ class DownloadStatusBar {
 
     set downloads(downloads: DownloadItem[]) {
         this._downloads = downloads;
-        this.app.$data.downloads = downloads;
+        this.app.$data['downloads'] = downloads;
     }
 
     private static makeStatusBarElement(): HTMLElement {

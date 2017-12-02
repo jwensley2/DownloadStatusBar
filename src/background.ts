@@ -1,19 +1,19 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import DownloadQuery = browser.downloads.DownloadQuery;
 import * as helpers from './helpers';
-import {Options} from './options';
+import {Options, defaultOptions} from './config/options';
 
 class DownloadStatus {
     protected downloads: DownloadItem[] = [];
     protected interval: number | null;
-    protected options: Options;
+    protected options: Options = defaultOptions;
 
     constructor() {
         const self = this;
 
         browser.storage.sync.get(null)
-            .then((options) => {
-                this.options = options;
+            .then((options: Options) => {
+                this.options = helpers.mergeDefaultOptions(options);
             });
 
         browser.storage.onChanged.addListener((changedOptions) => {
@@ -27,13 +27,16 @@ class DownloadStatus {
             self.startInterval();
         });
 
-        browser.downloads.onChanged.addListener((download) => {
-            if (download.state && download.state.current === 'complete') {
-                if (this.options.autohideEnable && this.options.autohideDuration) {
-                    setTimeout(() => {
-                        self.clearDownload(download);
-                    }, this.options.autohideDuration * 1000);
-                }
+        browser.downloads.onChanged.addListener((downloadDelta) => {
+            if (downloadDelta.state && downloadDelta.state.current === 'complete') {
+                // This download object is a delta of what changed so we need to query for the full download item
+                this.getDownloadItem(downloadDelta.id).then((download) => {
+                    if (helpers.shouldHideDownload(download, this.options)) {
+                        setTimeout(() => {
+                            self.clearDownload(download);
+                        }, this.options.autohideDuration * 1000);
+                    }
+                });
             } else {
                 self.startInterval();
             }
@@ -106,6 +109,22 @@ class DownloadStatus {
         console.log(`Error: ${error}`);
     }
 
+    getDownloadItem(downloadId: number) {
+        let query: DownloadQuery = {
+            id: downloadId,
+        };
+
+        return new Promise<DownloadItem>((resolve, reject) => {
+            browser.downloads.search(query).then((downloads) => {
+                if (downloads.length > 0) {
+                    resolve(downloads[0]);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
+
     /**
      * Update the browser tabs with the state of the downloads
      *
@@ -130,17 +149,13 @@ class DownloadStatus {
      * @returns {Promise<browser.downloads.DownloadItem[]>}
      */
     updateDownloads(): Promise<DownloadItem[]> {
-        let query: DownloadQuery = {};
-
         let promises = [];
 
         for (let download of this.downloads) {
             let promise = new Promise<DownloadItem>((resolve, reject) => {
-                query.id = download.id;
+                let query: DownloadQuery = {id: download.id};
 
-                let searching = browser.downloads.search(query);
-
-                searching.then((downloads) => {
+                browser.downloads.search(query).then((downloads) => {
                     resolve(downloads[0]);
                 }, (error) => {
                     this.onError(error);
@@ -158,7 +173,7 @@ class DownloadStatus {
      * Clear a download from the status bar
      * @param {{id: number}} download
      */
-    clearDownload(download: { id: number }) {
+    clearDownload(download: DownloadItem) {
         this.downloads = helpers.removeSelectedDownload(download, this.downloads);
         this.refresh();
     }

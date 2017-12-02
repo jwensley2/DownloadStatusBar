@@ -6,10 +6,11 @@
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.17",
     "copy-webpack-plugin": "^4.2.3",
-    "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
     "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
     "uglifyjs-webpack-plugin": "^1.1.1",
@@ -19,17 +20,22 @@
     "vue-template-compiler": "^2.5.8",
     "web-ext-types": "^1.1.1",
     "webpack": "^3.8.1",
-    "webpack-merge": "^4.1.1",
-    "style-loader": "^0.19.0"
+    "webpack-merge": "^4.1.1"
   },
   "scripts": {
     "watch": "webpack --watch --config webpack.dev.js",
     "dev": "webpack --config webpack.dev.js",
-    "prod": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
+    "prod": "webpack --config webpack.prod.js",
+    "lint": "web-ext lint -s build",
     "webext": "web-ext run -s build --bc -u https://josephwensley.com/test.html --ignore-files=*.ts node_modules",
-    "webext-build": "web-ext build -s build"
+    "webext-build": "web-ext build -s build --overwrite-dest"
   },
   "author": "Joseph Wensley",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "@types/lodash": "^4.14.86",
+    "bootstrap": "^4.0.0-beta.2",
+    "lodash": "^4.17.4",
+    "moment": "^2.19.2"
+  }
 }
