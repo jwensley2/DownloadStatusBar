@@ -95,3 +95,17 @@ export function shouldHideDownload(download: DownloadItem, options: Options): bo
     // Hide if there are no types configured
     return options.autohideCustomTypes.length === 0 && options.autohideFileTypes.length === 0;
 }
+
+/**
+ * Format a filesize in bytes to KB, MB, GB or TB
+ *
+ * @param {number} bytes
+ * @returns {string}
+ */
+export function formatFileSize(bytes: number) {
+    let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0 Bytes';
+    let i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+}

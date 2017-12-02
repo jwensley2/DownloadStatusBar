@@ -30,15 +30,8 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import moment from 'moment';
-
-    function formatFileSize(bytes: number) {
-        let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes === 0) return '0 Bytes';
-        let i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-        return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
-    }
+    import * as moment from 'moment';
+    import * as helpers from '../helpers';
 
     export default Vue.extend({
         name: 'download',
@@ -98,15 +91,15 @@
             },
 
             downloaded(): string {
-                return formatFileSize(this.download.bytesReceived);
+                return helpers.formatFileSize(this.download.bytesReceived);
             },
 
             totalsize(): string {
-                return formatFileSize(this.download.totalBytes);
+                return helpers.formatFileSize(this.download.totalBytes);
             },
 
             filesize(): string {
-                return formatFileSize(this.download.fileSize);
+                return helpers.formatFileSize(this.download.fileSize);
             },
 
             percentDone(): string {

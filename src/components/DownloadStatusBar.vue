@@ -1,5 +1,5 @@
 <template>
-    <div id="DownloadStatusBar" v-if="downloads.length > 0" :class="`theme-${theme}`" @mouseleave="hideContextMenu">
+    <div id="DownloadStatusBar" v-if="downloads.length > 0" :class="`theme-${options.theme}`" @mouseleave="hideContextMenu">
         <button class="clearDownloads" @click="$root.$emit('clearDownloads')">
             Clear
         </button>
@@ -10,7 +10,7 @@
                       :options="options"></download>
         </div>
 
-        <context-menu :theme="theme"></context-menu>
+        <context-menu :theme="options.theme"></context-menu>
     </div>
 </template>
 
@@ -18,16 +18,17 @@
     import Vue from 'vue';
     import Download from './Download.vue';
     import {Options, defaultOptions} from '../config/options';
+    import * as helpers from '../helpers';
 
     export default Vue.extend({
         name: 'download-status-bar',
         components: {
             'download': Download,
         },
-        props: ['options', 'downloads'],
-        computed: {
-            theme(): String {
-                return this.options.theme || 'light';
+        props: ['downloads'],
+        data() {
+            return {
+                options: defaultOptions,
             }
         },
         methods: {
@@ -45,8 +46,21 @@
                 } else {
                     body.style.marginBottom = '0';
                 }
-            }
-        }
+            },
+        },
+        mounted() {
+            // Load the saved options
+            browser.storage.sync.get(null)
+                .then((options: Options) => {
+                    this.options = helpers.mergeDefaultOptions(options);
+                });
+
+            browser.storage.onChanged.addListener((changedOptions) => {
+                for (let item of Object.keys(changedOptions)) {
+                    this.options[item] = changedOptions[item].newValue;
+                }
+            });
+        },
     });
 </script>
 

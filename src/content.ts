@@ -11,8 +11,6 @@ class DownloadStatusBar {
     protected statusBar: HTMLElement = DownloadStatusBar.makeStatusBarElement();
 
     constructor() {
-        let self = this;
-
         if (document.getElementById('DownloadStatusBarContainer')) {
             this.statusBar = document.getElementById('DownloadStatusBarContainer')!;
         } else {
@@ -24,30 +22,15 @@ class DownloadStatusBar {
         let app = this.app = new Vue({
             el: '#DownloadStatusBarContainer',
             data: {
-                options: {
-                    theme: 'light',
-                },
                 downloads: [],
             },
             render(render): VNode {
                 return render(DownloadStatusBarComponent, {
                     props: {
-                        options: this.options,
                         downloads: this.downloads,
-                    }
+                    },
                 });
-            }
-        });
-
-        // Get the theme from local storage
-        browser.storage.sync.get(null).then(function (options) {
-            app.$data.options = Object.assign({}, defaultOptions, options);
-        });
-
-        browser.storage.onChanged.addListener((changedOptions) => {
-            for (let item of Object.keys(changedOptions)) {
-                app.$data.options[item] = changedOptions[item].newValue;
-            }
+            },
         });
 
         app.$on('clearDownloads', () => {
