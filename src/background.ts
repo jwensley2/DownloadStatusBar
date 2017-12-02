@@ -58,6 +58,8 @@ class DownloadStatus {
                 self.resumeDownload(request.download);
             } else if (request.event === 'deleteDownload') {
                 self.deleteDownload(request.download);
+            } else if (request.event === 'openOptions') {
+                browser.runtime.openOptionsPage();
             }
         });
 

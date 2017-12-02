@@ -11,6 +11,8 @@
         </div>
 
         <context-menu :theme="options.theme"></context-menu>
+
+        <button class="open-options" @click="openOptions">Options<span class="icon-gear"></span></button>
     </div>
 </template>
 
@@ -34,6 +36,9 @@
         methods: {
             hideContextMenu() {
                 this.$contextMenu.close();
+            },
+            openOptions() {
+                this.$root.$emit('openOptions');
             },
         },
         watch: {
@@ -65,68 +70,101 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../variables";
+    @import "../scss/variables";
+    @import "../scss/mixins";
+    @import "../../icomoon/style";
 
     #DownloadStatusBar {
-        background: map-get($light-theme, "background");
-        border-top: 1px solid map-get($light-theme, "border");
-        bottom: 0;
-        box-sizing: content-box;
-        color: map-get($light-theme, "text");
-        display: flex;
-        flex-direction: row;
-        font: normal 400 16px Arial, sans-serif;
-        left: 0;
-        line-height: 1;
-        padding: 0;
-        position: fixed;
-        width: 100%;
-        z-index: 100000;
+        @include reset;
+        background     : light-theme("background");
+        border-top     : 1px solid light-theme("border");
+        bottom         : 0;
+        box-sizing     : content-box;
+        color          : light-theme("text");
+        display        : flex;
+        flex-direction : row;
+        font           : normal 400 16px Arial, sans-serif;
+        left           : 0;
+        line-height    : 1;
+        padding        : 0;
+        position       : fixed;
+        text-align     : left;
+        width          : 100%;
+        z-index        : 100000;
 
         > * {
-            vertical-align: middle
+            vertical-align : middle
         }
 
         .clearDownloads {
-            background: map-get($light-theme, "button");
-            border: 0;
-            border-right: 1px solid map-get($light-theme, "button-border");
-            box-shadow: none;
-            box-sizing: border-box;
-            color: map-get($light-theme, "text");
-            cursor: pointer;
-            display: inline-block;
-            font: normal 600 0.8em Arial, sans-serif;
-            margin: 0 5px 0 0;
-            padding: 0 15px;
-            width: auto;
+            @include reset;
+            background   : light-theme("button");
+            border-right : 1px solid light-theme("button-border");
+            box-shadow   : none;
+            box-sizing   : border-box;
+            color        : light-theme("text");
+            cursor       : pointer;
+            display      : inline-block;
+            font         : normal 600 0.8em Arial, sans-serif;
+            margin       : 0 5px 0 0;
+            padding      : 0 15px;
+            width        : auto;
 
             &:hover {
-                background: map-get($light-theme, "button-hover");
+                background : light-theme("button-hover");
+            }
+        }
+
+        .open-options {
+            @include reset;
+            background  : none;
+            cursor      : pointer;
+            margin-left : auto;
+            overflow    : hidden;
+            position    : relative;
+            text-indent : -999px;
+            width       : 30px;
+
+            .icon-gear {
+                color       : light-theme('text');
+                display     : block;
+                font-size   : 20px;
+                height      : 100%;
+                left        : 0;
+                line-height : 100%;
+                margin-top  : -10px;
+                position    : absolute;
+                right       : 0;
+                text-indent : 0;
+                top         : 50%;
+                width       : 100%;
             }
         }
 
         .downloads {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            margin-top: -5px;
+            @include reset;
+            display        : flex;
+            flex-direction : row;
+            flex-wrap      : wrap;
+            margin-top     : -5px;
         }
 
         &.theme-dark {
-            background: map-get($dark-theme, "background");
-            border-top: 1px solid map-get($dark-theme, "border");
-            color: map-get($dark-theme, "text");
+            background : dark-theme("background");
+            border-top : 1px solid dark-theme("border");
+            color      : dark-theme("text");
 
             .clearDownloads {
-                background: map-get($dark-theme, "button");
-                border-right: 1px solid map-get($dark-theme, "button-border");
-                color: map-get($dark-theme, "text");
+                background   : dark-theme("button");
+                border-right : 1px solid dark-theme("button-border");
+                color        : dark-theme("text");
 
                 &:hover {
-                    background: map-get($dark-theme, "button-hover");
+                    background : dark-theme("button-hover");
                 }
             }
+
+            .icon-gear { color : dark-theme('text') }
         }
     }
 </style>

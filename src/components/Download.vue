@@ -1,30 +1,46 @@
 <template>
-    <div>
-        <div class="item"
-             @click="singleClick"
-             @dblclick="doubleClick"
-             @mouseover="showTooltip = true"
-             @mouseleave="showTooltip = false"
-             @contextmenu.prevent="showContextMenu"
-             :class="`theme-${options.theme}`"
-        >
-            <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
+    <div class="item"
+         @click="singleClick"
+         @dblclick="doubleClick"
+         @mouseover="showTooltip = true"
+         @mouseleave="showTooltip = false"
+         @contextmenu.prevent="showContextMenu"
+         :class="`theme-${options.theme}`"
+    >
+        <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
 
-            <div class="text-container">
-                <p class="filename text-line">{{ filename }}</p>
-                <p v-if="options.showStatusText" class="status text-line">{{ status }}</p>
-                <p v-if="options.showProgressText" class="progress text-line">{{ progress }}</p>
-            </div>
-
-            <div class="tooltip" v-if="showTooltip">
-                <p><strong>Filename:</strong> {{ filename }}</p>
-                <p><strong>Url:</strong> {{ download.url }}</p>
-                <p><strong>Referrer:</strong> {{ download.referrer || 'None' }}</p>
-                <p><strong>Status:</strong> {{ status }}</p>
-                <p><strong>Progress:</strong> {{ progress }}</p>
-                <p><strong>MIME type:</strong> {{ download.mime || 'Unknown' }}</p>
-            </div>
+        <div class="text-container">
+            <p class="filename">{{ filename }}</p>
+            <p v-if="options.showStatusText" class="status text-line">{{ status }}</p>
+            <p v-if="options.showProgressText" class="progress text-line">{{ progress }}</p>
         </div>
+
+        <table class="tooltip" v-if="showTooltip">
+            <tr>
+                <th class="field-name">Filename:</th>
+                <td>{{ filename }}</td>
+            </tr>
+            <tr>
+                <th class="field-name">Url:</th>
+                <td>{{ download.url }}</td>
+            </tr>
+            <tr>
+                <th class="field-name">Referrer:</th>
+                <td>{{ download.referrer || 'None' }}</td>
+            </tr>
+            <tr>
+                <th class="field-name">Status:</th>
+                <td>{{ status }}</td>
+            </tr>
+            <tr>
+                <th class="field-name">Progress:</th>
+                <td>{{ progress }}</td>
+            </tr>
+            <tr>
+                <th class="field-name">MIME type:</th>
+                <td>{{ download.mime || 'Unknown' }}</td>
+            </tr>
+        </table>
     </div>
 </template>
 
@@ -201,113 +217,118 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../variables";
+    @import "../scss/variables";
+    @import "../scss/mixins";
 
     .item {
-        background: map-get($light-theme, "download");
-        border-radius: 0;
-        box-sizing: border-box;
-        color: map-get($light-theme, "text");
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        font-size: 0.9em;
-        justify-content: center;
-        line-height: 1;
-        margin: 5px 5px 0 5px;
-        min-height: 30px;
-        min-width: 200px;
-        max-width: 300px;
-        padding: 3px 6px;
-        position: relative;
+        @include reset;
+        background      : light-theme("download");
+        border-radius   : 0;
+        box-sizing      : border-box;
+        color           : light-theme("text");
+        cursor          : pointer;
+        display         : flex;
+        flex-direction  : column;
+        font            : 400 normal 14px/1 Arial, sans-serif;
+        justify-content : center;
+        margin          : 5px 5px 0 5px;
+        min-height      : 30px;
+        min-width       : 150px;
+        max-width       : 300px;
+        padding         : 3px 6px;
+        position        : relative;
+        text-shadow     : none;
 
         * {
-            z-index: 10;
-            position: relative;
+            position : relative;
+            z-index  : 10;
         }
 
         .progress-bar {
-            background: map-get($light-theme, "progress");
-            border-radius: 0;
-            display: block;
-            height: 100%;
-            left: 0;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            top: 0;
-            width: 100%;
-            z-index: 0;
+            @include reset;
+            background    : light-theme("progress");
+            border-radius : 0;
+            display       : block;
+            height        : 100%;
+            left          : 0;
+            position      : absolute;
+            top           : 0;
+            width         : 100%;
+            z-index       : 0;
         }
 
         .text-line {
-            background: transparent;
-            display: block;
-            height: auto;
-            margin: 0;
-            padding: 0;
+            @include reset;
+            background : transparent;
+            display    : block;
+            font-size  : 12px;
+            height     : auto;
+            text-align: left;
 
             + .text-line {
-                margin-top: 2px
+                margin-top : 2px
             }
         }
 
         .filename {
-            line-height: 16px;
-            font-size: 14px;
-            display: inline-block;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            direction: rtl;
-            max-width: 100%;
-        }
-
-        .status, .progress {
-            font-size: 12px
+            @extend .text-line;
+            line-height   : 16px;
+            font-size     : 14px;
+            display       : inline-block;
+            text-overflow : ellipsis;
+            overflow      : hidden;
+            direction     : rtl;
+            max-width     : 100%;
         }
 
         &.theme-dark {
-            background: map-get($dark-theme, "download");
-            color: map-get($dark-theme, "text");
+            background : dark-theme("download");
+            color      : dark-theme("text");
 
             .progress-bar {
-                background: map-get($dark-theme, "progress");
+                background : dark-theme("progress");
             }
 
             .tooltip {
-                background: map-get($dark-theme, "background");
-                border: 1px solid map-get($dark-theme, "border");
-                color: map-get($dark-theme, "text");
+                background : dark-theme("background");
+                border     : 1px solid dark-theme("border");
+                color      : dark-theme("text");
             }
         }
     }
 
     .tooltip {
-        background: map-get($light-theme, "background");
-        border: 1px solid map-get($light-theme, "border");
-        bottom: 100%;
-        color: map-get($light-theme, "text");
-        cursor: default;
-        left: 0;
-        line-height: 1.2;
-        margin: 0;
-        max-width: 500px;
-        min-width: 100%;
-        overflow: hidden;
-        padding: 10px;
-        pointer-events: none;
-        position: absolute;
+        background     : light-theme("background");
+        border         : 1px solid light-theme("border");
+        bottom         : 100%;
+        color          : light-theme("text");
+        cursor         : default;
+        left           : 0;
+        margin         : 0;
+        max-width      : 500px;
+        min-width      : 100%;
+        overflow       : hidden;
+        padding        : 10px;
+        pointer-events : none;
+        position       : absolute;
+        width          : 100%;
 
-        p {
-            margin: 0;
-            overflow: hidden;
-            padding: 0;
-            text-overflow: ellipsis;
-            word-break: normal;
+        td, th {
+            @include reset;
+            line-height : 1.2;
+        }
 
-            + p {
-                margin-top: 5px;
-            }
+        td {
+            overflow      : hidden;
+            padding-left  : 5px;
+            text-overflow : ellipsis;
+        }
+
+        th {
+            font-weight    : bold;
+            text-align     : right;
+            vertical-align : top;
+            white-space    : nowrap;
         }
     }
 </style>

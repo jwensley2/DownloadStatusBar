@@ -1,4 +1,8 @@
-$light-theme: (
+$icomoon-font-path: "moz-extension://__MSG_@@extension_id__/fonts";
+
+$default-font : 400 normal 14px/14px Arial, Helvetica, sans-serif;
+
+$light-theme : (
         "background": #EFEFEF,
         "button": transparent,
         "button-hover": #CCC,
@@ -9,8 +13,7 @@ $light-theme: (
         "text": #111
 );
 
-
-$dark-theme: (
+$dark-theme : (
         "background": #333,
         "button": transparent,
         "button-hover": #444,
