@@ -35,7 +35,7 @@ class DownloadStatusBar {
 
         app.$on('clearDownloads', () => {
             // Clear the locally stored downloads
-            this.downloads = helpers.filterCompletedDownloads(this._downloads);
+            this.downloads = helpers.filterFinishedDownloads(this._downloads);
 
             // Tell the background to clear it's downloads
             browser.runtime.sendMessage({event: 'clearDownloads'});

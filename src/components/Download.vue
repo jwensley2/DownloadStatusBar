@@ -78,11 +78,15 @@
                     return 'Paused';
                 }
 
-                if (download.state === 'interrupted') {
+                if (helpers.wasDownloadCancelled(download)) {
                     return `Cancelled`
                 }
 
-                if (download.totalBytes === -1) {
+                if (download.error) {
+                    return `Error: ${download.error}`;
+                }
+
+                if (download.totalBytes === -1 || !download.estimatedEndTime) {
                     return `In Progress`
                 }
 
@@ -153,15 +157,18 @@
                             this.$root.$contextMenu.close();
                         },
                     },
-                    {
+                ];
+
+                if (!this.download.error) {
+                    items.push({
                         name: showTitle,
                         icon: 'folder-open',
                         clicked: () => {
                             this.$root.$emit('showDownload', this.download);
                             this.$root.$contextMenu.close();
                         },
-                    },
-                ];
+                    });
+                }
 
                 // In progress or paused
                 if (inProgress || paused) {
@@ -263,7 +270,7 @@
             display    : block;
             font-size  : 12px;
             height     : auto;
-            text-align: left;
+            text-align : left;
 
             + .text-line {
                 margin-top : 2px

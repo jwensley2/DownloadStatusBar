@@ -4,14 +4,14 @@ import fileTypes, {FileType} from './config/filetypes';
 import * as _ from 'lodash';
 
 /**
- * Remove completed downloads from the array of downloads
+ * Remove finished downloads from the array of downloads
  *
  * @param {browser.downloads.DownloadItem[]} downloads
  * @returns {browser.downloads.DownloadItem[]}
  */
-export function filterCompletedDownloads(downloads: DownloadItem[]): DownloadItem[] {
+export function filterFinishedDownloads(downloads: DownloadItem[]): DownloadItem[] {
     return downloads.filter(function (download: DownloadItem) {
-        return download.state !== 'complete';
+        return download.state !== 'complete' && !wasDownloadCancelled(download);
     })
 }
 
@@ -40,6 +40,12 @@ export function getInProgressDownloads(downloads: DownloadItem[]): DownloadItem[
     })
 }
 
+/**
+ * Merge the default options into an options object
+ *
+ * @param {Options} options
+ * @returns {Options}
+ */
 export function mergeDefaultOptions(options: Options): Options {
     let merged = Object.assign({}, defaultOptions, options);
 
@@ -108,4 +114,18 @@ export function formatFileSize(bytes: number) {
     let i = Math.floor(Math.log(bytes) / Math.log(1024));
 
     return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+/**
+ * Check if a download was cancelled
+ *
+ * @param {browser.downloads.DownloadItem} download
+ * @returns {boolean}
+ */
+export function wasDownloadCancelled(download: DownloadItem): boolean {
+    if (download.paused) {
+        return false;
+    }
+
+    return download.state === 'interrupted' && (download.error === 'USER_CANCELED' || download.error === 'USER_SHUTDOWN')
 }

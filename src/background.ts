@@ -44,7 +44,7 @@ class DownloadStatus {
 
         browser.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
             if (request.event === 'clearDownloads') {
-                self.downloads = helpers.filterCompletedDownloads(self.downloads);
+                self.downloads = helpers.filterFinishedDownloads(self.downloads);
                 self.refresh();
             } else if (request.event === 'clearDownload') {
                 self.clearDownload(request.download);
