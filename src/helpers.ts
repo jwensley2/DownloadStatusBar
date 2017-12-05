@@ -2,6 +2,7 @@ import DownloadItem = browser.downloads.DownloadItem;
 import {defaultOptions, Options} from './config/options';
 import fileTypes, {FileType} from './config/filetypes';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 /**
  * Remove finished downloads from the array of downloads
@@ -128,4 +129,53 @@ export function wasDownloadCancelled(download: DownloadItem): boolean {
     }
 
     return download.state === 'interrupted' && (download.error === 'USER_CANCELED' || download.error === 'USER_SHUTDOWN')
+}
+
+export function downloadStatus(download: DownloadItem) {
+    if (download.state === 'complete') {
+        return 'Complete';
+    }
+
+    if (download.paused) {
+        return 'Paused';
+    }
+
+    if (wasDownloadCancelled(download)) {
+        return `Cancelled`
+    }
+
+    if (download.error) {
+        return `Error: ${download.error}`;
+    }
+
+    if (download.totalBytes === -1 || !download.estimatedEndTime) {
+        return `In Progress`
+    }
+
+    let now = moment();
+    let finish = moment(download.estimatedEndTime, moment.ISO_8601);
+
+    return moment.duration(finish.diff(now), 'ms').humanize();
+}
+
+export function downloadPercent(download: DownloadItem) {
+    if (download.state === 'complete') {
+        return '100';
+    } else if (download.totalBytes < 0) {
+        return '0';
+    }
+
+    return ((download.bytesReceived / download.totalBytes) * 100).toFixed(2);
+}
+
+export function downloadProgress(download: DownloadItem): string {
+    if (download.state === 'complete') {
+        return `${formatFileSize(download.fileSize)}`;
+    }
+
+    if (download.totalBytes === -1) {
+        return `${formatFileSize(download.bytesReceived)} / Unknown`
+    }
+
+    return `${download.bytesReceived} / ${download.totalBytes} - ${downloadPercent(download)}%`;
 }

@@ -2,9 +2,10 @@
     <div class="item"
          @click="singleClick"
          @dblclick="doubleClick"
-         @mouseover="showTooltip = true"
-         @mouseleave="showTooltip = false"
+         @mouseover="showTooltip($refs[`downloads-${download.id}`], download)"
+         @mouseleave="hideTooltip"
          @contextmenu.prevent="showContextMenu"
+         :ref="`downloads-${download.id}`"
          :class="`theme-${options.theme}`"
     >
         <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
@@ -14,33 +15,6 @@
             <p v-if="options.showStatusText" class="status text-line">{{ status }}</p>
             <p v-if="options.showProgressText" class="progress text-line">{{ progress }}</p>
         </div>
-
-        <table class="tooltip" v-if="showTooltip">
-            <tr>
-                <th class="field-name">Filename:</th>
-                <td>{{ filename }}</td>
-            </tr>
-            <tr>
-                <th class="field-name">Url:</th>
-                <td>{{ download.url }}</td>
-            </tr>
-            <tr>
-                <th class="field-name">Referrer:</th>
-                <td>{{ download.referrer || 'None' }}</td>
-            </tr>
-            <tr>
-                <th class="field-name">Status:</th>
-                <td>{{ status }}</td>
-            </tr>
-            <tr>
-                <th class="field-name">Progress:</th>
-                <td>{{ progress }}</td>
-            </tr>
-            <tr>
-                <th class="field-name">MIME type:</th>
-                <td>{{ download.mime || 'Unknown' }}</td>
-            </tr>
-        </table>
     </div>
 </template>
 
@@ -53,9 +27,7 @@
         name: 'download',
         props: ['download', 'options'],
         data() {
-            return {
-                showTooltip: false,
-            }
+            return {}
         },
         computed: {
             filename(): String {
@@ -68,46 +40,11 @@
                 return '';
             },
             status(): string {
-                let download = this.download;
-
-                if (download.state === 'complete') {
-                    return 'Complete';
-                }
-
-                if (download.paused) {
-                    return 'Paused';
-                }
-
-                if (helpers.wasDownloadCancelled(download)) {
-                    return `Cancelled`
-                }
-
-                if (download.error) {
-                    return `Error: ${download.error}`;
-                }
-
-                if (download.totalBytes === -1 || !download.estimatedEndTime) {
-                    return `In Progress`
-                }
-
-                let now = moment();
-                let finish = moment(download.estimatedEndTime, moment.ISO_8601);
-
-                return moment.duration(finish.diff(now), 'ms').humanize();
+                return helpers.downloadStatus(this.download);
             },
 
             progress(): string {
-                let download = this.download;
-
-                if (download.state === 'complete') {
-                    return `${this.filesize}`;
-                }
-
-                if (download.totalBytes === -1) {
-                    return `${this.downloaded} / Unknown`
-                }
-
-                return `${this.downloaded} / ${this.totalsize} - ${this.percentDone}%`;
+                return helpers.downloadProgress(this.download);
             },
 
             downloaded(): string {
@@ -123,13 +60,7 @@
             },
 
             percentDone(): string {
-                if (this.download.state === 'complete') {
-                    return '100';
-                } else if (this.download.totalBytes < 0) {
-                    return '0';
-                }
-
-                return ((this.download.bytesReceived / this.download.totalBytes) * 100).toFixed(2);
+                return helpers.downloadPercent(this.download);
             },
         },
 
@@ -295,47 +226,6 @@
             .progress-bar {
                 background : dark-theme("progress");
             }
-
-            .tooltip {
-                background : dark-theme("background");
-                border     : 1px solid dark-theme("border");
-                color      : dark-theme("text");
-            }
-        }
-    }
-
-    .tooltip {
-        background     : light-theme("background");
-        border         : 1px solid light-theme("border");
-        bottom         : 100%;
-        color          : light-theme("text");
-        cursor         : default;
-        left           : 0;
-        margin         : 0;
-        max-width      : 500px;
-        min-width      : 100%;
-        overflow       : hidden;
-        padding        : 10px;
-        pointer-events : none;
-        position       : absolute;
-        width          : 100%;
-
-        td, th {
-            @include reset;
-            line-height : 1.2;
-        }
-
-        td {
-            overflow      : hidden;
-            padding-left  : 5px;
-            text-overflow : ellipsis;
-        }
-
-        th {
-            font-weight    : bold;
-            text-align     : right;
-            vertical-align : top;
-            white-space    : nowrap;
         }
     }
 </style>

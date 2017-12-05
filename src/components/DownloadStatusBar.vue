@@ -12,6 +12,7 @@
         </div>
 
         <context-menu :theme="options.theme"></context-menu>
+        <tooltip :theme="options.theme"></tooltip>
 
         <button class="open-options" @click="openOptions">Options<span class="icon-gear"></span></button>
     </div>
