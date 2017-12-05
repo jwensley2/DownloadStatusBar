@@ -1,5 +1,6 @@
 <template>
-    <div id="DownloadStatusBar" v-if="downloads.length > 0" :class="`theme-${options.theme}`" @mouseleave="hideContextMenu">
+    <div id="DownloadStatusBar" v-if="downloads.length > 0 || options.alwaysShow" :class="`theme-${options.theme}`"
+         @mouseleave="hideContextMenu">
         <button class="clearDownloads" @click="$root.$emit('clearDownloads')">
             Clear
         </button>
@@ -86,6 +87,7 @@
         font           : normal 400 16px Arial, sans-serif;
         left           : 0;
         line-height    : 1;
+        min-height     : 25px;
         padding        : 0;
         position       : fixed;
         text-align     : left;

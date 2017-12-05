@@ -24,6 +24,14 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" v-model="options.alwaysShow">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Always show the status bar</span>
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" v-model="options.showStatusText">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Show status text</span>

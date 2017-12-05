@@ -2,6 +2,7 @@ import {FileType} from './filetypes';
 
 export type Options = {
     theme: string,
+    alwaysShow: boolean,
     showStatusText: boolean,
     showProgressText: boolean,
     autohideEnable: boolean,
@@ -12,6 +13,7 @@ export type Options = {
 
 export const defaultOptions: Options = {
     theme: 'light',
+    alwaysShow: false,
     showStatusText: true,
     showProgressText: true,
     autohideEnable: false,
