@@ -3,6 +3,7 @@ import {FileType} from './filetypes';
 export type Options = {
     theme: string,
     alwaysShow: boolean,
+    singleRowOnly: boolean,
     showStatusText: boolean,
     showProgressText: boolean,
     autohideEnable: boolean,
@@ -14,6 +15,7 @@ export type Options = {
 export const defaultOptions: Options = {
     theme: 'light',
     alwaysShow: false,
+    singleRowOnly: false,
     showStatusText: true,
     showProgressText: true,
     autohideEnable: false,

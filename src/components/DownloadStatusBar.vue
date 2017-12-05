@@ -4,7 +4,7 @@
         <button class="clearDownloads" @click="$root.$emit('clearDownloads')">
             Clear
         </button>
-        <div class="downloads">
+        <div class="downloads" :class="{'single-row': options.singleRowOnly}">
             <download v-for="download in downloads"
                       :key="download.id"
                       :download="download"
@@ -121,6 +121,7 @@
             @include reset;
             background  : none;
             cursor      : pointer;
+            flex        : none;
             margin-left : auto;
             overflow    : hidden;
             position    : relative;
@@ -149,6 +150,20 @@
             flex-direction : row;
             flex-wrap      : wrap;
             margin-top     : -5px;
+            flex           : 0 -1 auto;
+            overflow       : hidden;
+
+            &.single-row {
+                flex-wrap : nowrap;
+
+                .item {
+                    overflow  : hidden;
+                    flex      : 0 1 auto;
+                    max-width : unset;
+                    min-width : unset;
+                    width     : auto;
+                }
+            }
         }
 
         &.theme-dark {

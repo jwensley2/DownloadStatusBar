@@ -32,6 +32,14 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" v-model="options.singleRowOnly">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Force downloads to stay in a single row</span>
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" v-model="options.showStatusText">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Show status text</span>
