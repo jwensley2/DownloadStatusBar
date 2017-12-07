@@ -141,6 +141,12 @@ export function wasDownloadCancelled(download: DownloadItem): boolean {
     return download.state === 'interrupted' && (download.error === 'USER_CANCELED' || download.error === 'USER_SHUTDOWN')
 }
 
+/**
+ * Get a text representation of the status of a download
+ *
+ * @param {browser.downloads.DownloadItem} download
+ * @returns {string}
+ */
 export function downloadStatus(download: DownloadItem) {
     if (download.state === 'complete') {
         return 'Complete';
@@ -168,6 +174,12 @@ export function downloadStatus(download: DownloadItem) {
     return moment.duration(finish.diff(now), 'ms').humanize();
 }
 
+/**
+ * Get the percent that a download is complete
+ *
+ * @param {browser.downloads.DownloadItem} download
+ * @returns {string}
+ */
 export function downloadPercent(download: DownloadItem) {
     if (download.state === 'complete') {
         return '100';
@@ -178,6 +190,12 @@ export function downloadPercent(download: DownloadItem) {
     return ((download.bytesReceived / download.totalBytes) * 100).toFixed(2);
 }
 
+/**
+ * Get a text representation of the progress of a download
+ *
+ * @param {browser.downloads.DownloadItem} download
+ * @returns {string}
+ */
 export function downloadProgress(download: DownloadItem): string {
     if (download.state === 'complete') {
         return `${formatFileSize(download.fileSize)}`;
@@ -188,4 +206,24 @@ export function downloadProgress(download: DownloadItem): string {
     }
 
     return `${download.bytesReceived} / ${download.totalBytes} - ${downloadPercent(download)}%`;
+}
+
+/**
+ * Check if a download is an image
+ * @param {browser.downloads.DownloadItem} download
+ * @returns {boolean}
+ */
+export function downloadIsImage(download: DownloadItem) {
+    if (download.mime && download.mime.includes('image/')) {
+        return true;
+    }
+
+    const extension = _.last(download.filename.match(/\.(.*)/));
+    const imageExtensions = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
+
+    if (!extension) {
+        return false;
+    }
+
+    return imageExtensions.indexOf(extension) > 0;
 }

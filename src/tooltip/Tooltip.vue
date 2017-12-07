@@ -29,6 +29,10 @@
                 <th class="field-name">MIME type:</th>
                 <td>{{ download.mime || 'Unknown' }}</td>
             </tr>
+            <tr v-if="isImage">
+                <th class="field-name">Preview:</th>
+                <td><img class="preview" :src="download.url"></td>
+            </tr>
         </table>
     </div>
 </template>
@@ -89,6 +93,14 @@
             percentDone(): string {
                 return helpers.downloadPercent(this.download!)
             },
+
+            isImage(): boolean {
+                if (!this.download) {
+                    return false;
+                }
+
+                return helpers.downloadIsImage(this.download);
+            },
         },
 
         methods: {
@@ -131,21 +143,20 @@
 
     #DownloadStatusBarTooltip {
         @include reset;
-        background     : light-theme("background");
-        border         : 1px solid light-theme("border");
-        bottom         : 100%;
-        color          : light-theme("text");
-        cursor         : default;
-        left           : 0;
-        margin         : 0;
-        max-width      : 100%;
-        min-width      : 300px;
-        overflow       : hidden;
-        padding        : 10px;
-        pointer-events : none;
-        position       : absolute;
-        width          : auto;
-        z-index        : 10;
+        background : light-theme("background");
+        border     : 1px solid light-theme("border");
+        bottom     : 100%;
+        color      : light-theme("text");
+        cursor     : default;
+        left       : 0;
+        margin     : 0;
+        max-width  : 100%;
+        min-width  : 300px;
+        overflow   : hidden;
+        padding    : 10px;
+        position   : absolute;
+        width      : auto;
+        z-index    : 10;
 
         table {
             @include reset;
@@ -155,14 +166,14 @@
         tr {
             @include reset;
 
-            +tr {
-                td, th { padding-top: 5px }
+            + tr {
+                td, th { padding-top : 5px }
             }
         }
 
         td, th {
             @include reset;
-            background      : dark-theme("background");
+            background      : light-theme("background");
             border-collapse : collapse;
             line-height     : 1.2;
         }
@@ -179,6 +190,13 @@
             text-align     : right !important;
             vertical-align : top;
             white-space    : nowrap;
+        }
+
+        .preview {
+            max-width: 300px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
         }
 
         &.theme-dark {
