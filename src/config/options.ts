@@ -1,6 +1,9 @@
 import {FileType} from './filetypes';
 
-export type Options = {
+/**
+ * Options to save in the synced storage
+ */
+export type SyncOptions = {
     theme: string,
     alwaysShow: boolean,
     singleRowOnly: boolean,
@@ -10,9 +13,10 @@ export type Options = {
     autohideDuration: number,
     autohideFileTypes: Array<FileType>,
     autohideCustomTypes: Array<string>,
+    playSoundOnComplete: boolean,
 }
 
-export const defaultOptions: Options = {
+export const defaultSyncOptions: SyncOptions = {
     theme: 'light',
     alwaysShow: false,
     singleRowOnly: false,
@@ -22,4 +26,19 @@ export const defaultOptions: Options = {
     autohideDuration: 5,
     autohideFileTypes: [],
     autohideCustomTypes: [],
+    playSoundOnComplete: false,
+};
+
+/**
+ * Options to save in local storage
+ */
+export type LocalOptions = {
+    customSound?: {
+        name: string,
+        data: string,
+    },
+}
+
+export const defaultLocalOptions: LocalOptions = {
+    customSound: undefined,
 };

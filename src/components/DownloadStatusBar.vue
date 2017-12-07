@@ -21,7 +21,7 @@
 <script lang="ts">
     import Vue from 'vue';
     import Download from './Download.vue';
-    import {Options, defaultOptions} from '../config/options';
+    import {SyncOptions, defaultSyncOptions} from '../config/options';
     import * as helpers from '../helpers';
 
     export default Vue.extend({
@@ -32,7 +32,7 @@
         props: ['downloads'],
         data() {
             return {
-                options: defaultOptions,
+                options: defaultSyncOptions,
             }
         },
         methods: {
@@ -56,10 +56,10 @@
             },
         },
         mounted() {
-            // Load the saved options
+            // Load the saved syncOptions
             browser.storage.sync.get(null)
-                .then((options: Options) => {
-                    this.options = helpers.mergeDefaultOptions(options);
+                .then((options: SyncOptions) => {
+                    this.options = helpers.mergeSyncDefaultOptions(options);
                 });
 
             browser.storage.onChanged.addListener((changedOptions) => {

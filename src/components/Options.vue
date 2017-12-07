@@ -9,14 +9,14 @@
                             <div class="form-check">
                                 <label class="custom-control custom-radio">
                                     <span class="custom-control-indicator"></span>
-                                    <input type="radio" class="custom-control-input" value="light" v-model="options.theme">
+                                    <input type="radio" class="custom-control-input" value="light" v-model="syncOptions.theme">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Light</span>
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" value="dark" v-model="options.theme">
+                                    <input type="radio" class="custom-control-input" value="dark" v-model="syncOptions.theme">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Dark</span>
                                 </label>
@@ -24,7 +24,7 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="options.alwaysShow">
+                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.alwaysShow">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Always show the status bar</span>
                                 </label>
@@ -32,7 +32,7 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="options.singleRowOnly">
+                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.singleRowOnly">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Force downloads to stay in a single row</span>
                                 </label>
@@ -40,7 +40,7 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="options.showStatusText">
+                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.showStatusText">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Show status text</span>
                                 </label>
@@ -48,7 +48,7 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="options.showProgressText">
+                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.showProgressText">
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Show progress text</span>
                                 </label>
@@ -60,12 +60,12 @@
                         <div class="card-header">Auto Hiding</div>
                         <div class="card-body">
                             <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" v-model="options.autohideEnable">
+                                <input type="checkbox" class="custom-control-input" v-model="syncOptions.autohideEnable">
                                 <span class="custom-control-indicator"></span>
                                 <span class="custom-control-description">Auto Hide Completed Downloads</span>
                             </label>
 
-                            <div v-if="options.autohideEnable">
+                            <div v-if="syncOptions.autohideEnable">
                                 <div class="form-inline">
                                     Hide after
                                     <input type="number"
@@ -73,7 +73,7 @@
                                            max="600"
                                            class="form-control mr-2 ml-2 auto-hide-duration"
                                            value="5"
-                                           v-model="options.autohideDuration"
+                                           v-model="syncOptions.autohideDuration"
                                     >
                                     seconds
                                 </div>
@@ -83,10 +83,10 @@
                                     <small class="text-muted">Click to remove</small>
                                 </h5>
                                 <p>
-                                    <span v-for="type in options.autohideFileTypes"
+                                    <span v-for="type in syncOptions.autohideFileTypes"
                                           class="badge badge-primary mr-1"
                                           @click="removeFileType(type)">{{ type.name }}</span>
-                                    <span v-for="type in options.autohideCustomTypes"
+                                    <span v-for="type in syncOptions.autohideCustomTypes"
                                           class="badge badge-primary mr-1"
                                           @click="removeCustomType(type)">{{ type }}</span>
                                 </p>
@@ -118,6 +118,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card w-50 mt-4">
+                        <div class="card-header">Miscellaneous</div>
+                        <div class="card-body">
+                            <h4>Completion Sound</h4>
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="syncOptions.playSoundOnComplete">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Play a sound when a download completes</span>
+                            </label>
+
+                            <div v-if="syncOptions.playSoundOnComplete">
+                                <p class="text-muted">You may optionally choose a custom sound (1MB MAX)</p>
+                                <div v-if="localOptions.customSound">
+                                    {{ localOptions.customSound.name }}
+                                    <button class="btn btn-danger btn-sm" @click="removeCustomSound">X</button>
+                                </div>
+
+                                <div v-else class="form-group form-inline">
+                                    <input id="custom-sound"
+                                           class="form-control"
+                                           type="file"
+                                           maxlength="100000"
+                                           accept="audio/ogg,audio/mpeg,audio/wav,application/ogg,audio/webm,audio/x-flac"
+                                           @change="saveCustomSound($event.target.files)"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,12 +156,12 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {Options, defaultOptions} from '../config/options';
+    import {SyncOptions, defaultSyncOptions, LocalOptions, defaultLocalOptions} from '../config/options';
     import fileTypes, {FileTypeList, FileType} from '../config/filetypes';
     import * as helpers from '../helpers';
     import * as _ from 'lodash';
 
-    function saveOptionsToStorage(options: Options) {
+    function saveOptionsToStorage(options: SyncOptions) {
         options = {...options};
 
         if (typeof options.autohideDuration === 'string') {
@@ -144,11 +174,13 @@
     export default Vue.extend({
         name: 'options',
         data(): {
-            options: Options,
+            syncOptions: SyncOptions,
+            localOptions: LocalOptions
             fileTypes: FileTypeList
         } {
             return {
-                options: defaultOptions,
+                syncOptions: defaultSyncOptions,
+                localOptions: defaultLocalOptions,
                 fileTypes: fileTypes,
             }
         },
@@ -156,41 +188,41 @@
             selectableTypes(): FileTypeList {
                 return _.mapValues(this.fileTypes, (fileTypes) => {
                     return _.filter(fileTypes, (type: FileType) => {
-                        return this.options.autohideFileTypes.indexOf(type) === -1;
+                        return this.syncOptions.autohideFileTypes.indexOf(type) === -1;
                     })
                 });
             },
         },
         methods: {
             saveOptions() {
-                saveOptionsToStorage(this.options);
+                saveOptionsToStorage(this.syncOptions);
             },
             autohideTypeEntered(event: Event) {
                 const target = event.target as HTMLFormElement;
                 const type = (event.target as HTMLFormElement).value;
 
                 if (typeof type == 'string' && type.length >= 1) {
-                    if (this.options.autohideCustomTypes.indexOf(type) < 0) {
-                        this.options.autohideCustomTypes.push(type);
+                    if (this.syncOptions.autohideCustomTypes.indexOf(type) < 0) {
+                        this.syncOptions.autohideCustomTypes.push(type);
                     }
                 }
 
                 target.value = '';
             },
             removeFileType(type: FileType) {
-                const index = this.options.autohideFileTypes.indexOf(type);
-                this.options.autohideFileTypes.splice(index, 1);
+                const index = this.syncOptions.autohideFileTypes.indexOf(type);
+                this.syncOptions.autohideFileTypes.splice(index, 1);
             },
             removeCustomType(type: string) {
-                const index = this.options.autohideCustomTypes.indexOf(type);
-                this.options.autohideCustomTypes.splice(index, 1);
+                const index = this.syncOptions.autohideCustomTypes.indexOf(type);
+                this.syncOptions.autohideCustomTypes.splice(index, 1);
             },
             selectType(event: Event) {
                 const target = event.target as HTMLFormElement;
                 const selectedType = helpers.getFileTypeByName(target.value);
 
-                if (selectedType && this.options.autohideFileTypes.indexOf(selectedType) === -1) {
-                    this.options.autohideFileTypes.push(selectedType);
+                if (selectedType && this.syncOptions.autohideFileTypes.indexOf(selectedType) === -1) {
+                    this.syncOptions.autohideFileTypes.push(selectedType);
                 }
 
                 // Clear the input
@@ -201,18 +233,54 @@
                     return (group.length > 0 || prev);
                 }, false);
             },
+
+            saveCustomSound(files: File[]) {
+                const file = _.first(files);
+                let reader = new FileReader();
+
+                if (!file) {
+                    return;
+                }
+
+                if (file.size > (1024 * 1024)) {
+                    alert(`"${file.name}" is ${helpers.formatFileSize(file.size)}`);
+                    return;
+                }
+
+                reader.addEventListener('load', () => {
+                    this.localOptions.customSound = {
+                        'name': file.name,
+                        'data': reader.result,
+                    };
+
+                    browser.storage.local.set({'customSound': this.localOptions.customSound});
+                });
+
+                reader.readAsDataURL(file);
+            },
+
+            removeCustomSound() {
+                browser.storage.local.remove('customSound').then(() => {
+                    this.localOptions.customSound = undefined;
+                });
+            },
         },
 
         mounted() {
-            // Load the saved options
+            // Load the saved syncOptions
             browser.storage.sync.get(null)
-                .then((options: Options) => {
-                    this.options = helpers.mergeDefaultOptions(options);
+                .then((options: SyncOptions) => {
+                    this.syncOptions = helpers.mergeSyncDefaultOptions(options);
+                });
+
+            browser.storage.local.get(null)
+                .then((options: LocalOptions) => {
+                    this.localOptions = helpers.mergeLocalDefaultOptions(options);
                 });
         },
 
         watch: {
-            options: {
+            syncOptions: {
                 handler(options) {
                     saveOptionsToStorage(options);
                 },
@@ -226,19 +294,23 @@
     @import "~bootstrap/scss/bootstrap";
 
     html, body {
-        background: transparent;
+        background : transparent;
     }
 
     .auto-hide-duration {
-        width: 50px;
+        width : 50px;
+    }
+
+    .card-deck .card {
+        flex : 1 0 auto;
     }
 
     @include media-breakpoint-down(sm) {
         .card-deck .card {
-            flex: 100%;
+            flex : 100%;
 
             + .card {
-                margin-top: 20px
+                margin-top : 20px
             }
         }
     }

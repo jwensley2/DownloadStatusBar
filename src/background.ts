@@ -1,19 +1,19 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import DownloadQuery = browser.downloads.DownloadQuery;
 import * as helpers from './helpers';
-import {Options, defaultOptions} from './config/options';
+import {SyncOptions, defaultSyncOptions, LocalOptions} from './config/options';
 
 class DownloadStatus {
     protected downloads: DownloadItem[] = [];
     protected interval: number | null;
-    protected options: Options = defaultOptions;
+    protected options: SyncOptions = defaultSyncOptions;
 
     constructor() {
         const self = this;
 
         browser.storage.sync.get(null)
-            .then((options: Options) => {
-                this.options = helpers.mergeDefaultOptions(options);
+            .then((options: SyncOptions) => {
+                this.options = helpers.mergeSyncDefaultOptions(options);
             });
 
         browser.storage.onChanged.addListener((changedOptions) => {
@@ -29,6 +29,8 @@ class DownloadStatus {
 
         browser.downloads.onChanged.addListener((downloadDelta) => {
             if (downloadDelta.state && downloadDelta.state.current === 'complete') {
+                this.playCompletedSound();
+
                 // This download object is a delta of what changed so we need to query for the full download item
                 this.getDownloadItem(downloadDelta.id).then((download) => {
                     if (helpers.shouldHideDownload(download, this.options)) {
@@ -231,6 +233,24 @@ class DownloadStatus {
         browser.downloads.removeFile(download.id).then(() => {
             this.downloads = helpers.removeSelectedDownload(download, this.downloads);
             this.updateTabs(this.downloads);
+        });
+    }
+
+    playCompletedSound() {
+        if (!this.options.playSoundOnComplete) {
+            return;
+        }
+
+        browser.storage.local.get('customSound').then((options: LocalOptions) => {
+            let audio = new Audio();
+
+            if (options.customSound) {
+                audio.src = browser.runtime.getURL(options.customSound.data);
+            } else {
+                audio.src = browser.runtime.getURL('sounds/complete.wav');
+            }
+
+            audio.play();
         });
     }
 }

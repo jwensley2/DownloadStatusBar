@@ -78,7 +78,8 @@ module.exports = {
             {from: '.web-extension-id', to: './'},
             {from: 'src/options.html', to: './'},
             {from: 'icons', to: './icons'},
-            {from: 'icomoon/fonts', to: './fonts'}
+            {from: 'icomoon/fonts', to: './fonts'},
+            {from: 'sounds', to: './sounds'}
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]

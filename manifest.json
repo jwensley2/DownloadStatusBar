@@ -42,6 +42,7 @@
     "webNavigation"
   ],
   "web_accessible_resources": [
-    "/fonts/*"
+    "/fonts/*",
+    "/sounds/*"
   ]
 }

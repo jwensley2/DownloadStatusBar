@@ -1,5 +1,5 @@
 import DownloadItem = browser.downloads.DownloadItem;
-import {defaultOptions, Options} from './config/options';
+import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
 import fileTypes, {FileType} from './config/filetypes';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -42,13 +42,13 @@ export function getInProgressDownloads(downloads: DownloadItem[]): DownloadItem[
 }
 
 /**
- * Merge the default options into an options object
+ * Merge the default sync options into an sync options object
  *
- * @param {Options} options
- * @returns {Options}
+ * @param {SyncOptions} options
+ * @returns {SyncOptions}
  */
-export function mergeDefaultOptions(options: Options): Options {
-    let merged = Object.assign({}, defaultOptions, options);
+export function mergeSyncDefaultOptions(options: SyncOptions): SyncOptions {
+    let merged = Object.assign({}, defaultSyncOptions, options);
 
     // Replace the saved types with the one in the config if it exists
     merged.autohideFileTypes = merged.autohideFileTypes.map((fileType) => {
@@ -56,6 +56,16 @@ export function mergeDefaultOptions(options: Options): Options {
     });
 
     return merged;
+}
+
+/**
+ * Merge the default local options into an local options object
+ *
+ * @param {SyncOptions} options
+ * @returns {SyncOptions}
+ */
+export function mergeLocalDefaultOptions(options: LocalOptions): LocalOptions {
+    return Object.assign({}, defaultLocalOptions, options);
 }
 
 /**
@@ -74,10 +84,10 @@ export function getFileTypeByName(ft: string): FileType | undefined {
  * Check if a download should be automatically hidden
  *
  * @param {browser.downloads.DownloadItem} download
- * @param {Options} options
+ * @param {SyncOptions} options
  * @returns {boolean}
  */
-export function shouldHideDownload(download: DownloadItem, options: Options): boolean {
+export function shouldHideDownload(download: DownloadItem, options: SyncOptions): boolean {
     const extension = _.last(download.filename.match(/\.(.*)/));
 
     if (!options.autohideEnable) {
