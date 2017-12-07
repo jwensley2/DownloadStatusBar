@@ -82,6 +82,7 @@
                                 <h5 class="mt-3">File types to hide
                                     <small class="text-muted">Click to remove</small>
                                 </h5>
+                                <p class="text-muted">Optional. If nothing is selected all file types will auto hide.</p>
                                 <p>
                                     <span v-for="type in syncOptions.autohideFileTypes"
                                           class="badge badge-primary mr-1"
