@@ -12,7 +12,11 @@ import * as moment from 'moment';
  */
 export function filterFinishedDownloads(downloads: DownloadItem[]): DownloadItem[] {
     return downloads.filter(function (download: DownloadItem) {
-        return download.state !== 'complete' && !wasDownloadCancelled(download);
+        if (download.error && !download.paused) {
+            return false;
+        }
+
+        return download.state === 'in_progress' || download.paused;
     })
 }
 

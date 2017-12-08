@@ -10,7 +10,8 @@ $light-theme : (
         "border": #888,
         "download": #AAA,
         "progress": #2A911F,
-        "text": #111
+        "text": #111,
+        "error": #FF574F
 );
 
 $dark-theme : (
@@ -21,5 +22,6 @@ $dark-theme : (
         "border": #111,
         "download": #666,
         "progress": #222,
-        "text": #EEE
+        "text": #EEE,
+        "error": #73100D
 );

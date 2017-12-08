@@ -6,9 +6,9 @@
          @mouseleave="hideTooltip"
          @contextmenu.prevent="showContextMenu"
          :ref="`downloads-${download.id}`"
-         :class="`theme-${options.theme}`"
+         :class="[`theme-${options.theme}`, progressClass]"
     >
-        <div class="progress-bar" :style="`width: ${percentDone}%`"></div>
+        <div v-if="isInProgress" class="progress-bar" :style="`width: ${percentDone}%`"></div>
 
         <div class="text-container">
             <p class="filename">{{ filename }}</p>
@@ -20,7 +20,6 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import * as moment from 'moment';
     import * as helpers from '../helpers';
 
     export default Vue.extend({
@@ -61,6 +60,26 @@
 
             percentDone(): string {
                 return helpers.downloadPercent(this.download);
+            },
+
+            isInProgress(): boolean {
+                return this.download.state === 'in_progress' || this.download.paused;
+            },
+
+            progressClass() {
+                if (this.download.state === 'complete') {
+                    return 'complete';
+                }
+
+                if (helpers.wasDownloadCancelled(this.download)) {
+                    return 'cancelled';
+                }
+
+                if (this.download.error && !this.download.paused) {
+                    return 'error';
+                }
+
+                return 'in-progress';
             },
         },
 
@@ -182,6 +201,14 @@
             z-index  : 10;
         }
 
+        &.complete {
+            background : light-theme("progress");
+        }
+
+        &.error {
+            background : light-theme("error");
+        }
+
         .progress-bar {
             @include reset;
             background    : light-theme("progress");
@@ -225,6 +252,14 @@
 
             .progress-bar {
                 background : dark-theme("progress");
+            }
+
+            &.complete {
+                background : dark-theme("progress");
+            }
+
+            &.error {
+                background : dark-theme("error");
             }
         }
     }
