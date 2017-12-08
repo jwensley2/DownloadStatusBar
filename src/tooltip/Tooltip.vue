@@ -193,10 +193,10 @@
         }
 
         .preview {
-            max-width: 300px;
-            max-height: 200px;
-            width: auto;
-            height: auto;
+            max-width  : 300px;
+            max-height : 200px;
+            width      : auto;
+            height     : auto;
         }
 
         &.theme-dark {
@@ -204,7 +204,10 @@
             border     : 1px solid dark-theme("border");
             color      : dark-theme("text");
 
-            th, td { color : dark-theme("text") }
+            th, td {
+                background : dark-theme("background");
+                color      : dark-theme("text");
+            }
         }
     }
 </style>
