@@ -201,15 +201,18 @@ export function downloadPercent(download: DownloadItem) {
  * @returns {string}
  */
 export function downloadProgress(download: DownloadItem): string {
+    const downloaded = formatFileSize(download.bytesReceived);
+    const totalSize = formatFileSize(download.totalBytes);
+
     if (download.state === 'complete') {
         return `${formatFileSize(download.fileSize)}`;
     }
 
     if (download.totalBytes === -1) {
-        return `${formatFileSize(download.bytesReceived)} / Unknown`
+        return `${downloaded} / Unknown`
     }
 
-    return `${download.bytesReceived} / ${download.totalBytes} - ${downloadPercent(download)}%`;
+    return `${downloaded} / ${totalSize} - ${downloadPercent(download)}%`;
 }
 
 /**
