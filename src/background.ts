@@ -2,6 +2,8 @@ import DownloadItem = browser.downloads.DownloadItem;
 import DownloadQuery = browser.downloads.DownloadQuery;
 import * as helpers from './helpers';
 import {SyncOptions, defaultSyncOptions, LocalOptions} from './config/options';
+import download = browser.downloads.download;
+import moment = require('moment');
 
 class DownloadStatus {
     protected downloads: DownloadItem[] = [];
@@ -29,10 +31,15 @@ class DownloadStatus {
 
         browser.downloads.onChanged.addListener((downloadDelta) => {
             if (downloadDelta.state && downloadDelta.state.current === 'complete') {
-                this.playCompletedSound();
-
                 // This download object is a delta of what changed so we need to query for the full download item
                 this.getDownloadItem(downloadDelta.id).then((download) => {
+                    let startTime = moment(download.startTime);
+
+                    // Play sound if the download doesn't instantly finish
+                    if (moment().diff(startTime, 's') > 1) {
+                        this.playCompletedSound();
+                    }
+
                     if (helpers.shouldHideDownload(download, this.options)) {
                         setTimeout(() => {
                             self.clearDownload(download);
