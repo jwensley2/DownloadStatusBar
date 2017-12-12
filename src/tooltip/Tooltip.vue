@@ -7,11 +7,11 @@
             </tr>
             <tr>
                 <th class="field-name">Url:</th>
-                <td>{{ download.url }}</td>
+                <td>{{ download.downloadItem.url }}</td>
             </tr>
             <tr>
                 <th class="field-name">Referrer:</th>
-                <td>{{ download.referrer || 'None' }}</td>
+                <td>{{ download.downloadItem.referrer || 'None' }}</td>
             </tr>
             <tr>
                 <th class="field-name">Status:</th>
@@ -27,11 +27,11 @@
             </tr>
             <tr>
                 <th class="field-name">MIME type:</th>
-                <td>{{ download.mime || 'Unknown' }}</td>
+                <td>{{ download.downloadItem.mime || 'Unknown' }}</td>
             </tr>
             <tr v-if="isImage">
                 <th class="field-name">Preview:</th>
-                <td><img class="preview" :src="download.url"></td>
+                <td><img class="preview" :src="download.downloadItem.url"></td>
             </tr>
         </table>
     </div>
@@ -39,16 +39,15 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import Component from 'vue-class-component'
-    import DownloadItem = browser.downloads.DownloadItem;
     import events from './events';
     import * as helpers from '../helpers';
+    import {DSBDownload} from '../DSBDownloadItem';
 
     export default Vue.extend({
         name: 'tooltip',
         props: ['theme'],
         data(): {
-            download: DownloadItem | null,
+            download: DSBDownload | null,
             element: HTMLElement | null,
             tooltipShown: boolean,
             left: string,
@@ -62,36 +61,30 @@
         },
         computed: {
             filename(): string {
-                let m = this.download!.filename.toString().match(/.*[\/\\](.+)/);
-
-                if (m && m.length > 1) {
-                    return m[m.length - 1];
-                }
-
-                return '';
+                return this.download!.downloadItem.filename;
             },
             status(): string {
-                return helpers.downloadStatus(this.download!)
+                return this.download!.status();
             },
 
             progress(): string {
-                return helpers.downloadProgress(this.download!);
+                return this.download!.progress();
             },
 
             downloaded(): string {
-                return helpers.formatFileSize(this.download!.bytesReceived);
+                return helpers.formatFileSize(this.download!.downloadItem.bytesReceived);
             },
 
             totalsize(): string {
-                return helpers.formatFileSize(this.download!.totalBytes);
+                return helpers.formatFileSize(this.download!.downloadItem.totalBytes);
             },
 
             filesize(): string {
-                return helpers.formatFileSize(this.download!.fileSize);
+                return helpers.formatFileSize(this.download!.downloadItem.fileSize);
             },
 
             percentDone(): string {
-                return helpers.downloadPercent(this.download!)
+                return this.download!.percentDownloaded();
             },
 
             isImage(): boolean {
@@ -99,7 +92,7 @@
                     return false;
                 }
 
-                return helpers.downloadIsImage(this.download);
+                return this.download.isImage();
             },
         },
 
@@ -124,7 +117,7 @@
         },
 
         mounted() {
-            events.$on('showTooltip', (download: DownloadItem, element: HTMLElement) => {
+            events.$on('showTooltip', (download: DSBDownload, element: HTMLElement) => {
                 this.tooltipShown = true;
                 this.download = download;
                 this.element = element;

@@ -2,10 +2,10 @@
     <div class="item"
          @click="singleClick"
          @dblclick="doubleClick"
-         @mouseover="showTooltip($refs[`downloads-${download.id}`], download)"
+         @mouseover="showTooltip($refs[`downloads-${download.downloadItem.id}`], download)"
          @mouseleave="hideTooltip"
          @contextmenu.prevent="showContextMenu"
-         :ref="`downloads-${download.id}`"
+         :ref="`downloads-${download.downloadItem.id}`"
          :class="[`theme-${options.theme}`, progressClass]"
     >
         <div v-if="isInProgress" class="progress-bar" :style="`width: ${percentDone}%`"></div>
@@ -29,53 +29,47 @@
             return {}
         },
         computed: {
-            filename(): String {
-                let m = this.download.filename.toString().match(/.*[\/\\](.+)/);
-
-                if (m && m.length > 1) {
-                    return m[m.length - 1];
-                }
-
-                return '';
+            filename(): string {
+                return this.download.filename();
             },
             status(): string {
-                return helpers.downloadStatus(this.download);
+                return this.download.status();
             },
 
             progress(): string {
-                return helpers.downloadProgress(this.download);
+                return this.download.progress()
             },
 
             downloaded(): string {
-                return helpers.formatFileSize(this.download.bytesReceived);
+                return helpers.formatFileSize(this.download.downloadItem.bytesReceived);
             },
 
             totalsize(): string {
-                return helpers.formatFileSize(this.download.totalBytes);
+                return helpers.formatFileSize(this.download.downloadItem.totalBytes);
             },
 
             filesize(): string {
-                return helpers.formatFileSize(this.download.fileSize);
+                return helpers.formatFileSize(this.download.downloadItem.fileSize);
             },
 
             percentDone(): string {
-                return helpers.downloadPercent(this.download);
+                return this.download.percentDownloaded()
             },
 
             isInProgress(): boolean {
-                return this.download.state === 'in_progress' || this.download.paused;
+                return this.download.downloadItem.state === 'in_progress' || this.download.downloadItem.paused;
             },
 
             progressClass() {
-                if (this.download.state === 'complete') {
+                if (this.download.downloadItem.state === 'complete') {
                     return 'complete';
                 }
 
-                if (helpers.wasDownloadCancelled(this.download)) {
+                if (this.download.isCancelled()) {
                     return 'cancelled';
                 }
 
-                if (this.download.error && !this.download.paused) {
+                if (this.download.downloadItem.error && !this.download.downloadItem.paused) {
                     return 'error';
                 }
 
@@ -88,12 +82,12 @@
                 this.$root.$contextMenu.close();
             },
             doubleClick() {
-                this.$root.$emit('showDownload', this.download);
+                this.$root.$emit('showDownload', this.download.downloadItem);
             },
             showContextMenu(event: MouseEvent) {
                 const userAgent = window.navigator.userAgent;
-                const inProgress = this.download.state === 'in_progress';
-                const paused = this.download.state === 'interrupted' && this.download.paused;
+                const inProgress = this.download.downloadItem.state === 'in_progress';
+                const paused = this.download.downloadItem.state === 'interrupted' && this.download.downloadItem.paused;
 
                 let showTitle = userAgent.includes('Windows') ? 'Show in Explorer' :
                     userAgent.includes('Mac') ? 'Reveal in Finder' : 'Show in Folder';
@@ -109,7 +103,7 @@
                     },
                 ];
 
-                if (!this.download.error) {
+                if (!this.download.downloadItem.error) {
                     items.push({
                         name: showTitle,
                         icon: 'folder-open',
@@ -156,7 +150,7 @@
                     });
                 }
 
-                if (this.download.state === 'complete') {
+                if (this.download.downloadItem.state === 'complete') {
                     items.push({
                         name: 'Delete Download',
                         icon: 'trash-o',
