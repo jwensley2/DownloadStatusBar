@@ -1,7 +1,7 @@
 import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
 import fileTypes, {FileType} from './config/filetypes';
 import * as _ from 'lodash';
-import {DSBDownload} from './DSBDownloadItem';
+import {DSBDownload} from './DSBDownload';
 
 /**
  * Remove finished downloads from the array of downloads

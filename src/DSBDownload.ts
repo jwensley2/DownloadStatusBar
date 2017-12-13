@@ -2,13 +2,53 @@ import DownloadItem = browser.downloads.DownloadItem;
 import * as _ from 'lodash';
 import * as helpers from './helpers';
 import * as moment from 'moment';
+import {Moment} from 'moment';
+
+type DownloadProgress = { time: Moment, bytesReceived: number };
 
 export class DSBDownload {
-    readonly downloadItem: DownloadItem;
-    protected downloadProgress = [];
+    protected _downloadItem: DownloadItem;
+    protected downloadProgress: DownloadProgress[] = [];
 
-    constructor(download: DownloadItem) {
-        this.downloadItem = download;
+    constructor(downloadItem: DownloadItem) {
+        this._downloadItem = downloadItem;
+
+        this.downloadProgress.push({
+            time: moment(downloadItem.startTime),
+            bytesReceived: downloadItem.bytesReceived,
+        });
+    }
+
+    get downloadItem() {
+        return this._downloadItem;
+    }
+
+    updateDownload(downloadItem: DownloadItem, time?: Moment) {
+        this._downloadItem = downloadItem;
+
+        this.downloadProgress.push({
+            time: time || moment(),
+            bytesReceived: downloadItem.bytesReceived,
+        });
+    }
+
+    /**
+     * Calculate the download speed in bytes/s
+     * @returns {number}
+     */
+    calculateDownloadSpeed() {
+        // Get the 5 most recent samples of the progress
+        const samples = this.downloadProgress.slice(-5);
+
+        // Get the first and last of the samples
+        const first = _.first(samples);
+        const last = _.last(samples);
+
+        // Calculate the total time and bytes between the first and last samples
+        const totalTime = Math.max((last.time.diff(first.time, 's')), 1);
+        const totalBytes = last.bytesReceived - first.bytesReceived;
+
+        return totalBytes / totalTime;
     }
 
     /**

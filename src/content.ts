@@ -3,7 +3,7 @@ import * as helpers from './helpers';
 import ContextMenu from './context-menu/ContextMenu';
 import Tooltip from './tooltip/Tooltip';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
-import {DSBDownload} from './DSBDownloadItem';
+import {DSBDownload} from './DSBDownload';
 import DownloadItem = browser.downloads.DownloadItem;
 
 class DownloadStatusBar {

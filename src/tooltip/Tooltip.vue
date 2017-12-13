@@ -41,7 +41,7 @@
     import Vue from 'vue';
     import events from './events';
     import * as helpers from '../helpers';
-    import {DSBDownload} from '../DSBDownloadItem';
+    import {DSBDownload} from '../DSBDownload';
 
     export default Vue.extend({
         name: 'tooltip',

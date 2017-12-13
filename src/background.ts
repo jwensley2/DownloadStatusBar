@@ -3,7 +3,7 @@ import DownloadQuery = browser.downloads.DownloadQuery;
 import DownloadItem = browser.downloads.DownloadItem;
 import * as helpers from './helpers';
 import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
-import {DSBDownload} from './DSBDownloadItem';
+import {DSBDownload} from './DSBDownload';
 
 class DownloadStatus {
     protected downloads: DSBDownload[] = [];
@@ -175,7 +175,8 @@ class DownloadStatus {
                 let query: DownloadQuery = {id: download.downloadItem.id};
 
                 browser.downloads.search(query).then((downloads) => {
-                    resolve(new DSBDownload(downloads[0]));
+                    download.updateDownload(downloads[0]);
+                    resolve(download);
                 }, (error) => {
                     this.onError(error);
                     reject();
