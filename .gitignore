@@ -4,3 +4,5 @@
 /content.js*
 /build
 /web-ext-artifacts
+/.nyc_output
+/coverage

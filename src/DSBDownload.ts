@@ -123,14 +123,14 @@ export class DSBDownload {
      *
      * @returns {string}
      */
-    percentDownloaded(): string {
+    percentDownloaded(): number {
         if (this.downloadItem.state === 'complete') {
-            return '100';
+            return 100;
         } else if (this.downloadItem.totalBytes < 0) {
-            return '0';
+            return 0;
         }
 
-        return ((this.downloadItem.bytesReceived / this.downloadItem.totalBytes) * 100).toFixed(2);
+        return Math.floor((this.downloadItem.bytesReceived / this.downloadItem.totalBytes) * 100);
     }
 
     /**
