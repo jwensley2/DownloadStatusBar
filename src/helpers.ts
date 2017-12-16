@@ -139,3 +139,17 @@ export function formatFileSize(bytes: number, round: boolean = false) {
 
     return size + sizes[i];
 }
+
+/**
+ * Save the options to the synced storage
+ * @param {SyncOptions} options
+ */
+export function saveOptionsToStorage(options: SyncOptions) {
+    options = {...options};
+
+    if (typeof options.autohideDuration === 'string') {
+        options.autohideDuration = parseInt(options.autohideDuration);
+    }
+
+    return browser.storage.sync.set(options);
+}

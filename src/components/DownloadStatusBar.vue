@@ -1,10 +1,11 @@
 <template>
-    <div id="DownloadStatusBar" v-if="downloads.length > 0 || options.alwaysShow" :class="`theme-${options.theme}`"
+    <div id="DownloadStatusBar" v-if="downloads.length > 0 || options.alwaysShow"
+         :class="[`theme-${options.theme}`, {minimized: options.minimized}]"
          @mouseleave="hideContextMenu">
         <button class="clearDownloads" @click="$root.$emit('clearDownloads')">
             Clear
         </button>
-        <div class="downloads" :class="{'single-row': options.singleRowOnly}">
+        <div class="downloads" :class="{'single-row': options.singleRowOnly}" v-if="!options.minimized">
             <download v-for="download in downloads"
                       :key="download.id"
                       :download="download"
@@ -15,6 +16,9 @@
         <tooltip :theme="options.theme"></tooltip>
 
         <button class="open-options" @click="openOptions">Options<span class="icon-gear"></span></button>
+        <button class="minimize" @click="minimize">
+            <span :class="!options.minimized ? 'icon-angle-right' : 'icon-angle-left'"></span>
+        </button>
     </div>
 </template>
 
@@ -32,7 +36,7 @@
         props: ['downloads'],
         data() {
             return {
-                options: defaultSyncOptions,
+                options: defaultSyncOptions
             }
         },
         methods: {
@@ -41,6 +45,11 @@
             },
             openOptions() {
                 this.$root.$emit('openOptions');
+            },
+            minimize() {
+                this.options.minimized = !this.options.minimized;
+
+                helpers.saveOptionsToStorage(this.options);
             },
         },
         watch: {
@@ -99,6 +108,17 @@
             vertical-align : middle
         }
 
+        &.minimized {
+            border-left : 1px solid light-theme("border");
+            left        : auto;
+            overflow    : hidden;
+            right       : 0;
+            width       : auto;
+
+            .clearDownloads { display : none }
+            .open-options { display : none }
+        }
+
         .clearDownloads {
             @include reset;
             background   : light-theme("button");
@@ -118,18 +138,16 @@
             }
         }
 
-        .open-options {
+        .icon-button {
             @include reset;
             background  : none;
             cursor      : pointer;
-            flex        : none;
-            margin-left : auto;
             overflow    : hidden;
             position    : relative;
             text-indent : -999px;
             width       : 30px;
 
-            .icon-gear {
+            [class^="icon-"] {
                 color       : light-theme('text');
                 display     : block;
                 font-size   : 20px;
@@ -143,6 +161,16 @@
                 top         : 50%;
                 width       : 100%;
             }
+        }
+
+        .open-options {
+            @extend .icon-button;
+            margin-left : auto;
+            flex        : none;
+        }
+
+        .minimize {
+            @extend .icon-button;
         }
 
         .downloads {
@@ -172,6 +200,10 @@
             border-top : 1px solid dark-theme("border");
             color      : dark-theme("text");
 
+            &.minimized {
+                border-left : 1px solid dark-theme("border");
+            }
+
             .clearDownloads {
                 background   : dark-theme("button");
                 border-right : 1px solid dark-theme("button-border");
@@ -182,7 +214,7 @@
                 }
             }
 
-            .icon-gear { color : dark-theme('text') }
+            .icon-button [class^="icon-"] { color : dark-theme('text') }
         }
     }
 </style>

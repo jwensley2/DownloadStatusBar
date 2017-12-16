@@ -14,6 +14,7 @@ export type SyncOptions = {
     autohideFileTypes: Array<FileType>,
     autohideCustomTypes: Array<string>,
     playSoundOnComplete: boolean,
+    minimized: boolean
 }
 
 export const defaultSyncOptions: SyncOptions = {
@@ -27,6 +28,7 @@ export const defaultSyncOptions: SyncOptions = {
     autohideFileTypes: [],
     autohideCustomTypes: [],
     playSoundOnComplete: false,
+    minimized: false,
 };
 
 /**

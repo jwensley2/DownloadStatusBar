@@ -162,16 +162,6 @@
     import * as helpers from '../helpers';
     import * as _ from 'lodash';
 
-    function saveOptionsToStorage(options: SyncOptions) {
-        options = {...options};
-
-        if (typeof options.autohideDuration === 'string') {
-            options.autohideDuration = parseInt(options.autohideDuration);
-        }
-
-        browser.storage.sync.set(options);
-    }
-
     export default Vue.extend({
         name: 'options',
         data(): {
@@ -196,7 +186,7 @@
         },
         methods: {
             saveOptions() {
-                saveOptionsToStorage(this.syncOptions);
+                helpers.saveOptionsToStorage(this.syncOptions);
             },
             autohideTypeEntered(event: Event) {
                 const target = event.target as HTMLFormElement;
@@ -283,7 +273,7 @@
         watch: {
             syncOptions: {
                 handler(options) {
-                    saveOptionsToStorage(options);
+                    helpers.saveOptionsToStorage(options);
                 },
                 deep: true,
             },
