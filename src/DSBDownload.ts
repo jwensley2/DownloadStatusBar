@@ -6,9 +6,14 @@ import {Moment} from 'moment';
 
 type DownloadProgress = { time: Moment, bytesReceived: number };
 
-export class DSBDownload {
+export interface DownloadInterface {
+    downloadItem: DownloadItem,
+    downloadProgress: DownloadProgress[],
+}
+
+export class DSBDownload implements DownloadInterface {
     protected _downloadItem: DownloadItem;
-    protected downloadProgress: DownloadProgress[] = [];
+    protected _downloadProgress: DownloadProgress[] = [];
 
     constructor(downloadItem: DownloadItem) {
         this._downloadItem = downloadItem;
@@ -19,36 +24,65 @@ export class DSBDownload {
         });
     }
 
+    static fromJson(json: DownloadInterface) {
+        let download = new this(json.downloadItem);
+
+        // Convert the serialized progress to the proper form
+        download._downloadProgress = json.downloadProgress.map((progress) => {
+            progress.time = moment(progress.time);
+            return progress;
+        });
+
+        return download;
+    }
+
+    toJSON() {
+        return {
+            downloadItem: this.downloadItem,
+            downloadProgress: this.downloadProgress,
+        }
+    }
+
     get downloadItem() {
         return this._downloadItem;
+    }
+
+    get downloadProgress() {
+        return this._downloadProgress;
     }
 
     updateDownload(downloadItem: DownloadItem, time?: Moment) {
         this._downloadItem = downloadItem;
 
-        this.downloadProgress.push({
-            time: time || moment(),
-            bytesReceived: downloadItem.bytesReceived,
-        });
+        if (downloadItem.state !== 'complete') {
+            this.downloadProgress.push({
+                time: time || moment(),
+                bytesReceived: downloadItem.bytesReceived,
+            });
+        }
     }
 
     /**
      * Calculate the download speed in bytes/s
      * @returns {number}
      */
-    calculateDownloadSpeed() {
+    calculateDownloadSpeed(sampleSize = 10) {
         // Get the 5 most recent samples of the progress
-        const samples = this.downloadProgress.slice(-5);
+        const samples = this.downloadProgress.slice(-sampleSize);
+
+        if (samples.length === 0) {
+            return 0;
+        }
 
         // Get the first and last of the samples
-        const first = _.first(samples);
-        const last = _.last(samples);
+        const first = _.first(samples)!;
+        const last = _.last(samples)!;
 
         // Calculate the total time and bytes between the first and last samples
         const totalTime = Math.max((last.time.diff(first.time, 's')), 1);
         const totalBytes = last.bytesReceived - first.bytesReceived;
 
-        return totalBytes / totalTime;
+        return Math.round(totalBytes / totalTime);
     }
 
     /**

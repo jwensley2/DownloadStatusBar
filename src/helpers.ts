@@ -123,12 +123,19 @@ export function shouldHideDownload(download: DSBDownload, options: SyncOptions):
  * Format a filesize in bytes to KB, MB, GB or TB
  *
  * @param {number} bytes
+ * @param round
  * @returns {string}
  */
-export function formatFileSize(bytes: number) {
-    let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0 Bytes';
+export function formatFileSize(bytes: number, round: boolean = false) {
+    let sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0B';
     let i = Math.floor(Math.log(bytes) / Math.log(1024));
 
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    let size = Math.round(bytes / Math.pow(1024, i) * 100) / 100;
+
+    if (round) {
+        size = Math.round(size);
+    }
+
+    return size + sizes[i];
 }

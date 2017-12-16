@@ -13,7 +13,8 @@
         <div class="text-container">
             <p class="filename">{{ filename }}</p>
             <p v-if="options.showStatusText" class="status text-line">{{ status }}</p>
-            <p v-if="options.showProgressText" class="progress text-line">{{ progress }}</p>
+            <p v-if="options.showProgressText" class="progress text-line">{{ progress }} <span
+                    v-if="isInProgress">{{ downloadSpeed }}</span></p>
         </div>
     </div>
 </template>
@@ -75,6 +76,14 @@
 
                 return 'in-progress';
             },
+
+            downloadSpeed(): string {
+                if (!this.download) {
+                    return '';
+                }
+
+                return `${helpers.formatFileSize(this.download.calculateDownloadSpeed(), true)}/s`;
+            },
         },
 
         methods: {
@@ -82,7 +91,7 @@
                 this.$root.$contextMenu.close();
             },
             doubleClick() {
-                this.$root.$emit('showDownload', this.download.downloadItem);
+                this.$root.$emit('showDownload', this.download);
             },
             showContextMenu(event: MouseEvent) {
                 const userAgent = window.navigator.userAgent;

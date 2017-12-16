@@ -2,8 +2,9 @@ import moment = require('moment');
 import DownloadQuery = browser.downloads.DownloadQuery;
 import DownloadItem = browser.downloads.DownloadItem;
 import * as helpers from './helpers';
+import * as _ from 'lodash';
 import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
-import {DSBDownload} from './DSBDownload';
+import {DownloadInterface, DSBDownload} from './DSBDownload';
 
 class DownloadStatus {
     protected downloads: DSBDownload[] = [];
@@ -31,9 +32,21 @@ class DownloadStatus {
 
         browser.downloads.onChanged.addListener((downloadDelta) => {
             if (downloadDelta.state && downloadDelta.state.current === 'complete') {
+                let download = _.find(this.downloads, (dl) => {
+                    return dl.downloadItem.id === downloadDelta.id;
+                });
+
+                if (!download) return;
+
                 // This downloadItem object is a delta of what changed so we need to query for the full downloadItem item
-                this.getDownloadItem(downloadDelta.id).then((download) => {
+                this.updateDownload(download).then((download) => {
                     let startTime = moment(download.downloadItem.startTime);
+
+                    // Add the final progress
+                    download.downloadProgress.push({
+                        time: moment(),
+                        bytesReceived: download.downloadItem.fileSize,
+                    });
 
                     // Play sound if the download doesn't instantly finish
                     if (moment().diff(startTime, 's') > 1) {
@@ -52,21 +65,23 @@ class DownloadStatus {
         });
 
         browser.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
+            let download = DSBDownload.fromJson(JSON.parse(request.download) as DownloadInterface);
+
             if (request.event === 'clearDownloads') {
                 self.downloads = helpers.filterFinishedDownloads(self.downloads);
                 self.refresh();
             } else if (request.event === 'clearDownload') {
-                self.clearDownload(request.download);
+                self.clearDownload(download);
             } else if (request.event === 'showDownload') {
-                self.showDownload(request.download);
+                self.showDownload(download);
             } else if (request.event === 'cancelDownload') {
-                self.cancelDownload(request.download);
+                self.cancelDownload(download);
             } else if (request.event === 'pauseDownload') {
-                self.pauseDownload(request.download);
+                self.pauseDownload(download);
             } else if (request.event === 'resumeDownload') {
-                self.resumeDownload(request.download);
+                self.resumeDownload(download);
             } else if (request.event === 'deleteDownload') {
-                self.deleteDownload(request.download);
+                self.deleteDownload(download);
             } else if (request.event === 'openOptions') {
                 browser.runtime.openOptionsPage();
             }
@@ -74,11 +89,7 @@ class DownloadStatus {
 
         // Send the downloads to a tab when it loads
         browser.webNavigation.onCompleted.addListener(function (arg: any) {
-            const downloadItems = self.downloads.map((download) => {
-                return download.downloadItem;
-            });
-
-            browser.tabs.sendMessage(arg.tabId, downloadItems);
+            browser.tabs.sendMessage(arg.tabId, JSON.stringify(self.downloads));
         });
     }
 
@@ -107,7 +118,7 @@ class DownloadStatus {
 
         this.interval = setInterval(() => {
             this.refresh();
-        }, 1000);
+        }, 250);
     }
 
     /**
@@ -124,22 +135,6 @@ class DownloadStatus {
         console.log(`Error: ${error}`);
     }
 
-    getDownloadItem(downloadId: number) {
-        let query: DownloadQuery = {
-            id: downloadId,
-        };
-
-        return new Promise<DSBDownload>((resolve, reject) => {
-            browser.downloads.search(query).then((downloads) => {
-                if (downloads.length > 0) {
-                    resolve(new DSBDownload(downloads[0]));
-                } else {
-                    reject();
-                }
-            })
-        });
-    }
-
     /**
      * Update the browser tabs with the state of the downloads
      *
@@ -151,16 +146,29 @@ class DownloadStatus {
 
         return querying.then((tabs) => {
             for (let tab of tabs) {
-                const downloadItems = downloads.map((download) => {
-                    return download.downloadItem;
-                });
-
                 if (tab.id) {
-                    browser.tabs.sendMessage(tab.id, downloadItems);
+                    browser.tabs.sendMessage(tab.id, JSON.stringify(downloads));
                 }
             }
         });
     };
+
+    updateDownload(download: DSBDownload) {
+        let query: DownloadQuery = {
+            id: download.downloadItem.id,
+        };
+
+        return new Promise<DSBDownload>((resolve, reject) => {
+            browser.downloads.search(query).then((downloads) => {
+                if (downloads.length > 0) {
+                    download.updateDownload(downloads[0]);
+                    resolve(download);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
 
     /**
      * Update the state of the currently managed downloads
@@ -171,19 +179,7 @@ class DownloadStatus {
         let promises = [];
 
         for (let download of this.downloads) {
-            let promise = new Promise<DSBDownload>((resolve, reject) => {
-                let query: DownloadQuery = {id: download.downloadItem.id};
-
-                browser.downloads.search(query).then((downloads) => {
-                    download.updateDownload(downloads[0]);
-                    resolve(download);
-                }, (error) => {
-                    this.onError(error);
-                    reject();
-                });
-            });
-
-            promises.push(promise);
+            promises.push(this.updateDownload(download));
         }
 
         return Promise.all(promises);
@@ -245,9 +241,9 @@ class DownloadStatus {
      *
      * @param {DSBDownload} download
      */
-    deleteDownload(download: DownloadItem) {
-        browser.downloads.removeFile(download.id).then(() => {
-            this.downloads = helpers.removeSelectedDownload(download, this.downloads);
+    deleteDownload(download: DSBDownload) {
+        browser.downloads.removeFile(download.downloadItem.id).then(() => {
+            this.downloads = helpers.removeSelectedDownload(download.downloadItem, this.downloads);
             this.updateTabs(this.downloads);
         });
     }

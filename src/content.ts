@@ -3,8 +3,7 @@ import * as helpers from './helpers';
 import ContextMenu from './context-menu/ContextMenu';
 import Tooltip from './tooltip/Tooltip';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
-import {DSBDownload} from './DSBDownload';
-import DownloadItem = browser.downloads.DownloadItem;
+import {DownloadInterface, DSBDownload} from './DSBDownload';
 
 class DownloadStatusBar {
     private app: Vue;
@@ -46,33 +45,33 @@ class DownloadStatusBar {
             this.app.$contextMenu.close();
         });
 
-        app.$on('clearDownload', (downloadItem: DSBDownload) => {
+        app.$on('clearDownload', (download: DSBDownload) => {
             // Filter out the cleared download
-            this.downloads = helpers.removeSelectedDownload(downloadItem.downloadItem, this._downloads);
+            this.downloads = helpers.removeSelectedDownload(download.downloadItem, this._downloads);
 
             // Tell the background process to clear the download
-            browser.runtime.sendMessage({event: 'clearDownload', download: downloadItem});
+            browser.runtime.sendMessage({event: 'clearDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('showDownload', (downloadItem: DSBDownload) => {
+        app.$on('showDownload', (download: DSBDownload) => {
             // Tell the background process to open the download
-            browser.runtime.sendMessage({event: 'showDownload', download: downloadItem});
+            browser.runtime.sendMessage({event: 'showDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('cancelDownload', (downloadItem: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'cancelDownload', download: downloadItem});
+        app.$on('cancelDownload', (download: DSBDownload) => {
+            browser.runtime.sendMessage({event: 'cancelDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('pauseDownload', (downloadItem: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'pauseDownload', download: downloadItem});
+        app.$on('pauseDownload', (download: DSBDownload) => {
+            browser.runtime.sendMessage({event: 'pauseDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('resumeDownload', (downloadItem: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'resumeDownload', download: downloadItem});
+        app.$on('resumeDownload', (download: DSBDownload) => {
+            browser.runtime.sendMessage({event: 'resumeDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('deleteDownload', (downloadItem: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'deleteDownload', download: downloadItem});
+        app.$on('deleteDownload', (download: DSBDownload) => {
+            browser.runtime.sendMessage({event: 'deleteDownload', download: JSON.stringify(download)});
         });
 
         app.$on('openOptions', () => {
@@ -96,8 +95,10 @@ class DownloadStatusBar {
 
 let statusBar = new DownloadStatusBar();
 
-browser.runtime.onMessage.addListener(function (downloads: DownloadItem[]) {
+browser.runtime.onMessage.addListener((json: any) => {
+    let downloads: DownloadInterface[] = JSON.parse(json);
+
     statusBar.downloads = downloads.map((downloadItem) => {
-        return new DSBDownload(downloadItem);
+        return DSBDownload.fromJson(downloadItem);
     });
 });

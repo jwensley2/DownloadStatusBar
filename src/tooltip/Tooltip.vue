@@ -14,10 +14,14 @@
                 <td>{{ download.downloadItem.referrer || 'None' }}</td>
             </tr>
             <tr>
+                <th class="field-name">Speed:</th>
+                <td>{{ downloadSpeed }}</td>
+            </tr>
+            <tr>
                 <th class="field-name">Status:</th>
                 <td>{{ status }}</td>
             </tr>
-            <tr v-if="download.state !== 'complete'">
+            <tr v-if="download.downloadItem.state !== 'complete'">
                 <th class="field-name">Progress:</th>
                 <td>{{ progress }}</td>
             </tr>
@@ -83,7 +87,7 @@
                 return helpers.formatFileSize(this.download!.downloadItem.fileSize);
             },
 
-            percentDone(): string {
+            percentDone(): number {
                 return this.download!.percentDownloaded();
             },
 
@@ -93,6 +97,14 @@
                 }
 
                 return this.download.isImage();
+            },
+
+            downloadSpeed(): string {
+                if (!this.download) {
+                    return 'Unknown';
+                }
+
+                return `${helpers.formatFileSize(this.download.calculateDownloadSpeed())}/s`;
             },
         },
 
