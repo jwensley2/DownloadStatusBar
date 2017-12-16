@@ -65,25 +65,39 @@ class DownloadStatus {
         });
 
         browser.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
-            let download = DSBDownload.fromJson(JSON.parse(request.download) as DownloadInterface);
+            if (request.download) {
+                let download = DSBDownload.fromJson(JSON.parse(request.download) as DownloadInterface);
 
-            if (request.event === 'clearDownloads') {
-                self.downloads = helpers.filterFinishedDownloads(self.downloads);
-                self.refresh();
-            } else if (request.event === 'clearDownload') {
-                self.clearDownload(download);
-            } else if (request.event === 'showDownload') {
-                self.showDownload(download);
-            } else if (request.event === 'cancelDownload') {
-                self.cancelDownload(download);
-            } else if (request.event === 'pauseDownload') {
-                self.pauseDownload(download);
-            } else if (request.event === 'resumeDownload') {
-                self.resumeDownload(download);
-            } else if (request.event === 'deleteDownload') {
-                self.deleteDownload(download);
-            } else if (request.event === 'openOptions') {
-                browser.runtime.openOptionsPage();
+                switch (request.event) {
+                    case 'clearDownload':
+                        self.clearDownload(download);
+                        break;
+                    case 'showDownload':
+                        self.showDownload(download);
+                        break;
+                    case 'cancelDownload':
+                        self.cancelDownload(download);
+                        break;
+                    case 'pauseDownload':
+                        self.pauseDownload(download);
+                        break;
+                    case 'resumeDownload':
+                        self.resumeDownload(download);
+                        break;
+                    case 'deleteDownload':
+                        self.deleteDownload(download);
+                        break;
+                }
+            }
+
+            switch (request.event) {
+                case 'clearDownloads':
+                    self.downloads = helpers.filterFinishedDownloads(self.downloads);
+                    self.refresh();
+                    break;
+                case 'openOptions':
+                    browser.runtime.openOptionsPage();
+                    break;
             }
         });
 
