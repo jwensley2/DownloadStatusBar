@@ -6,9 +6,7 @@ import {FileType} from './filetypes';
 export type SyncOptions = {
     theme: string,
     alwaysShow: boolean,
-    singleRowOnly: boolean,
-    showStatusText: boolean,
-    showProgressText: boolean,
+    showInfoText: boolean,
     autohideEnable: boolean,
     autohideDuration: number,
     autohideFileTypes: Array<FileType>,
@@ -20,9 +18,7 @@ export type SyncOptions = {
 export const defaultSyncOptions: SyncOptions = {
     theme: 'light',
     alwaysShow: false,
-    singleRowOnly: false,
-    showStatusText: true,
-    showProgressText: true,
+    showInfoText: true,
     autohideEnable: false,
     autohideDuration: 5,
     autohideFileTypes: [],

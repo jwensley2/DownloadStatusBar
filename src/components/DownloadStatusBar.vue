@@ -1,11 +1,11 @@
 <template>
     <div id="DownloadStatusBar" v-if="downloads.length > 0 || options.alwaysShow"
-         :class="[`theme-${options.theme}`, {minimized: options.minimized}]"
+         :class="[`dsb-theme-${options.theme}`, {'dsb-minimized': options.minimized}]"
          @mouseleave="hideContextMenu">
-        <button class="clearDownloads" @click="$root.$emit('clearDownloads')">
+        <button class="dsb-clear-downloads" v-if="!options.minimized" @click="$root.$emit('clearDownloads')">
             Clear
         </button>
-        <div class="downloads" :class="{'single-row': options.singleRowOnly}" v-if="!options.minimized">
+        <div class="dsb-downloads" v-if="!options.minimized">
             <download v-for="download in downloads"
                       :key="download.id"
                       :download="download"
@@ -15,8 +15,9 @@
         <context-menu :theme="options.theme"></context-menu>
         <tooltip :theme="options.theme"></tooltip>
 
-        <button class="open-options" @click="openOptions">Options<span class="icon-gear"></span></button>
-        <button class="minimize" @click="minimize">
+
+        <button class="dsb-open-options" v-if="!options.minimized" @click="openOptions">Options<span class="icon-gear"></span></button>
+        <button class="dsb-minimize" @click="minimize">
             <span :class="!options.minimized ? 'icon-angle-right' : 'icon-angle-left'"></span>
         </button>
     </div>
@@ -36,7 +37,7 @@
         props: ['downloads'],
         data() {
             return {
-                options: defaultSyncOptions
+                options: defaultSyncOptions,
             }
         },
         methods: {
@@ -84,9 +85,9 @@
     @import "../scss/variables";
     @import "../scss/mixins";
     @import "../../icomoon/style";
+    @import "~bootstrap/scss/bootstrap-reboot";
 
     #DownloadStatusBar {
-        @include reset;
         background     : light-theme("background");
         border-top     : 1px solid light-theme("border");
         bottom         : 0;
@@ -108,103 +109,24 @@
             vertical-align : middle
         }
 
-        &.minimized {
+        &.dsb-minimized {
             border-left : 1px solid light-theme("border");
             left        : auto;
             overflow    : hidden;
             right       : 0;
             width       : auto;
-
-            .clearDownloads { display : none }
-            .open-options { display : none }
         }
 
-        .clearDownloads {
-            @include reset;
-            background   : light-theme("button");
-            border-right : 1px solid light-theme("button-border");
-            box-shadow   : none;
-            box-sizing   : border-box;
-            color        : light-theme("text");
-            cursor       : pointer;
-            display      : inline-block;
-            font         : normal 600 0.8em Arial, sans-serif;
-            margin       : 0 5px 0 0;
-            padding      : 0 15px;
-            width        : auto;
-
-            &:hover {
-                background : light-theme("button-hover");
-            }
-        }
-
-        .icon-button {
-            @include reset;
-            background  : none;
-            cursor      : pointer;
-            overflow    : hidden;
-            position    : relative;
-            text-indent : -999px;
-            width       : 30px;
-
-            [class^="icon-"] {
-                color       : light-theme('text');
-                display     : block;
-                font-size   : 20px;
-                height      : 100%;
-                left        : 0;
-                line-height : 100%;
-                margin-top  : -10px;
-                position    : absolute;
-                right       : 0;
-                text-indent : 0;
-                top         : 50%;
-                width       : 100%;
-            }
-        }
-
-        .open-options {
-            @extend .icon-button;
-            margin-left : auto;
-            flex        : none;
-        }
-
-        .minimize {
-            @extend .icon-button;
-        }
-
-        .downloads {
-            @include reset;
-            display        : flex;
-            flex-direction : row;
-            flex-wrap      : wrap;
-            margin-top     : -5px;
-            flex           : 0 -1 auto;
-            overflow       : hidden;
-
-            &.single-row {
-                flex-wrap : nowrap;
-
-                .item {
-                    overflow  : hidden;
-                    flex      : 0 1 auto;
-                    max-width : unset;
-                    min-width : unset;
-                    width     : auto;
-                }
-            }
-        }
-
-        &.theme-dark {
+        &.dsb-theme-dark {
             background : dark-theme("background");
             border-top : 1px solid dark-theme("border");
             color      : dark-theme("text");
 
-            &.minimized {
+            &.dsb-minimized {
                 border-left : 1px solid dark-theme("border");
             }
 
-            .clearDownloads {
+            .dsb-clear-downloads {
                 background   : dark-theme("button");
                 border-right : 1px solid dark-theme("button-border");
                 color        : dark-theme("text");
@@ -214,7 +136,73 @@
                 }
             }
 
-            .icon-button [class^="icon-"] { color : dark-theme('text') }
+            .dsb-icon-button [class^="icon-"] { color : dark-theme('text') }
         }
+    }
+
+    .dsb-clear-downloads {
+        background   : light-theme("button");
+        border-width : 0 1px 0 0;
+        border-style : solid;
+        border-color : light-theme("button-border");
+        box-shadow   : none;
+        box-sizing   : border-box;
+        color        : light-theme("text");
+        cursor       : pointer;
+        display      : inline-block;
+        font         : normal 600 0.8em Arial, sans-serif;
+        margin       : 0 5px 0 0;
+        padding      : 0 15px;
+        width        : auto;
+
+        &:hover {
+            background : light-theme("button-hover");
+        }
+    }
+
+    .dsb-icon-button {
+        background  : none;
+        border      : 0;
+        cursor      : pointer;
+        margin      : 0;
+        overflow    : hidden;
+        padding     : 0;
+        position    : relative;
+        text-indent : -999px;
+        width       : 30px;
+
+        [class^="icon-"] {
+            color       : light-theme('text');
+            display     : block;
+            font-size   : 20px;
+            height      : 100%;
+            left        : 0;
+            line-height : 100%;
+            margin-top  : -10px;
+            position    : absolute;
+            right       : 0;
+            text-indent : 0;
+            top         : 50%;
+            width       : 100%;
+        }
+    }
+
+    .dsb-open-options {
+        @extend .dsb-icon-button;
+        margin-left : auto;
+        flex        : none;
+    }
+
+    .dsb-minimize {
+        @extend .dsb-icon-button;
+    }
+
+    .dsb-downloads {
+        display        : flex;
+        flex           : 0 -1 auto;
+        flex-direction : row;
+        flex-wrap      : nowrap;
+        margin-top     : -5px;
+        overflow       : hidden;
     }
 </style>

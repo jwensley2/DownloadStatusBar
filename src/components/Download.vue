@@ -1,20 +1,22 @@
 <template>
-    <div class="item"
+    <div class="dsb-item"
          @click="singleClick"
          @dblclick="doubleClick"
          @mouseover="showTooltip($refs[`downloads-${download.downloadItem.id}`], download)"
          @mouseleave="hideTooltip"
          @contextmenu.prevent="showContextMenu"
          :ref="`downloads-${download.downloadItem.id}`"
-         :class="[`theme-${options.theme}`, progressClass]"
+         :class="[`dsb-theme-${options.theme}`, progressClass]"
     >
-        <div v-if="isInProgress" class="progress-bar" :style="`width: ${percentDone}%`"></div>
+        <div v-if="isInProgress" class="dsb-progress-bar" :style="`width: ${percentDone}%`"></div>
 
-        <div class="text-container">
-            <p class="filename">{{ filename }}</p>
-            <p v-if="options.showStatusText" class="status text-line">{{ status }}</p>
-            <p v-if="options.showProgressText" class="progress text-line">{{ progress }} <span
-                    v-if="isInProgress">{{ downloadSpeed }}</span></p>
+        <div class="dsb-text-container">
+            <div class="dsb-filename">{{ filename }}</div>
+            <div class="dsb-download-info" v-if="!download.isCancelled() && options.showInfoText">
+                <div v-if="options.showProgressText" class="dsb-progress">{{ progress }}</div>
+                <div class="dsb-speed" v-if="isInProgress && !download.downloadItem.paused">{{ downloadSpeed }}</div>
+                <div class="dsb-percent" v-else>{{ percentDone }}%</div>
+            </div>
         </div>
     </div>
 </template>
@@ -31,26 +33,29 @@
         },
         computed: {
             filename(): string {
-                return this.download.filename();
+                const maxLength = 15;
+                const length = this.download.filename().length;
+                let filename = (this.download.filename()).slice(0, maxLength);
+
+                if (length > maxLength) {
+                    filename += '…';
+                }
+
+                return filename;
             },
             status(): string {
                 return this.download.status();
             },
 
             progress(): string {
-                return this.download.progress()
-            },
+                const downloadItem = this.download.downloadItem;
+                const downloaded = helpers.formatFileSize(downloadItem.bytesReceived);
 
-            downloaded(): string {
-                return helpers.formatFileSize(this.download.downloadItem.bytesReceived);
-            },
+                if (downloadItem.state === 'complete') {
+                    return `${helpers.formatFileSize(downloadItem.fileSize)}`;
+                }
 
-            totalsize(): string {
-                return helpers.formatFileSize(this.download.downloadItem.totalBytes);
-            },
-
-            filesize(): string {
-                return helpers.formatFileSize(this.download.downloadItem.fileSize);
+                return `${downloaded}`;
             },
 
             percentDone(): string {
@@ -63,18 +68,18 @@
 
             progressClass() {
                 if (this.download.downloadItem.state === 'complete') {
-                    return 'complete';
+                    return 'dsb-complete';
                 }
 
                 if (this.download.isCancelled()) {
-                    return 'cancelled';
+                    return 'dsb-cancelled';
                 }
 
                 if (this.download.downloadItem.error && !this.download.downloadItem.paused) {
-                    return 'error';
+                    return 'dsb-error';
                 }
 
-                return 'in-progress';
+                return 'dsb-in-progress';
             },
 
             downloadSpeed(): string {
@@ -179,91 +184,116 @@
 <style lang="scss" scoped>
     @import "../scss/variables";
     @import "../scss/mixins";
+    @import "~bootstrap/scss/bootstrap-reboot";
 
-    .item {
-        @include reset;
+    .dsb-item {
         background      : light-theme("download");
         border-radius   : 0;
         box-sizing      : border-box;
         color           : light-theme("text");
         cursor          : pointer;
         display         : flex;
+        flex            : 0 1 auto;
         flex-direction  : column;
         font            : 400 normal 14px/1 Arial, sans-serif;
         justify-content : center;
         margin          : 5px 5px 0 5px;
+        max-width       : unset;
         min-height      : 30px;
-        min-width       : 150px;
-        max-width       : 300px;
+        min-width       : unset;
+        overflow        : hidden;
         padding         : 3px 6px;
         position        : relative;
         text-shadow     : none;
+        width           : auto;
 
         * {
             position : relative;
             z-index  : 10;
         }
 
-        &.complete {
+        &.dsb-complete {
             background : light-theme("progress");
         }
 
-        &.error {
+        &.dsb-error {
             background : light-theme("error");
         }
 
-        .progress-bar {
-            @include reset;
-            background    : light-theme("progress");
-            border-radius : 0;
-            display       : block;
-            height        : 100%;
-            left          : 0;
-            position      : absolute;
-            top           : 0;
-            width         : 100%;
-            z-index       : 0;
-        }
-
-        .text-line {
-            @include reset;
-            background : transparent;
-            display    : block;
-            font-size  : 12px;
-            height     : auto;
-            text-align : left;
-
-            + .text-line {
-                margin-top : 2px
-            }
-        }
-
-        .filename {
-            @extend .text-line;
-            line-height   : 16px;
-            font-size     : 14px;
-            display       : inline-block;
-            text-overflow : ellipsis;
-            overflow      : hidden;
-            direction     : rtl;
-            max-width     : 100%;
-        }
-
-        &.theme-dark {
+        &.dsb-theme-dark {
             background : dark-theme("download");
             color      : dark-theme("text");
 
-            .progress-bar {
+            .dsb-progress-bar {
                 background : dark-theme("progress");
             }
 
-            &.complete {
+            &.dsb-complete {
                 background : dark-theme("progress");
             }
 
-            &.error {
+            &.dsb-error {
                 background : dark-theme("error");
             }
+
+            .dsb-text-line {
+                color : dark-theme("text");
+            }
         }
+    }
+
+    .dsb-progress-bar {
+        background    : light-theme("progress");
+        border-radius : 0;
+        display       : block;
+        height        : 100%;
+        left          : 0;
+        position      : absolute;
+        top           : 0;
+        width         : 100%;
+        z-index       : 0;
+    }
+
+    .dsb-text-container {
+        display        : flex;
+        flex-direction : row;
+        align-items    : center;
+        height: 100%;
+    }
+
+    .dsb-text-line {
+        background : transparent;
+        box-sizing : content-box;
+        color      : light-theme("text");
+        display    : block;
+        font       : 400 normal 10px/10px Arial, Helvetica, sans-serif;
+        height     : auto;
+        margin     : 0;
+        padding    : 0;
+        text-align : right;
+        position   : relative;
+
+        + .dsb-text-line {
+            margin-top : 2px
+        }
+    }
+
+    .dsb-filename {
+        @extend .dsb-text-line;
+        text-align : left;
+        font-size  : 14px;
+    }
+
+    .dsb-download-info {
+        height: 100%;
+        margin-left : 10px;
+    }
+
+    .dsb-progress {
+        @extend .dsb-text-line;
+    }
+
+    .dsb-speed, .dsb-percent {
+        @extend .dsb-text-line;
     }
 </style>

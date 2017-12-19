@@ -32,25 +32,9 @@
 
                             <div class="form-check">
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.singleRowOnly">
+                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.showInfoText">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Force downloads to stay in a single row</span>
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.showStatusText">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Show status text</span>
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.showProgressText">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Show progress text</span>
+                                    <span class="custom-control-description">Show download info</span>
                                 </label>
                             </div>
                         </div>

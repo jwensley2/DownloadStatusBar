@@ -214,6 +214,6 @@ export class DSBDownload implements DownloadInterface {
      * @returns {Promise<void>}
      */
     resume() {
-        return browser.downloads.pause(this.downloadItem.id);
+        return browser.downloads.resume(this.downloadItem.id);
     }
 }
