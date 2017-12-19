@@ -70,20 +70,20 @@
                                 <p>
                                     <span v-for="type in syncOptions.autohideFileTypes"
                                           class="badge badge-primary mr-1"
-                                          @click="removeFileType(type)">{{ type.name }}</span>
+                                          @click="removeAutohideFileType(type)">{{ type.name }}</span>
                                     <span v-for="type in syncOptions.autohideCustomTypes"
                                           class="badge badge-primary mr-1"
-                                          @click="removeCustomType(type)">{{ type }}</span>
+                                          @click="removeAutohideCustomType(type)">{{ type }}</span>
                                 </p>
 
-                                <div v-if="showTypesSelect()" class="form-group form-inline">
+                                <div v-if="showAutohideTypesSelect()" class="form-group form-inline">
                                     <label for="autohide-type-select">Select type</label>
                                     <select
                                             id="autohide-type-select"
                                             class="form-control ml-2"
-                                            @change="selectType($event)">
+                                            @change="selectAutohideType($event)">
                                         <option :value="null" selected disabled hidden>Select File Type</option>
-                                        <optgroup :label="groupName" v-for="(group, groupName) in selectableTypes"
+                                        <optgroup :label="groupName" v-for="(group, groupName) in selectableAutohideTypes"
                                                   v-if="group.length > 0">
                                             <option v-for="type in group" :value="type.name">{{ type.name }}</option>
                                         </optgroup>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
 
-                    <div class="card w-50 mt-4">
+                    <div class="card">
                         <div class="card-header">Miscellaneous</div>
                         <div class="card-body">
                             <h4>Completion Sound</h4>
@@ -130,6 +130,49 @@
                                            @change="saveCustomSound($event.target.files)"
                                     >
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">Ignored File Types</div>
+                        <div class="card-body">
+                            <p>These file types will not show up in the bar</p>
+                            <h5>File types to ignore
+                                <small class="text-muted">Click to remove</small>
+                            </h5>
+                            <p>
+                                    <span v-for="type in syncOptions.ignoredFileTypes"
+                                          class="badge badge-primary mr-1"
+                                          @click="removeIgnoredFileType(type)">{{ type.name }}</span>
+                                <span v-for="type in syncOptions.ignoredCustomTypes"
+                                      class="badge badge-primary mr-1"
+                                      @click="removeIgnoredCustomType(type)">{{ type }}</span>
+                            </p>
+
+                            <div v-if="showIgnoredTypesSelect()" class="form-group form-inline">
+                                <label for="ignore-type-select">Select type</label>
+                                <select
+                                        id="ignore-type-select"
+                                        class="form-control ml-2"
+                                        @change="selectIgnoredType($event)">
+                                    <option :value="null" selected disabled hidden>Select File Type</option>
+                                    <optgroup :label="groupName" v-for="(group, groupName) in selectableIgnoredTypes"
+                                              v-if="group.length > 0">
+                                        <option v-for="type in group" :value="type.name">{{ type.name }}</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="form-group form-inline">
+                                <label for="ignore-type">Add other type</label>
+                                <input id="ignore-type"
+                                       class="form-control ml-2 mr-2"
+                                       type="text"
+                                       autocomplete="off"
+                                       placeholder="image/png, gif, png, etc."
+                                       @keyup.enter="ignoredTypeEntered($event)"
+                                >
                             </div>
                         </div>
                     </div>
@@ -160,10 +203,18 @@
             }
         },
         computed: {
-            selectableTypes(): FileTypeList {
+            selectableAutohideTypes(): FileTypeList {
                 return _.mapValues(this.fileTypes, (fileTypes) => {
                     return _.filter(fileTypes, (type: FileType) => {
                         return this.syncOptions.autohideFileTypes.indexOf(type) === -1;
+                    })
+                });
+            },
+
+            selectableIgnoredTypes(): FileTypeList {
+                return _.mapValues(this.fileTypes, (fileTypes) => {
+                    return _.filter(fileTypes, (type: FileType) => {
+                        return this.syncOptions.ignoredFileTypes.indexOf(type) === -1;
                     })
                 });
             },
@@ -184,15 +235,15 @@
 
                 target.value = '';
             },
-            removeFileType(type: FileType) {
+            removeAutohideFileType(type: FileType) {
                 const index = this.syncOptions.autohideFileTypes.indexOf(type);
                 this.syncOptions.autohideFileTypes.splice(index, 1);
             },
-            removeCustomType(type: string) {
+            removeAutohideCustomType(type: string) {
                 const index = this.syncOptions.autohideCustomTypes.indexOf(type);
                 this.syncOptions.autohideCustomTypes.splice(index, 1);
             },
-            selectType(event: Event) {
+            selectAutohideType(event: Event) {
                 const target = event.target as HTMLFormElement;
                 const selectedType = helpers.getFileTypeByName(target.value);
 
@@ -203,8 +254,45 @@
                 // Clear the input
                 target.value = '';
             },
-            showTypesSelect(): boolean {
-                return _.reduce(this.selectableTypes, function (prev, group) {
+            showAutohideTypesSelect(): boolean {
+                return _.reduce(this.selectableAutohideTypes, function (prev, group) {
+                    return (group.length > 0 || prev);
+                }, false);
+            },
+
+            ignoredTypeEntered(event: Event) {
+                const target = event.target as HTMLFormElement;
+                const type = (event.target as HTMLFormElement).value;
+
+                if (typeof type == 'string' && type.length >= 1) {
+                    if (this.syncOptions.ignoredCustomTypes.indexOf(type) < 0) {
+                        this.syncOptions.ignoredCustomTypes.push(type);
+                    }
+                }
+
+                target.value = '';
+            },
+            removeIgnoredFileType(type: FileType) {
+                const index = this.syncOptions.ignoredFileTypes.indexOf(type);
+                this.syncOptions.ignoredFileTypes.splice(index, 1);
+            },
+            removeIgnoredCustomType(type: string) {
+                const index = this.syncOptions.ignoredCustomTypes.indexOf(type);
+                this.syncOptions.ignoredCustomTypes.splice(index, 1);
+            },
+            selectIgnoredType(event: Event) {
+                const target = event.target as HTMLFormElement;
+                const selectedType = helpers.getFileTypeByName(target.value);
+
+                if (selectedType && this.syncOptions.ignoredFileTypes.indexOf(selectedType) === -1) {
+                    this.syncOptions.ignoredFileTypes.push(selectedType);
+                }
+
+                // Clear the input
+                target.value = '';
+            },
+            showIgnoredTypesSelect(): boolean {
+                return _.reduce(this.selectableIgnoredTypes, function (prev, group) {
                     return (group.length > 0 || prev);
                 }, false);
             },
@@ -276,8 +364,13 @@
         width : 50px;
     }
 
+    .card-deck {
+        justify-content : space-between;
+    }
+
     .card-deck .card {
-        flex : 1 0 auto;
+        flex-basis : 48%;
+        margin     : 0 1% 20px 1%;
     }
 
     @include media-breakpoint-down(sm) {

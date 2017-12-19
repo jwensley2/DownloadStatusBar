@@ -25,11 +25,17 @@ class DownloadStatus {
             }
         });
 
-        browser.downloads.onCreated.addListener((download) =>{
+        browser.downloads.onCreated.addListener((downloadItem) => {
+            const download = new DSBDownload(downloadItem);
+
             this.options.minimized = false;
             helpers.saveOptionsToStorage(this.options);
 
-            self.downloads.push(new DSBDownload(download));
+            if (helpers.shouldIgnoreDownload(download, this.options)) {
+                return;
+            }
+
+            self.downloads.push(download);
             self.startInterval();
         });
 

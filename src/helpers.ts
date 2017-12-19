@@ -120,6 +120,35 @@ export function shouldHideDownload(download: DSBDownload, options: SyncOptions):
 }
 
 /**
+ * Check if a download should be ignored
+ *
+ * @param {DSBDownload} download
+ * @param {SyncOptions} options
+ * @returns {boolean}
+ */
+export function shouldIgnoreDownload(download: DSBDownload, options: SyncOptions): boolean {
+    const downloadItem = download.downloadItem;
+    const extension = _.last(downloadItem.filename.match(/\.(.*)/));
+
+    // Does the download match one of the selected file types
+    const match = _.find(options.ignoredFileTypes, (fileType) => {
+        return fileType.mimes.indexOf(downloadItem.mime) !== -1 || (extension && fileType.extensions.indexOf(extension) !== -1);
+    });
+
+    // Ignore it if there was a match
+    if (match) {
+        return true;
+    }
+
+    // Ignore it the mime or extension matches one of the custom types
+    if (options.ignoredCustomTypes.indexOf(downloadItem.mime) !== -1 || (extension && options.ignoredCustomTypes.indexOf(extension) !== -1)) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Format a filesize in bytes to KB, MB, GB or TB
  *
  * @param {number} bytes
