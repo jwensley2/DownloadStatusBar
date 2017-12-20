@@ -1,4 +1,4 @@
-import {FileType} from './filetypes';
+import {FileType} from "./filetypes";
 
 /**
  * Options to save in the synced storage
@@ -9,16 +9,16 @@ export type SyncOptions = {
     showInfoText: boolean,
     autohideEnable: boolean,
     autohideDuration: number,
-    autohideFileTypes: Array<FileType>,
-    autohideCustomTypes: Array<string>,
-    ignoredFileTypes: Array<FileType>,
-    ignoredCustomTypes: Array<string>,
+    autohideFileTypes: FileType[],
+    autohideCustomTypes: string[],
+    ignoredFileTypes: FileType[],
+    ignoredCustomTypes: string[],
     playSoundOnComplete: boolean,
     minimized: boolean
 }
 
 export const defaultSyncOptions: SyncOptions = {
-    theme: 'light',
+    theme: "light",
     alwaysShow: false,
     showInfoText: true,
     autohideEnable: false,

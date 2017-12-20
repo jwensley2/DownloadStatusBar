@@ -1,7 +1,7 @@
-import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
-import fileTypes, {FileType} from './config/filetypes';
-import * as _ from 'lodash';
-import {DSBDownload} from './DSBDownload';
+import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from "./config/options";
+import fileTypes, {FileType} from "./config/filetypes";
+import * as _ from "lodash";
+import {DSBDownload} from "./DSBDownload";
 
 /**
  * Remove finished downloads from the array of downloads
@@ -17,8 +17,8 @@ export function filterFinishedDownloads(downloads: DSBDownload[]): DSBDownload[]
             return false;
         }
 
-        return downloadItem.state === 'in_progress' || downloadItem.paused;
-    })
+        return downloadItem.state === "in_progress" || downloadItem.paused;
+    });
 }
 
 /**
@@ -42,7 +42,7 @@ export function removeSelectedDownload(download: { id: number }, downloads: DSBD
  */
 export function getInProgressDownloads(downloads: DSBDownload[]): DSBDownload[] {
     return downloads.filter(function (dl: DSBDownload) {
-        return dl.downloadItem.state === 'in_progress';
+        return dl.downloadItem.state === "in_progress";
     })
 }
 
@@ -93,25 +93,17 @@ export function getFileTypeByName(ft: string): FileType | undefined {
  * @returns {boolean}
  */
 export function shouldHideDownload(download: DSBDownload, options: SyncOptions): boolean {
-    const downloadItem = download.downloadItem;
-    const extension = _.last(downloadItem.filename.match(/\.(.*)/));
-
     if (!options.autohideEnable) {
         return false;
     }
 
-    // Does the download match one of the selected file types
-    const match = _.find(options.autohideFileTypes, (fileType) => {
-        return fileType.mimes.indexOf(downloadItem.mime) !== -1 || (extension && fileType.extensions.indexOf(extension) !== -1);
-    });
-
     // Hide it if there was a match
-    if (match) {
+    if (downloadMatchesFiletypes(download, options.autohideFileTypes)) {
         return true;
     }
 
     // Hide it the mime or extension matches one of the custom types
-    if (options.autohideCustomTypes.indexOf(downloadItem.mime) !== -1 || (extension && options.autohideCustomTypes.indexOf(extension) !== -1)) {
+    if (downloadMatchesCustomTypes(download, options.autohideCustomTypes)) {
         return true;
     }
 
@@ -127,25 +119,46 @@ export function shouldHideDownload(download: DSBDownload, options: SyncOptions):
  * @returns {boolean}
  */
 export function shouldIgnoreDownload(download: DSBDownload, options: SyncOptions): boolean {
-    const downloadItem = download.downloadItem;
-    const extension = _.last(downloadItem.filename.match(/\.(.*)/));
-
-    // Does the download match one of the selected file types
-    const match = _.find(options.ignoredFileTypes, (fileType) => {
-        return fileType.mimes.indexOf(downloadItem.mime) !== -1 || (extension && fileType.extensions.indexOf(extension) !== -1);
-    });
-
     // Ignore it if there was a match
-    if (match) {
+    if (downloadMatchesFiletypes(download, options.ignoredFileTypes)) {
         return true;
     }
 
     // Ignore it the mime or extension matches one of the custom types
-    if (options.ignoredCustomTypes.indexOf(downloadItem.mime) !== -1 || (extension && options.ignoredCustomTypes.indexOf(extension) !== -1)) {
-        return true;
-    }
+    return downloadMatchesCustomTypes(download, options.ignoredCustomTypes);
+}
 
-    return false;
+/**
+ * Check if the download matches the list of types
+ *
+ * @param {DSBDownload} download
+ * @param {FileType[]} fileTypes
+ * @returns {boolean}
+ */
+export function downloadMatchesFiletypes(download: DSBDownload, fileTypes: FileType[]): boolean {
+    const downloadItem = download.downloadItem;
+    const extension = _.last(downloadItem.filename.match(/\.(.*)/));
+
+    // Does the download match one of the selected file types
+    const match = _.find(fileTypes, (fileType) => {
+        return fileType.mimes.indexOf(downloadItem.mime) !== -1 || (extension && fileType.extensions.indexOf(extension) !== -1);
+    });
+
+    return !!match;
+}
+
+/**
+ * Check of the download matches the list of custom types
+ *
+ * @param {DSBDownload} download
+ * @param {string[]} types
+ * @returns {boolean}
+ */
+export function downloadMatchesCustomTypes(download: DSBDownload, types: string[]): boolean {
+    const downloadItem = download.downloadItem;
+    const extension = _.last(downloadItem.filename.match(/\.(.*)/));
+
+    return types.indexOf(downloadItem.mime) !== -1 || (!!extension && types.indexOf(extension) !== -1);
 }
 
 /**
@@ -156,8 +169,8 @@ export function shouldIgnoreDownload(download: DSBDownload, options: SyncOptions
  * @returns {string}
  */
 export function formatFileSize(bytes: number, round: boolean = false) {
-    let sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0B';
+    let sizes = ["B", "KB", "MB", "GB", "TB"];
+    if (bytes === 0) return "0B";
     let i = Math.floor(Math.log(bytes) / Math.log(1024));
 
     let size = Math.round(bytes / Math.pow(1024, i) * 100) / 100;
@@ -176,7 +189,7 @@ export function formatFileSize(bytes: number, round: boolean = false) {
 export function saveOptionsToStorage(options: SyncOptions) {
     options = {...options};
 
-    if (typeof options.autohideDuration === 'string') {
+    if (typeof options.autohideDuration === "string") {
         options.autohideDuration = parseInt(options.autohideDuration);
     }
 
