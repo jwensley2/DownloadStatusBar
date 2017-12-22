@@ -14,7 +14,8 @@ export type SyncOptions = {
     ignoredFileTypes: FileType[],
     ignoredCustomTypes: string[],
     playSoundOnComplete: boolean,
-    minimized: boolean
+    minimized: boolean,
+    refreshRate: number,
 }
 
 export const defaultSyncOptions: SyncOptions = {
@@ -29,6 +30,7 @@ export const defaultSyncOptions: SyncOptions = {
     ignoredCustomTypes: [],
     playSoundOnComplete: false,
     minimized: false,
+    refreshRate: 1000,
 };
 
 /**

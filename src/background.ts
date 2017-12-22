@@ -140,7 +140,7 @@ class DownloadStatus {
 
         this.interval = setInterval(() => {
             this.refresh();
-        }, 250);
+        }, this.options.refreshRate);
     }
 
     /**

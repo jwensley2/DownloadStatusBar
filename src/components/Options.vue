@@ -131,6 +131,21 @@
                                     >
                                 </div>
                             </div>
+
+                            <h4 class="mt-4">Refresh Rate</h4>
+                            <div class="form-group">
+                                <p class="form-text text-muted">Controls how often the bar is refreshed</p>
+                                <div class="form-inline">
+                                    <input id="refresh-rate"
+                                           class="form-control mr-2"
+                                           type="number"
+                                           step="100"
+                                           min="100"
+                                           max="2000"
+                                           v-model="syncOptions.refreshRate">
+                                    (ms)
+                                </div>
+                            </div>
                         </div>
                     </div>
 
