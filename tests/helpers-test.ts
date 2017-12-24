@@ -3,6 +3,7 @@ import * as helpers from "../src/helpers";
 import * as utils from "./utils";
 import {DSBDownload} from "../src/DSBDownload";
 import {defaultSyncOptions} from "../src/config/options";
+import fileTypes from "../src/config/filetypes";
 
 tape("shouldHideDownload", (t) => {
     const download = new DSBDownload(utils.makeDownloadItem({filename: "test.png", mime: "image/png"}));
@@ -51,4 +52,54 @@ tape("shouldIgnoreDownload", (t) => {
     t.is(helpers.shouldIgnoreDownload(download, ignorePNGs), true, "png filetype should be ignored");
     t.is(helpers.shouldIgnoreDownload(download, ignorePNGsCustomExtension), true, "png extension should be ignored");
     t.is(helpers.shouldIgnoreDownload(download, ignorePNGsCustomMime), true, "png mime should be ignored");
+});
+
+tape("downloadMatchesFiletypes", (t) => {
+    const download = new DSBDownload(utils.makeDownloadItem({filename: "test.png", mime: "image/png"}));
+
+    const imageFiletypes = fileTypes['Images'];
+    const documentsFiletypes = fileTypes['Documents'];
+
+    t.plan(2);
+
+    t.is(helpers.downloadMatchesFiletypes(download, imageFiletypes), true, "image download should match image file types");
+    t.is(helpers.downloadMatchesFiletypes(download, documentsFiletypes), false, "image download should not match document filetypes");
+});
+
+tape("downloadMatchesCustomTypes", (t) => {
+    const download = new DSBDownload(utils.makeDownloadItem({filename: "test.png", mime: "image/png"}));
+
+    const imageExtensions = ['png', 'jpg'];
+    const imageMimetypes = ['image/png', 'image/jpeg'];
+    const textExtensions = ['txt', 'doc'];
+    const textMimetypes = ['text/plain'];
+
+    t.plan(4);
+
+    t.is(helpers.downloadMatchesCustomTypes(download, imageExtensions), true, "image download should match image file types");
+    t.is(helpers.downloadMatchesCustomTypes(download, imageMimetypes), true, "image download should match image file types");
+    t.is(helpers.downloadMatchesCustomTypes(download, textExtensions), false, "image download should not match document filetypes");
+    t.is(helpers.downloadMatchesCustomTypes(download, textMimetypes), false, "image download should not match document filetypes");
+});
+
+tape("formatFileSize", (t) => {
+    const kb = 1024;
+    const mb = 1024 * 1024;
+    const gb = 1024 * 1024 * 1024;
+    const tb = 1024 * 1024 * 1024 * 1024;
+
+    t.plan(6);
+
+    t.is(helpers.formatFileSize(1), "1B", "1 byte is 1B");
+    t.is(helpers.formatFileSize(kb * 1.5), "1.5KB", `${kb * 1.5} bytes is 1.5KB`);
+    t.is(helpers.formatFileSize(kb), "1KB", `${kb} bytes is 1KB`);
+    t.is(helpers.formatFileSize(mb), "1MB", `${mb} bytes is 1MB`);
+    t.is(helpers.formatFileSize(gb), "1GB", `${gb} bytes is 1GB`);
+    t.is(helpers.formatFileSize(tb), "1TB", `${tb} bytes is 1TB`);
+});
+
+tape("getFileTypeByName", (t) => {
+    t.plan(1);
+
+    t.is(helpers.getFileTypeByName('PNG'), fileTypes.Images[0], 'is a png filetype');
 });
