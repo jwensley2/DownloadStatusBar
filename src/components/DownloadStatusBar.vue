@@ -26,7 +26,7 @@
 <script lang="ts">
     import Vue from 'vue';
     import Download from './Download.vue';
-    import {SyncOptions, defaultSyncOptions} from '../config/options';
+    import {defaultSyncOptions, SyncOptions} from '../config/options';
     import * as helpers from '../helpers';
 
     export default Vue.extend({
@@ -34,10 +34,13 @@
         components: {
             'download': Download,
         },
-        props: ['downloads'],
+        props: {
+            downloads: Array,
+        },
         data() {
             return {
                 options: defaultSyncOptions,
+                defaultBottomMargin: 0,
             }
         },
         methods: {
@@ -52,17 +55,20 @@
 
                 helpers.saveOptionsToStorage(this.options);
             },
+            setBodyMargin() {
+                const body = document.getElementsByTagName('body')[0];
+                const downloadStatusBar = document.getElementById('DownloadStatusBar');
+
+                if (downloadStatusBar && this.downloads.length > 0 && downloadStatusBar.offsetHeight > this.defaultBottomMargin) {
+                    body.style.marginBottom = `${downloadStatusBar.offsetHeight}px`;
+                } else {
+                    body.style.marginBottom = `${this.defaultBottomMargin}px`;
+                }
+            }
         },
         watch: {
             downloads() {
-                let body = document.getElementsByTagName('body')[0];
-                let downloadStatusBar = document.getElementById('DownloadStatusBar');
-
-                if (downloadStatusBar && this.downloads.length > 0) {
-                    body.style.marginBottom = `${downloadStatusBar.offsetHeight}px`;
-                } else {
-                    body.style.marginBottom = '0';
-                }
+                this.setBodyMargin();
             },
         },
         mounted() {
@@ -77,7 +83,16 @@
                     this.options[item] = changedOptions[item].newValue;
                 }
             });
+
+            const body = document.getElementsByTagName('body')[0];
+            if (window.getComputedStyle(body).marginBottom) {
+                this.defaultBottomMargin = parseInt(window.getComputedStyle(body).marginBottom!);
+            }
+            this.setBodyMargin();
         },
+        updated() {
+            this.setBodyMargin();
+        }
     });
 </script>
 
