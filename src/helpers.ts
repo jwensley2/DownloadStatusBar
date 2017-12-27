@@ -141,7 +141,15 @@ export function downloadMatchesFiletypes(download: DSBDownload, fileTypes: FileT
 
     // Does the download match one of the selected file types
     const match = _.find(fileTypes, (fileType) => {
-        return fileType.mimes.indexOf(downloadItem.mime) !== -1 || (extension && fileType.extensions.indexOf(extension) !== -1);
+        if (fileType.mimes && fileType.mimes.indexOf(downloadItem.mime) !== -1) {
+            return true;
+        }
+
+        if (extension && fileType.extensions && fileType.extensions.indexOf(extension) !== -1) {
+            return true;
+        }
+
+        return false;
     });
 
     return !!match;

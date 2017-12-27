@@ -15,7 +15,7 @@ let fileTypes: FileTypeList = {
     ],
     "Documents": [
         {name: "Text", mimes: ["text/plain"], extensions: ["txt"]},
-        {name: "HTML", mimes: ["text/html"], extensions: ["htm"]},
+        {name: "HTML", mimes: ["text/html"], extensions: ["htm", "html"]},
         {
             name: "Word",
             mimes: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
