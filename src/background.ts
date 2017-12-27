@@ -167,9 +167,11 @@ class DownloadStatus {
         let querying = browser.tabs.query({});
 
         return querying.then((tabs) => {
+            const json = JSON.stringify(downloads);
+
             for (let tab of tabs) {
                 if (tab.id) {
-                    browser.tabs.sendMessage(tab.id, JSON.stringify(downloads));
+                    browser.tabs.sendMessage(tab.id, json);
                 }
             }
         });
