@@ -103,22 +103,24 @@
     @import "~bootstrap/scss/bootstrap-reboot";
 
     #DownloadStatusBar {
-        background     : light-theme("background");
-        border-top     : 1px solid light-theme("border");
-        bottom         : 0;
-        box-sizing     : content-box;
-        color          : light-theme("text");
-        display        : flex;
-        flex-direction : row;
-        font           : normal 400 16px Arial, sans-serif;
-        left           : 0;
-        line-height    : 1;
-        min-height     : 25px;
-        padding        : 0;
-        position       : fixed;
-        text-align     : left;
-        width          : 100%;
-        z-index        : 100000;
+        -moz-osx-font-smoothing : grayscale;
+        background              : light-theme("background");
+        border-top              : 1px solid light-theme("border");
+        bottom                  : 0;
+        box-sizing              : content-box;
+        color                   : light-theme("text");
+        display                 : flex;
+        flex-direction          : row;
+        font                    : normal 400 16px Arial, sans-serif;
+        left                    : 0;
+        letter-spacing          : normal;
+        line-height             : 1;
+        min-height              : 25px;
+        padding                 : 0;
+        position                : fixed;
+        text-align              : left;
+        width                   : 100%;
+        z-index                 : 100000;
 
         > * {
             vertical-align : middle
@@ -156,19 +158,18 @@
     }
 
     .dsb-clear-downloads {
-        background   : light-theme("button");
-        border-width : 0 1px 0 0;
-        border-style : solid;
-        border-color : light-theme("button-border");
-        box-shadow   : none;
-        box-sizing   : border-box;
-        color        : light-theme("text");
-        cursor       : pointer;
-        display      : inline-block;
-        font         : normal 600 0.8em Arial, sans-serif;
-        margin       : 0 5px 0 0;
-        padding      : 0 15px;
-        width        : auto;
+        background         : light-theme("button");
+        border             : 0 solid light-theme("button-border");
+        border-right-width : 1px;
+        box-shadow         : none;
+        box-sizing         : border-box;
+        color              : light-theme("text");
+        cursor             : pointer;
+        display            : inline-block;
+        font               : normal 600 14px Arial, sans-serif;
+        margin             : 0 5px 0 0;
+        padding            : 0 15px;
+        width              : auto;
 
         &:hover {
             background : light-theme("button-hover");
@@ -217,7 +218,7 @@
         flex           : 0 -1 auto;
         flex-direction : row;
         flex-wrap      : nowrap;
-        margin-top     : -5px;
+        margin         : -5px 0 0 0;
         overflow       : hidden;
     }
 </style>

@@ -27,7 +27,10 @@
 
     export default Vue.extend({
         name: 'download',
-        props: ['download', 'options'],
+        props: {
+            download: Object,
+            options: Object
+        },
         data() {
             return {}
         },
@@ -197,6 +200,7 @@
         flex-direction  : column;
         font            : 400 normal 14px/1 Arial, sans-serif;
         justify-content : center;
+        letter-spacing  : normal;
         margin          : 5px 5px 0 5px;
         max-width       : unset;
         min-height      : 30px;
@@ -258,20 +262,21 @@
         display        : flex;
         flex-direction : row;
         align-items    : center;
-        height: 100%;
+        height         : 100%;
     }
 
     .dsb-text-line {
-        background : transparent;
-        box-sizing : content-box;
-        color      : light-theme("text");
-        display    : block;
-        font       : 400 normal 10px/10px Arial, Helvetica, sans-serif;
-        height     : auto;
-        margin     : 0;
-        padding    : 0;
-        text-align : right;
-        position   : relative;
+        background     : transparent;
+        box-sizing     : content-box;
+        color          : light-theme("text");
+        display        : block;
+        font           : 400 normal 10px/10px Arial, Helvetica, sans-serif;
+        height         : auto;
+        letter-spacing : normal;
+        margin         : 0;
+        padding        : 0;
+        text-align     : right;
+        position       : relative;
 
         + .dsb-text-line {
             margin-top : 2px
@@ -285,7 +290,7 @@
     }
 
     .dsb-download-info {
-        height: 100%;
+        height      : 100%;
         margin-left : 10px;
     }
 

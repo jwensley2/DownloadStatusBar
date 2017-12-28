@@ -199,8 +199,8 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {SyncOptions, defaultSyncOptions, LocalOptions, defaultLocalOptions} from '../config/options';
-    import fileTypes, {FileTypeList, FileType} from '../config/filetypes';
+    import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '../config/options';
+    import fileTypes, {FileType, FileTypeList} from '../config/filetypes';
     import * as helpers from '../helpers';
     import * as _ from 'lodash';
 
