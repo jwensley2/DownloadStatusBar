@@ -60,6 +60,9 @@ export class DSBDownload implements DownloadInterface {
                 bytesReceived: downloadItem.bytesReceived,
             });
         }
+
+        // Only keep the 10 most recent samples
+        this.downloadProgress.splice(0, this.downloadProgress.length - 10);
     }
 
     /**
@@ -67,7 +70,7 @@ export class DSBDownload implements DownloadInterface {
      * @returns {number}
      */
     calculateDownloadSpeed(sampleSize = 10) {
-        // Get the 5 most recent samples of the progress
+        // Get the X most recent samples of the progress
         const samples = this.downloadProgress.slice(-sampleSize);
 
         if (samples.length === 0) {

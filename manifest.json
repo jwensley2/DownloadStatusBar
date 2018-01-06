@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "WX Download Status Bar",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Adds a bar to show the status of your downloads",
   "homepage_url": "https://github.com/jwensley2/DownloadStatusBar",
   "applications": {
