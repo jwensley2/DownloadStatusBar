@@ -113,6 +113,11 @@ class DownloadStatus {
         browser.webNavigation.onCompleted.addListener(function (arg: any) {
             browser.tabs.sendMessage(arg.tabId, JSON.stringify(self.downloads));
         });
+
+        // When the active tab changes update it with the current downloads
+        browser.tabs.onActivated.addListener(function (activeInfo: any) {
+            browser.tabs.sendMessage(activeInfo.tabId, JSON.stringify(self.downloads));
+        });
     }
 
     /**
@@ -138,7 +143,7 @@ class DownloadStatus {
             return;
         }
 
-        this.interval = setInterval(() => {
+        this.interval = window.setInterval(() => {
             this.refresh();
         }, this.options.refreshRate);
     }
@@ -161,10 +166,17 @@ class DownloadStatus {
      * Update the browser tabs with the state of the downloads
      *
      * @param {DSBDownload[]} downloads
+     * @param {boolean} activeOnly
      * @returns {Promise<void>}
      */
-    updateTabs(downloads: DSBDownload[]) {
-        let querying = browser.tabs.query({});
+    updateTabs(downloads: DSBDownload[], activeOnly: boolean = true) {
+        let query: any = {};
+
+        if (activeOnly) {
+            query.active = true;
+        }
+
+        let querying = browser.tabs.query(query);
 
         return querying.then((tabs) => {
             const json = JSON.stringify(downloads);
