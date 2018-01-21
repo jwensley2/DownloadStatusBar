@@ -120,7 +120,7 @@
         position                : fixed;
         text-align              : left;
         width                   : 100%;
-        z-index                 : 100000;
+        z-index                 : 9999999;
 
         > * {
             vertical-align : middle

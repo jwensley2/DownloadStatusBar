@@ -13,7 +13,7 @@
         <div class="dsb-text-container">
             <div class="dsb-filename">{{ filename }}</div>
             <div class="dsb-download-info" v-if="!download.isCancelled() && options.showInfoText">
-                <div v-if="options.showProgressText" class="dsb-progress">{{ progress }}</div>
+                <div class="dsb-progress">{{ progress }}</div>
                 <div class="dsb-speed" v-if="isInProgress && !download.downloadItem.paused">{{ downloadSpeed }}</div>
                 <div class="dsb-percent" v-else>{{ percentDone }}%</div>
             </div>
