@@ -164,7 +164,7 @@ export function downloadMatchesFiletypes(download: DSBDownload, fileTypes: FileT
  */
 export function downloadMatchesCustomTypes(download: DSBDownload, types: string[]): boolean {
     const downloadItem = download.downloadItem;
-    const extension = _.last(downloadItem.filename.match(/\.(.*)/));
+    const extension = _.last(downloadItem.filename.match(/\.([^.]*)$/));
 
     return types.indexOf(downloadItem.mime) !== -1 || (!!extension && types.indexOf(extension) !== -1);
 }

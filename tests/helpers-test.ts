@@ -67,19 +67,28 @@ tape("downloadMatchesFiletypes", (t) => {
 });
 
 tape("downloadMatchesCustomTypes", (t) => {
-    const download = new DSBDownload(utils.makeDownloadItem({filename: "test.png", mime: "image/png"}));
+    const downloads = [
+        new DSBDownload(utils.makeDownloadItem({filename: "test.png", mime: "image/png"})),
+        new DSBDownload(utils.makeDownloadItem({filename: "test.test.png", mime: "image/png"})),
+        new DSBDownload(utils.makeDownloadItem({filename: "test-test.png", mime: "image/png"}))
+    ];
 
     const imageExtensions = ['png', 'jpg'];
     const imageMimetypes = ['image/png', 'image/jpeg'];
     const textExtensions = ['txt', 'doc'];
     const textMimetypes = ['text/plain'];
 
-    t.plan(4);
+    for (let download of downloads) {
+        const filename = download.downloadItem.filename;
 
-    t.is(helpers.downloadMatchesCustomTypes(download, imageExtensions), true, "image download should match image file types");
-    t.is(helpers.downloadMatchesCustomTypes(download, imageMimetypes), true, "image download should match image file types");
-    t.is(helpers.downloadMatchesCustomTypes(download, textExtensions), false, "image download should not match document filetypes");
-    t.is(helpers.downloadMatchesCustomTypes(download, textMimetypes), false, "image download should not match document filetypes");
+        t.test(filename, function (st) {
+            st.plan(4);
+            st.is(helpers.downloadMatchesCustomTypes(download, imageExtensions), true, "image download should match image file types");
+            st.is(helpers.downloadMatchesCustomTypes(download, imageMimetypes), true, "image download should match image file types");
+            st.is(helpers.downloadMatchesCustomTypes(download, textExtensions), false, "image download should not match document filetypes");
+            st.is(helpers.downloadMatchesCustomTypes(download, textMimetypes), false, "image download should not match document filetypes");
+        });
+    }
 });
 
 tape("formatFileSize", (t) => {
