@@ -146,6 +146,13 @@
                                     (ms)
                                 </div>
                             </div>
+
+                            <h4>History</h4>
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="syncOptions.clearHistory">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Also clear browser history when clearing download(s)</span>
+                            </label>
                         </div>
                     </div>
 

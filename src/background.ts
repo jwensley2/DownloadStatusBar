@@ -100,8 +100,7 @@ class DownloadStatus {
 
             switch (request.event) {
                 case "clearDownloads":
-                    self.downloads = helpers.filterFinishedDownloads(self.downloads);
-                    self.refresh();
+                    self.clearDownloads();
                     break;
                 case "openOptions":
                     browser.runtime.openOptionsPage();
@@ -228,6 +227,12 @@ class DownloadStatus {
     clearDownload(download: DSBDownload) {
         this.downloads = helpers.removeSelectedDownload(download.downloadItem, this.downloads);
         this.refresh();
+
+        if (this.options.clearHistory) {
+            browser.downloads.erase({
+                id: download.downloadItem.id,
+            });
+        }
     }
 
     /**
@@ -300,6 +305,15 @@ class DownloadStatus {
 
             audio.play();
         });
+    }
+
+    clearDownloads() {
+        this.downloads = helpers.filterFinishedDownloads(this.downloads);
+        this.refresh();
+
+        if (this.options.clearHistory) {
+            browser.downloads.erase({});
+        }
     }
 }
 
