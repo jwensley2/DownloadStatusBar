@@ -29,7 +29,7 @@
         name: 'download',
         props: {
             download: Object,
-            options: Object
+            options: Object,
         },
         data() {
             return {}
@@ -290,8 +290,8 @@
     }
 
     .dsb-download-info {
-        height      : 100%;
-        margin-left : 10px;
+        height : 100%;
+        margin : 0 0 0 10px;
     }
 
     .dsb-progress {
