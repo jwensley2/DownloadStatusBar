@@ -1,7 +1,7 @@
-import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from "./config/options";
-import fileTypes, {FileType} from "./config/filetypes";
-import * as _ from "lodash";
-import {DSBDownload} from "./DSBDownload";
+import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
+import fileTypes, {FileType} from './config/filetypes';
+import * as _ from 'lodash';
+import {DSBDownload} from './DSBDownload';
 
 /**
  * Remove finished downloads from the array of downloads
@@ -17,7 +17,7 @@ export function filterFinishedDownloads(downloads: DSBDownload[]): DSBDownload[]
             return false;
         }
 
-        return downloadItem.state === "in_progress" || downloadItem.paused;
+        return downloadItem.state === 'in_progress' || downloadItem.paused;
     });
 }
 
@@ -42,7 +42,7 @@ export function removeSelectedDownload(download: { id: number }, downloads: DSBD
  */
 export function getInProgressDownloads(downloads: DSBDownload[]): DSBDownload[] {
     return downloads.filter(function (dl: DSBDownload) {
-        return dl.downloadItem.state === "in_progress";
+        return dl.downloadItem.state === 'in_progress';
     })
 }
 
@@ -177,8 +177,8 @@ export function downloadMatchesCustomTypes(download: DSBDownload, types: string[
  * @returns {string}
  */
 export function formatFileSize(bytes: number, round: boolean = false) {
-    let sizes = ["B", "KB", "MB", "GB", "TB"];
-    if (bytes === 0) return "0B";
+    let sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0B';
     let i = Math.floor(Math.log(bytes) / Math.log(1024));
 
     let size = Math.round(bytes / Math.pow(1024, i) * 100) / 100;
@@ -197,9 +197,17 @@ export function formatFileSize(bytes: number, round: boolean = false) {
 export function saveOptionsToStorage(options: SyncOptions) {
     options = {...options};
 
-    if (typeof options.autohideDuration === "string") {
+    if (typeof options.autohideDuration === 'string') {
         options.autohideDuration = parseInt(options.autohideDuration);
     }
 
     return browser.storage.sync.set(options);
+}
+
+/**
+ * Localize a string
+ * @returns {string}
+ */
+export function localize(messageName: string, substitutions?: string | string[]): string {
+    return browser.i18n.getMessage(messageName, substitutions);
 }

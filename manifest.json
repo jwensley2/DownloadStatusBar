@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "WX Download Status Bar",
+  "name": "__MSG_extensionName__",
   "version": "1.7.2",
-  "description": "Adds a bar to show the status of your downloads",
+  "description": "__MSG_extensionDescription__",
   "homepage_url": "https://github.com/jwensley2/DownloadStatusBar",
   "applications": {
     "gecko": {
@@ -44,5 +44,6 @@
   "web_accessible_resources": [
     "/fonts/*",
     "/sounds/*"
-  ]
+  ],
+  "default_locale": "en_CA"
 }

@@ -3,7 +3,7 @@
          :class="[`dsb-theme-${options.theme}`, {'dsb-minimized': options.minimized}]"
          @mouseleave="hideContextMenu">
         <button class="dsb-clear-downloads" v-if="!options.minimized" @click="$root.$emit('clearDownloads')">
-            Clear
+            {{ l('barClearButton') }}
         </button>
         <div class="dsb-downloads" v-if="!options.minimized">
             <download v-for="download in downloads"
@@ -44,6 +44,9 @@
             }
         },
         methods: {
+            l(messageName: string, substitutions?: string | string[]): string {
+                return helpers.localize(messageName, substitutions);
+            },
             hideContextMenu() {
                 this.$contextMenu.close();
             },
@@ -64,7 +67,7 @@
                 } else {
                     body.style.marginBottom = `${this.defaultBottomMargin}px`;
                 }
-            }
+            },
         },
         watch: {
             downloads() {
@@ -92,7 +95,7 @@
         },
         updated() {
             this.setBodyMargin();
-        }
+        },
     });
 </script>
 

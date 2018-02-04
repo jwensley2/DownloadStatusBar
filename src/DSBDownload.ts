@@ -1,8 +1,8 @@
 import DownloadItem = browser.downloads.DownloadItem;
-import * as _ from "lodash";
-import * as helpers from "./helpers";
-import * as moment from "moment";
-import {Moment} from "moment";
+import * as _ from 'lodash';
+import * as helpers from './helpers';
+import * as moment from 'moment';
+import {Moment} from 'moment';
 
 type DownloadProgress = { time: Moment, bytesReceived: number };
 
@@ -54,7 +54,7 @@ export class DSBDownload implements DownloadInterface {
     updateDownload(downloadItem: DownloadItem, time?: Moment) {
         this._downloadItem = downloadItem;
 
-        if (downloadItem.state !== "complete") {
+        if (downloadItem.state !== 'complete') {
             this.downloadProgress.push({
                 time: time || moment(),
                 bytesReceived: downloadItem.bytesReceived,
@@ -82,7 +82,7 @@ export class DSBDownload implements DownloadInterface {
         const last = _.last(samples)!;
 
         // Calculate the total time and bytes between the first and last samples
-        const totalTime = Math.max((last.time.diff(first.time, "s")), 1);
+        const totalTime = Math.max((last.time.diff(first.time, 's')), 1);
         const totalBytes = last.bytesReceived - first.bytesReceived;
 
         return Math.round(totalBytes / totalTime);
@@ -100,7 +100,7 @@ export class DSBDownload implements DownloadInterface {
             return m[m.length - 1];
         }
 
-        return "";
+        return '';
     }
 
     /**
@@ -113,7 +113,7 @@ export class DSBDownload implements DownloadInterface {
             return false;
         }
 
-        return this.downloadItem.state === "interrupted" && (this.downloadItem.error === "USER_CANCELED" || this.downloadItem.error === "USER_SHUTDOWN")
+        return this.downloadItem.state === 'interrupted' && (this.downloadItem.error === 'USER_CANCELED' || this.downloadItem.error === 'USER_SHUTDOWN')
     }
 
     /**
@@ -121,12 +121,12 @@ export class DSBDownload implements DownloadInterface {
      * @returns {boolean}
      */
     isImage(): boolean {
-        if (this.downloadItem.mime && this.downloadItem.mime.includes("image/")) {
+        if (this.downloadItem.mime && this.downloadItem.mime.includes('image/')) {
             return true;
         }
 
         const extension = _.last(this.downloadItem.filename.match(/\.(.*)/));
-        const imageExtensions = ["gif", "png", "jpg", "jpeg", "bmp", "webp"];
+        const imageExtensions = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
 
         if (!extension) {
             return false;
@@ -144,7 +144,7 @@ export class DSBDownload implements DownloadInterface {
         const downloaded = helpers.formatFileSize(this.downloadItem.bytesReceived);
         const totalSize = helpers.formatFileSize(this.downloadItem.totalBytes);
 
-        if (this.downloadItem.state === "complete") {
+        if (this.downloadItem.state === 'complete') {
             return `${helpers.formatFileSize(this.downloadItem.fileSize)}`;
         }
 
@@ -161,7 +161,7 @@ export class DSBDownload implements DownloadInterface {
      * @returns {string}
      */
     percentDownloaded(): number {
-        if (this.downloadItem.state === "complete") {
+        if (this.downloadItem.state === 'complete') {
             return 100;
         } else if (this.downloadItem.totalBytes < 0) {
             return 0;
@@ -176,30 +176,30 @@ export class DSBDownload implements DownloadInterface {
      * @returns {string}
      */
     status() {
-        if (this.downloadItem.state === "complete") {
-            return "Complete";
+        if (this.downloadItem.state === 'complete') {
+            return helpers.localize('downloadStatusComplete');
         }
 
         if (this.downloadItem.paused) {
-            return "Paused";
+            return helpers.localize('downloadStatusPaused');
         }
 
         if (this.isCancelled()) {
-            return `Cancelled`
+            return helpers.localize('downloadStatusCancelled')
         }
 
         if (this.downloadItem.error) {
-            return `Error: ${this.downloadItem.error}`;
+            return `${helpers.localize('downloadStatusInProgress')}: ${this.downloadItem.error}`;
         }
 
         if (this.downloadItem.totalBytes === -1 || !this.downloadItem.estimatedEndTime) {
-            return `In Progress`
+            return helpers.localize('downloadStatusInProgress')
         }
 
         let now = moment();
         let finish = moment(this.downloadItem.estimatedEndTime, moment.ISO_8601);
 
-        return moment.duration(finish.diff(now), "ms").humanize();
+        return moment.duration(finish.diff(now), 'ms').humanize();
     }
 
     /**

@@ -4,14 +4,14 @@
             <div class="col-12">
                 <div class="card-deck">
                     <div class="card">
-                        <div class="card-header">Appearance</div>
+                        <div class="card-header">{{ l('optionsDisplayPanelTitle') }}</div>
                         <div class="card-body">
                             <div class="form-check">
                                 <label class="custom-control custom-radio">
                                     <span class="custom-control-indicator"></span>
                                     <input type="radio" class="custom-control-input" value="light" v-model="syncOptions.theme">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Light</span>
+                                    <span class="custom-control-description">{{ l('optionsThemeLight') }}</span>
                                 </label>
                             </div>
                             <div class="form-check">
@@ -26,7 +26,7 @@
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" v-model="syncOptions.alwaysShow">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Always show the status bar</span>
+                                    <span class="custom-control-description">{{ l('optionsAlwaysShowBar') }}</span>
                                 </label>
                             </div>
 
@@ -34,19 +34,19 @@
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" v-model="syncOptions.showInfoText">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Show download info</span>
+                                    <span class="custom-control-description">{{ l('optionsShowDownloadInfo') }}</span>
                                 </label>
                             </div>
                         </div>
                     </div>
 
                     <div class="card">
-                        <div class="card-header">Auto Hiding</div>
+                        <div class="card-header">{{ l('optionsAutoHidePanelTitle') }}</div>
                         <div class="card-body">
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" v-model="syncOptions.autohideEnable">
                                 <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">Auto Hide Completed Downloads</span>
+                                <span class="custom-control-description">{{ l('optionsAutoHideCompleted' )}}</span>
                             </label>
 
                             <div v-if="syncOptions.autohideEnable">
@@ -63,10 +63,10 @@
                                 </div>
 
 
-                                <h5 class="mt-3">File types to hide
-                                    <small class="text-muted">Click to remove</small>
+                                <h5 class="mt-3">{{ l('optionsAutoHideFileTypes' )}}
+                                    <small class="text-muted">{{ l('optionsClickToRemove') }}</small>
                                 </h5>
-                                <p class="text-muted">Optional. If nothing is selected all file types will auto hide.</p>
+                                <p class="text-muted">{{ l('optionsAutoHideOptional') }}</p>
                                 <p>
                                     <span v-for="type in syncOptions.autohideFileTypes"
                                           class="badge badge-primary mr-1"
@@ -77,12 +77,12 @@
                                 </p>
 
                                 <div v-if="showAutohideTypesSelect()" class="form-group form-inline">
-                                    <label for="autohide-type-select">Select type</label>
+                                    <label for="autohide-type-select">{{ l('optionsSelectType') }}</label>
                                     <select
                                             id="autohide-type-select"
                                             class="form-control ml-2"
                                             @change="selectAutohideType($event)">
-                                        <option :value="null" selected disabled hidden>Select File Type</option>
+                                        <option :value="null" selected disabled hidden>{{ l('optionsSelectFileType') }}</option>
                                         <optgroup :label="groupName" v-for="(group, groupName) in selectableAutohideTypes"
                                                   v-if="group.length > 0">
                                             <option v-for="type in group" :value="type.name">{{ type.name }}</option>
@@ -91,7 +91,7 @@
                                 </div>
 
                                 <div class="form-group form-inline">
-                                    <label for="autohide-type">Add other type</label>
+                                    <label for="autohide-type">{{ l('optionsAddOtherType') }}</label>
                                     <input id="autohide-type"
                                            class="form-control ml-2 mr-2"
                                            type="text"
@@ -105,17 +105,17 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-header">Miscellaneous</div>
+                        <div class="card-header">{{ l('optionsMiscellaneousPanelTitle') }}</div>
                         <div class="card-body">
                             <h4>Completion Sound</h4>
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" v-model="syncOptions.playSoundOnComplete">
                                 <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">Play a sound when a download completes</span>
+                                <span class="custom-control-description">{{ l('optionsPlaySound') }}</span>
                             </label>
 
                             <div v-if="syncOptions.playSoundOnComplete">
-                                <p class="text-muted">You may optionally choose a custom sound (1MB MAX)</p>
+                                <p class="text-muted">{{ l('optionsCustomSoundNote') }}</p>
                                 <div v-if="localOptions.customSound">
                                     {{ localOptions.customSound.name }}
                                     <button class="btn btn-danger btn-sm" @click="removeCustomSound">X</button>
@@ -132,9 +132,9 @@
                                 </div>
                             </div>
 
-                            <h4 class="mt-4">Refresh Rate</h4>
+                            <h4 class="mt-4">{{ l('optionsRefreshRateTitle') }}</h4>
                             <div class="form-group">
-                                <p class="form-text text-muted">Controls how often the bar is refreshed</p>
+                                <p class="form-text text-muted"></p>
                                 <div class="form-inline">
                                     <input id="refresh-rate"
                                            class="form-control mr-2"
@@ -151,17 +151,17 @@
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" v-model="syncOptions.clearHistory">
                                 <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">Also clear browser history when clearing download(s)</span>
+                                <span class="custom-control-description">{{ l('optionsHistoryLabel') }}</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="card">
-                        <div class="card-header">Ignored File Types</div>
+                        <div class="card-header">{{ l('optionsIgnoreFilesPanelTitle') }}</div>
                         <div class="card-body">
-                            <p>These file types will not show up in the bar</p>
-                            <h5>File types to ignore
-                                <small class="text-muted">Click to remove</small>
+                            <p>{{ l('optionsIgnoreFilesDescription') }}</p>
+                            <h5>{{ l('optionsIgnoreFileTypes') }}
+                                <small class="text-muted">{{ l('optionsClickToRemove') }}</small>
                             </h5>
                             <p>
                                     <span v-for="type in syncOptions.ignoredFileTypes"
@@ -173,12 +173,12 @@
                             </p>
 
                             <div v-if="showIgnoredTypesSelect()" class="form-group form-inline">
-                                <label for="ignore-type-select">Select type</label>
+                                <label for="ignore-type-select">{{ l('optionsSelectType') }}</label>
                                 <select
                                         id="ignore-type-select"
                                         class="form-control ml-2"
                                         @change="selectIgnoredType($event)">
-                                    <option :value="null" selected disabled hidden>Select File Type</option>
+                                    <option :value="null" selected disabled hidden>{{ l('optionsSelectFileType') }}</option>
                                     <optgroup :label="groupName" v-for="(group, groupName) in selectableIgnoredTypes"
                                               v-if="group.length > 0">
                                         <option v-for="type in group" :value="type.name">{{ type.name }}</option>
@@ -187,7 +187,7 @@
                             </div>
 
                             <div class="form-group form-inline">
-                                <label for="ignore-type">Add other type</label>
+                                <label for="ignore-type">{{ l('optionsAddOtherType') }}</label>
                                 <input id="ignore-type"
                                        class="form-control ml-2 mr-2"
                                        type="text"
@@ -242,6 +242,9 @@
             },
         },
         methods: {
+            l(messageName: string, substitutions?: string | string[]): string {
+                return helpers.localize(messageName, substitutions);
+            },
             saveOptions() {
                 helpers.saveOptionsToStorage(this.syncOptions);
             },

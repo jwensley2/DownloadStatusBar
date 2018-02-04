@@ -1,40 +1,41 @@
 <template>
-    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown" :class="`dsb-theme-${theme}`" :style="{left: left}" :ref="'tooltip'">
+    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown" :class="`dsb-theme-${theme}`" :style="{left: left}"
+         :ref="'tooltip'">
         <table class="dsb-tooltip-table">
             <tr class="dsb-tooltip-table-row">
-                <th class="dsb-tooltip-heading">Filename:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipFilenameHeading') }}:</th>
                 <td class="dsb-tooltip-cell">{{ filename }}</td>
             </tr>
             <tr class="dsb-tooltip-table-row">
-                <th class="dsb-tooltip-heading">Url:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipUrlHeading') }}:</th>
                 <td class="dsb-tooltip-cell">{{ download.downloadItem.url }}</td>
             </tr>
             <tr class="dsb-tooltip-table-row">
-                <th class="dsb-tooltip-heading">Referrer:</th>
-                <td class="dsb-tooltip-cell">{{ download.downloadItem.referrer || 'None' }}</td>
+                <th class="dsb-tooltip-heading">{{ l('tooltipReferrerHeading') }}:</th>
+                <td class="dsb-tooltip-cell">{{ download.downloadItem.referrer || l('tooltipReferrerNone') }}</td>
             </tr>
             <tr class="dsb-tooltip-table-row">
-                <th class="dsb-tooltip-heading">Speed:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipSpeedHeading') }}:</th>
                 <td class="dsb-tooltip-cell">{{ downloadSpeed }}</td>
             </tr>
             <tr class="dsb-tooltip-table-row">
-                <th class="dsb-tooltip-heading">Status:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipStatusHeading') }}:</th>
                 <td class="dsb-tooltip-cell">{{ status }}</td>
             </tr>
             <tr v-if="download.downloadItem.state !== 'complete'">
-                <th class="dsb-tooltip-heading">Progress:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipProgressHeading') }}:</th>
                 <td class="dsb-tooltip-cell">{{ progress }}</td>
             </tr>
             <tr v-else>
-                <th class="dsb-tooltip-heading">Filesize:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipFilesizeHeading') }}:</th>
                 <td class="dsb-tooltip-cell">{{ filesize }}</td>
             </tr>
             <tr class="dsb-tooltip-table-row">
-                <th class="dsb-tooltip-heading">MIME type:</th>
-                <td class="dsb-tooltip-cell">{{ download.downloadItem.mime || 'Unknown' }}</td>
+                <th class="dsb-tooltip-heading">{{ l('tooltipMimeHeading') }}:</th>
+                <td class="dsb-tooltip-cell">{{ download.downloadItem.mime || l('tooltipMimeUnknown') }}</td>
             </tr>
             <tr v-if="isImage">
-                <th class="dsb-tooltip-heading">Preview:</th>
+                <th class="dsb-tooltip-heading">{{ l('tooltipPreviewHeading') }}:</th>
                 <td class="dsb-tooltip-cell"><img class="dsb-preview" :src="download.downloadItem.url"></td>
             </tr>
         </table>
@@ -50,7 +51,7 @@
     export default Vue.extend({
         name: 'tooltip',
         props: {
-            theme: String
+            theme: String,
         },
         data(): {
             download: DSBDownload | null,
@@ -103,7 +104,7 @@
 
             downloadSpeed(): string {
                 if (!this.download) {
-                    return 'Unknown';
+                    return helpers.localize('downloadSpeedUnknown');
                 }
 
                 return `${helpers.formatFileSize(this.download.calculateDownloadSpeed())}/s`;
@@ -111,6 +112,9 @@
         },
 
         methods: {
+            l(messageName: string, substitutions?: string | string[]): string {
+                return helpers.localize(messageName, substitutions);
+            },
             calculateLeftPosition(): string {
                 if (this.element) {
                     let downloadOffset = this.element.offsetLeft;
