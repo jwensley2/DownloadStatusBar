@@ -4,6 +4,9 @@
 
 # DownloadStatusBar
 
+## Localization
+To add translations for a new language copy [\_locales/en_CA/messages.json](_locales/en_CA/messages.json) to a new folder with the proper language code inside [\_locales](_locales)
+
 ## Testing
 Run `npm run dev` to build the dev build then `npm run webext` to start a Firefox instance with the addon
 
