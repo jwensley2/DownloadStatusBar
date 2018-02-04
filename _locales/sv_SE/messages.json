@@ -1,0 +1,154 @@
+{
+  "extensionName": {
+    "message": "WX Download Status Bar",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "Lägger till ett fält som visar din nerladdningsstatus",
+    "description": "Description of the extension."
+  },
+  "downloadStatusComplete": {
+    "message": "Klar"
+  },
+  "downloadStatusPaused": {
+    "message": "Pausad"
+  },
+  "downloadStatusCancelled": {
+    "message": "Avbruten"
+  },
+  "downloadStatusError": {
+    "message": "Fel"
+  },
+  "downloadStatusInProgress": {
+    "message": "Pågående"
+  },
+  "downloadSpeedUnknown": {
+    "message": "Okänd"
+  },
+  "barClearButton": {
+    "message": "Rensa",
+    "description": "Text for the clear downloads button"
+  },
+  "tooltipFilenameHeading": {
+    "message": "Filnamn"
+  },
+  "tooltipUrlHeading": {
+    "message": "Webbadress"
+  },
+  "tooltipReferrerHeading": {
+    "message": "Hänvisningsadress"
+  },
+  "tooltipReferrerNone": {
+    "message": "Ingen",
+    "description": "Text to show if there is no referrer"
+  },
+  "tooltipSpeedHeading": {
+    "message": "Hastighet"
+  },
+  "tooltipStatusHeading": {
+    "message": "Status"
+  },
+  "tooltipProgressHeading": {
+    "message": "Förlopp"
+  },
+  "tooltipFilesizeHeading": {
+    "message": "Filstorlek"
+  },
+  "tooltipMimeHeading": {
+    "message": "MIME-typ"
+  },
+  "tooltipMimeUnknown": {
+    "message": "Okänd",
+    "description": "Message to show if the mime type is not known"
+  },
+  "tooltipPreviewHeading": {
+    "message": "Förhandsvisning"
+  },
+  "optionsDisplayPanelTitle": {
+    "message": "Visningsalternativ",
+    "description": "Title of the display options panel."
+  },
+  "optionsThemeLight": {
+    "message": "Ljust",
+    "description": "The name of the light theme"
+  },
+  "optionsThemeDark": {
+    "message": "Mörkt",
+    "description": "The name of the dark theme"
+  },
+  "optionsAlwaysShowBar": {
+    "message": "Visa alltid statusfältet"
+  },
+  "optionsShowDownloadInfo": {
+    "message": "Visa nerladdningsinfo"
+  },
+  "optionsAutoHidePanelTitle": {
+    "message": "Dölj automatiskt",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsAutoHideCompleted": {
+    "message": "Dölj automatiskt klara nerladdningar"
+  },
+  "optionsAutoHideFileTypes": {
+    "message": "Dolda filtyper"
+  },
+  "optionsAutoHideOptional": {
+    "message": "Optional. If nothing is selected all file types will auto hide."
+  },
+  "optionsSelectType": {
+    "message": "Välj typ",
+    "description": "Label of the select file type dropdown"
+  },
+  "optionsSelectFileType": {
+    "message": "Välj filtyp",
+    "description": "Placeholder for the select file type dropdown"
+  },
+  "optionsAddOtherType": {
+    "message": "Lägg till annan typ"
+  },
+  "optionsClickToRemove": {
+    "message": "Klicka för att ta bort"
+  },
+  "optionsIgnoreFilesPanelTitle": {
+    "message": "Ignorerade filtyper",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsIgnoreFilesDescription": {
+    "message": "Dessa filtyper kommer inte att synas i fältet"
+  },
+  "optionsIgnoreFileTypes": {
+    "message": "Ignorerade filtyper"
+  },
+  "optionsMiscellaneousPanelTitle": {
+    "message": "Diverse",
+    "description": "Title of the miscellaneous options panel"
+  },
+  "optionsCompletionSoundTitle": {
+    "message": "Klarljud",
+    "description": "Title of the completion sound section"
+  },
+  "optionsPlaySound": {
+    "message": "Spela upp ett ljud när nerladdningen är klar",
+    "description": "Play completion sound checkbox label"
+  },
+  "optionsCustomSoundNote": {
+    "message": "Du kan också välja ett eget ljud (MAX 1 MB)",
+    "description": "Message about choosing a custom sound"
+  },
+  "optionsRefreshRateTitle": {
+    "message": "Uppdateringsfrekvens",
+    "description": "Title of the refresh rate section"
+  },
+  "optionsRefreshRateNote": {
+    "message": "Styr hur ofta fältet ska uppdateras",
+    "description": "Description of what the refresh rate does"
+  },
+  "optionsHistoryTitle": {
+    "message": "Historik",
+    "description": "Title of the history section"
+  },
+  "optionsHistoryLabel": {
+    "message": "Rensa även webbläsarens historik när nerladdningarna rensas",
+    "description": "Label for the checkbox to enable browser history clearing"
+  }
+}
