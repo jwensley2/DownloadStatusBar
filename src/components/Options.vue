@@ -107,7 +107,7 @@
                     <div class="card">
                         <div class="card-header">{{ l('optionsMiscellaneousPanelTitle') }}</div>
                         <div class="card-body">
-                            <h4>Completion Sound</h4>
+                            <h4>{{ l('optionsCompletionSoundTitle') }}</h4>
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" v-model="syncOptions.playSoundOnComplete">
                                 <span class="custom-control-indicator"></span>
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
 
-                            <h4>History</h4>
+                            <h4>{{ l('optionsHistoryTitle') }}</h4>
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" v-model="syncOptions.clearHistory">
                                 <span class="custom-control-indicator"></span>
