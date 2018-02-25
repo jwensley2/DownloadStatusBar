@@ -312,7 +312,7 @@ class DownloadStatus {
         this.refresh();
 
         if (this.options.clearHistory) {
-            browser.downloads.erase({});
+            browser.downloads.erase({state: 'complete'});
         }
     }
 }
