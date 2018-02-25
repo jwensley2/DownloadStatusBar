@@ -95,6 +95,14 @@
   "optionsAutoHideOptional": {
     "message": "Optional. If nothing is selected all file types will auto hide."
   },
+  "optionsAutoHideSecondsInputBeforeText": {
+    "message": "Hide after",
+    "description": "The text before the seconds input field"
+  },
+  "optionsAutoHideSecondsInputAfterText": {
+    "message": "seconds",
+    "description": "The text after the seconds input field"
+  },
   "optionsSelectType": {
     "message": "Select type",
     "description": "Label of the select file type dropdown"

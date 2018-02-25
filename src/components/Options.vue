@@ -18,7 +18,7 @@
                                 <label class="custom-control custom-radio">
                                     <input type="radio" class="custom-control-input" value="dark" v-model="syncOptions.theme">
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Dark</span>
+                                    <span class="custom-control-description">{{ l('optionsThemeDark') }}</span>
                                 </label>
                             </div>
 
@@ -51,7 +51,7 @@
 
                             <div v-if="syncOptions.autohideEnable">
                                 <div class="form-inline">
-                                    Hide after
+                                    {{ l('optionsAutoHideSecondsInputBeforeText' )}}
                                     <input type="number"
                                            min="1"
                                            max="600"
@@ -59,7 +59,7 @@
                                            value="5"
                                            v-model="syncOptions.autohideDuration"
                                     >
-                                    seconds
+                                    {{ l('optionsAutoHideSecondsInputAfterText' )}}
                                 </div>
 
 
