@@ -1,0 +1,154 @@
+{
+  "extensionName": {
+    "message": "WX Download Status Bar",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "Aoute une barre pour montrer le statut de vos téléchargements",
+    "description": "Description of the extension."
+  },
+  "downloadStatusComplete": {
+    "message": "Terminé"
+  },
+  "downloadStatusPaused": {
+    "message": "En pause"
+  },
+  "downloadStatusCancelled": {
+    "message": "Annulé"
+  },
+  "downloadStatusError": {
+    "message": "Erreur"
+  },
+  "downloadStatusInProgress": {
+    "message": "En cours"
+  },
+  "downloadSpeedUnknown": {
+    "message": "Inconnu"
+  },
+  "barClearButton": {
+    "message": "Effacer",
+    "description": "Text for the clear downloads button"
+  },
+  "tooltipFilenameHeading": {
+    "message": "Nom du fichier"
+  },
+  "tooltipUrlHeading": {
+    "message": "Url"
+  },
+  "tooltipReferrerHeading": {
+    "message": "Referrer"
+  },
+  "tooltipReferrerNone": {
+    "message": "Aucun",
+    "description": "Text to show if there is no referrer"
+  },
+  "tooltipSpeedHeading": {
+    "message": "Vitesse"
+  },
+  "tooltipStatusHeading": {
+    "message": "Statut"
+  },
+  "tooltipProgressHeading": {
+    "message": "Progression"
+  },
+  "tooltipFilesizeHeading": {
+    "message": "Taille du fichier"
+  },
+  "tooltipMimeHeading": {
+    "message": "type MIME"
+  },
+  "tooltipMimeUnknown": {
+    "message": "Inconnu",
+    "description": "Message to show if the mime type is not known"
+  },
+  "tooltipPreviewHeading": {
+    "message": "Previsuaisation"
+  },
+  "optionsDisplayPanelTitle": {
+    "message": "Options",
+    "description": "Title of the display options panel."
+  },
+  "optionsThemeLight": {
+    "message": "Clair",
+    "description": "The name of the light theme"
+  },
+  "optionsThemeDark": {
+    "message": "Sombre",
+    "description": "The name of the dark theme"
+  },
+  "optionsAlwaysShowBar": {
+    "message": "Toujours afficher la barre de statut"
+  },
+  "optionsShowDownloadInfo": {
+    "message": "Afficher les informations"
+  },
+  "optionsAutoHidePanelTitle": {
+    "message": "Masquage automatique",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsAutoHideCompleted": {
+    "message": "Masquer automatiquement les téléchargements terminés"
+  },
+  "optionsAutoHideFileTypes": {
+    "message": "Types de fichier à masquer"
+  },
+  "optionsAutoHideOptional": {
+    "message": "Optionnel. Si aucun sélectionné, tous les types de fichier seront masqués."
+  },
+  "optionsSelectType": {
+    "message": "Sélectionner le type",
+    "description": "Label of the select file type dropdown"
+  },
+  "optionsSelectFileType": {
+    "message": "Sélectionner le type de fichier",
+    "description": "Placeholder for the select file type dropdown"
+  },
+  "optionsAddOtherType": {
+    "message": "Aouter un autre type"
+  },
+  "optionsClickToRemove": {
+    "message": "Cliquer pour retirer"
+  },
+  "optionsIgnoreFilesPanelTitle": {
+    "message": "Types de fichier ignorés",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsIgnoreFilesDescription": {
+    "message": "Ces types de fichier n'apparaitront pas dans la barre"
+  },
+  "optionsIgnoreFileTypes": {
+    "message": "Types de fichier à ignorer"
+  },
+  "optionsMiscellaneousPanelTitle": {
+    "message": "Divers",
+    "description": "Title of the miscellaneous options panel"
+  },
+  "optionsCompletionSoundTitle": {
+    "message": "Son de fin de téléchargement",
+    "description": "Title of the completion sound section"
+  },
+  "optionsPlaySound": {
+    "message": "Joue un son quand un téléchargement est terminé",
+    "description": "Play completion sound checkbox label"
+  },
+  "optionsCustomSoundNote": {
+    "message": "Optionnel : vous pouvez choisir un fichier son (1MO MAX)",
+    "description": "Message about choosing a custom sound"
+  },
+  "optionsRefreshRateTitle": {
+    "message": "Taux de rafraichissement",
+    "description": "Title of the refresh rate section"
+  },
+  "optionsRefreshRateNote": {
+    "message": "Contrôler la fréquence de rafraichissement de la barre",
+    "description": "Description of what the refresh rate does"
+  },
+  "optionsHistoryTitle": {
+    "message": "Historique",
+    "description": "Title of the history section"
+  },
+  "optionsHistoryLabel": {
+    "message": "Effacer également les téléchargements du navigateur en effaçant la barre.",
+    "description": "Label for the checkbox to enable browser history clearing"
+  }
+}
