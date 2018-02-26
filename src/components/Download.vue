@@ -3,7 +3,7 @@
          @click="singleClick"
          @dblclick="doubleClick"
          @mouseover="showTooltip($refs[`downloads-${download.downloadItem.id}`], download)"
-         @mouseleave="hideTooltip"
+         @mouseleave="hideTooltip($event)"
          @contextmenu.prevent="showContextMenu"
          :ref="`downloads-${download.downloadItem.id}`"
          :class="[`dsb-theme-${options.theme}`, progressClass]"
@@ -95,6 +95,19 @@
         },
 
         methods: {
+            hideTooltip(event: MouseEvent) {
+                let tooltip = document.getElementById('DownloadStatusBarTooltip');
+
+                if (event.relatedTarget && tooltip) {
+                    let target = event.relatedTarget !as HTMLElement;
+
+                    if (target.isEqualNode(tooltip)) {
+                        return;
+                    }
+                }
+
+                this.$tooltip.hide();
+            },
             singleClick() {
                 this.$root.$contextMenu.close();
             },

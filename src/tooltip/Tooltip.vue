@@ -1,18 +1,23 @@
 <template>
     <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown" :class="`dsb-theme-${theme}`" :style="{left: left}"
+         @mouseleave="hideTooltip"
          :ref="'tooltip'">
         <table class="dsb-tooltip-table">
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipFilenameHeading') }}:</th>
-                <td class="dsb-tooltip-cell">{{ filename }}</td>
+                <td class="dsb-tooltip-cell"><input class="dsb-tooltip-url" type="url" :value="filename" readonly></td>
             </tr>
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipUrlHeading') }}:</th>
-                <td class="dsb-tooltip-cell">{{ download.downloadItem.url }}</td>
+                <td class="dsb-tooltip-cell"><input class="dsb-tooltip-url" type="url" :value="download.downloadItem.url" readonly></td>
             </tr>
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipReferrerHeading') }}:</th>
-                <td class="dsb-tooltip-cell">{{ download.downloadItem.referrer || l('tooltipReferrerNone') }}</td>
+                <td class="dsb-tooltip-cell">
+                    <input v-if="download.downloadItem.referrer" class="dsb-tooltip-url" type="url" :value="download.downloadItem.referrer"
+                           readonly>
+                    <span v-else>{{ l('tooltipReferrerNone') }}</span>
+                </td>
             </tr>
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipSpeedHeading') }}:</th>
@@ -203,11 +208,22 @@
             white-space    : nowrap;
         }
 
+        .dsb-tooltip-url {
+            background  : rgba(0, 0, 0, 0.2);
+            border      : 1px solid light-theme("border");
+            color       : light-theme("text");
+            line-height : 1;
+            max-width   : 500px;
+            min-width   : 250px;
+            padding     : 5px 5px;
+            width       : 100%;
+        }
+
         .dsb-preview {
-            max-width  : 300px;
-            max-height : 200px;
-            width      : auto;
             height     : auto;
+            max-height : 200px;
+            max-width  : 300px;
+            width      : auto;
         }
 
         &.dsb-theme-dark {
@@ -218,6 +234,11 @@
             .dsb-tooltip-heading, .dsb-tooltip-cell {
                 background : dark-theme("background");
                 color      : dark-theme("text");
+            }
+
+            .dsb-tooltip-url {
+                border : 1px solid dark-theme("border");
+                color  : dark-theme("text");
             }
         }
     }
