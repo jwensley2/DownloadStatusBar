@@ -126,6 +126,7 @@
         z-index                 : 9999999;
 
         > * {
+            height         : auto;
             vertical-align : middle
         }
 
@@ -149,7 +150,7 @@
             .dsb-clear-downloads {
                 background   : dark-theme("button");
                 border-right : 1px solid dark-theme("button-border");
-                color        : dark-theme("text");
+                color        : dark-theme("text") !important;
 
                 &:hover {
                     background : dark-theme("button-hover");
@@ -166,10 +167,10 @@
         border-right-width : 1px;
         box-shadow         : none;
         box-sizing         : border-box;
-        color              : light-theme("text");
+        color              : light-theme("text") !important;
         cursor             : pointer;
         display            : inline-block;
-        font               : normal 600 14px Arial, sans-serif;
+        font               : normal 600 14px/1 Arial, sans-serif;
         margin             : 0 5px 0 0;
         padding            : 0 15px;
         width              : auto;
