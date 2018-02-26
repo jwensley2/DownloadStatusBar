@@ -1,9 +1,9 @@
-import moment = require("moment");
+import moment = require('moment');
 import DownloadQuery = browser.downloads.DownloadQuery;
-import * as helpers from "./helpers";
-import * as _ from "lodash";
-import {defaultSyncOptions, LocalOptions, SyncOptions} from "./config/options";
-import {DownloadInterface, DSBDownload} from "./DSBDownload";
+import * as helpers from './helpers';
+import * as _ from 'lodash';
+import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
+import {DownloadInterface, DSBDownload} from './DSBDownload';
 
 class DownloadStatus {
     protected downloads: DSBDownload[] = [];
@@ -39,7 +39,7 @@ class DownloadStatus {
         });
 
         browser.downloads.onChanged.addListener((downloadDelta) => {
-            if (downloadDelta.state && downloadDelta.state.current === "complete") {
+            if (downloadDelta.state && downloadDelta.state.current === 'complete') {
                 let download = _.find(this.downloads, (dl) => {
                     return dl.downloadItem.id === downloadDelta.id;
                 });
@@ -57,7 +57,7 @@ class DownloadStatus {
                     });
 
                     // Play sound if the download doesn't instantly finish
-                    if (moment().diff(startTime, "s") > 1) {
+                    if (moment().diff(startTime, 's') > 1) {
                         this.playCompletedSound();
                     }
 
@@ -77,32 +77,32 @@ class DownloadStatus {
                 let download = DSBDownload.fromJson(JSON.parse(request.download) as DownloadInterface);
 
                 switch (request.event) {
-                    case "clearDownload":
+                    case 'clearDownload':
                         self.clearDownload(download);
                         break;
-                    case "showDownload":
+                    case 'showDownload':
                         self.showDownload(download);
                         break;
-                    case "cancelDownload":
+                    case 'cancelDownload':
                         self.cancelDownload(download);
                         break;
-                    case "pauseDownload":
+                    case 'pauseDownload':
                         self.pauseDownload(download);
                         break;
-                    case "resumeDownload":
+                    case 'resumeDownload':
                         self.resumeDownload(download);
                         break;
-                    case "deleteDownload":
+                    case 'deleteDownload':
                         self.deleteDownload(download);
                         break;
                 }
             }
 
             switch (request.event) {
-                case "clearDownloads":
+                case 'clearDownloads':
                     self.clearDownloads();
                     break;
-                case "openOptions":
+                case 'openOptions':
                     browser.runtime.openOptionsPage();
                     break;
             }
@@ -294,13 +294,13 @@ class DownloadStatus {
             return;
         }
 
-        browser.storage.local.get("customSound").then((options: LocalOptions) => {
+        browser.storage.local.get('customSound').then((options: LocalOptions) => {
             let audio = new Audio();
 
             if (options.customSound) {
                 audio.src = browser.runtime.getURL(options.customSound.data);
             } else {
-                audio.src = browser.runtime.getURL("sounds/complete.wav");
+                audio.src = browser.runtime.getURL('sounds/complete.wav');
             }
 
             audio.play();
