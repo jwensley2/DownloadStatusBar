@@ -36,7 +36,7 @@
     "message": "URL"
   },
   "tooltipReferrerHeading": {
-    "message": "Referrer"
+    "message": "Rimando"
   },
   "tooltipReferrerNone": {
     "message": "Nessuno",
@@ -55,7 +55,7 @@
     "message": "Dimensione"
   },
   "tooltipMimeHeading": {
-    "message": "MIME type"
+    "message": "Tipo di MIME"
   },
   "tooltipMimeUnknown": {
     "message": "Sconosciuto",
@@ -80,7 +80,7 @@
     "message": "Mostra sempre la barra di stato"
   },
   "optionsShowDownloadInfo": {
-    "message": "Mostra info sul download"
+    "message": "Mostra informazioni sul download"
   },
   "optionsAutoHidePanelTitle": {
     "message": "Nascondi automaticamente",
@@ -96,6 +96,14 @@
     "message": "Opzionale - Non selezionando nulla, verranno nascosti automaticamente tutti i tipi di file"
   },
   "optionsSelectType": {
+    "message": "Nascondi dopo",
+    "description": "The text before the seconds input field"
+  },
+"optionsSelectType": {
+    "message": "secondi",
+    "description": "The text after the seconds input field"
+  },  
+"optionsSelectType": {
     "message": "Seleziona tipo",
     "description": "Label of the select file type dropdown"
   },
@@ -132,7 +140,7 @@
     "description": "Play completion sound checkbox label"
   },
   "optionsCustomSoundNote": {
-    "message": "È possibile scegliere un suono personalizzato (Max. 1MB)",
+    "message": "È possibile scegliere un suono personalizzato (max. 1MB)",
     "description": "Message about choosing a custom sound"
   },
   "optionsRefreshRateTitle": {
