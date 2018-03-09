@@ -1,0 +1,162 @@
+﻿{
+  "extensionName": {
+    "message": "WX Download Status Bar",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "다운로드 상태를 표시하는 막대를 추가합니다.",
+    "description": "Description of the extension."
+  },
+  "downloadStatusComplete": {
+    "message": "완료"
+  },
+  "downloadStatusPaused": {
+    "message": "일시정지"
+  },
+  "downloadStatusCancelled": {
+    "message": "취소됨"
+  },
+  "downloadStatusError": {
+    "message": "오류"
+  },
+  "downloadStatusInProgress": {
+    "message": "다운로드중"
+  },
+  "downloadSpeedUnknown": {
+    "message": "알수없음"
+  },
+  "barClearButton": {
+    "message": "지우기",
+    "description": "Text for the clear downloads button"
+  },
+  "tooltipFilenameHeading": {
+    "message": "파일이름"
+  },
+  "tooltipUrlHeading": {
+    "message": "Url"
+  },
+  "tooltipReferrerHeading": {
+    "message": "리퍼러"
+  },
+  "tooltipReferrerNone": {
+    "message": "없음",
+    "description": "Text to show if there is no referrer"
+  },
+  "tooltipSpeedHeading": {
+    "message": "속도"
+  },
+  "tooltipStatusHeading": {
+    "message": "상태"
+  },
+  "tooltipProgressHeading": {
+    "message": "진행상황"
+  },
+  "tooltipFilesizeHeading": {
+    "message": "파일크기"
+  },
+  "tooltipMimeHeading": {
+    "message": "MIME 유형"
+  },
+  "tooltipMimeUnknown": {
+    "message": "알수없음",
+    "description": "Message to show if the mime type is not known"
+  },
+  "tooltipPreviewHeading": {
+    "message": "미리보기"
+  },
+  "optionsDisplayPanelTitle": {
+    "message": "표시 옵션",
+    "description": "Title of the display options panel."
+  },
+  "optionsThemeLight": {
+    "message": "밝은 모드",
+    "description": "The name of the light theme"
+  },
+  "optionsThemeDark": {
+    "message": "어두운 모드",
+    "description": "The name of the dark theme"
+  },
+  "optionsAlwaysShowBar": {
+    "message": "상태를 나타내는 막대를 항상 표시합니다."
+  },
+  "optionsShowDownloadInfo": {
+    "message": "다운로드 정보 표시"
+  },
+  "optionsAutoHidePanelTitle": {
+    "message": "자동 숨기기",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsAutoHideCompleted": {
+    "message": "다운로드가 완료되면 자동으로 숨깁니다."
+  },
+  "optionsAutoHideFileTypes": {
+    "message": "숨길 파일 형식"
+  },
+  "optionsAutoHideOptional": {
+    "message": "아무것도 선택하지 않으면 모든 파일 형식이 자동으로 숨겨집니다."
+  },
+  "optionsAutoHideSecondsInputBeforeText": {
+    "message": "",
+    "description": "The text before the seconds input field"
+  },
+  "optionsAutoHideSecondsInputAfterText": {
+    "message": "초 이후에 숨겨짐",
+    "description": "The text after the seconds input field"
+  },
+  "optionsSelectType": {
+    "message": "형식 선택",
+    "description": "Label of the select file type dropdown"
+  },
+  "optionsSelectFileType": {
+    "message": "파일 형식 선택",
+    "description": "Placeholder for the select file type dropdown"
+  },
+  "optionsAddOtherType": {
+    "message": "다른 형식 추가"
+  },
+  "optionsClickToRemove": {
+    "message": "클릭하여 삭제"
+  },
+  "optionsIgnoreFilesPanelTitle": {
+    "message": "무시할 파일 형식",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsIgnoreFilesDescription": {
+    "message": "다음과 같은 파일 형식은 상태창에 표시되지 않습니다."
+  },
+  "optionsIgnoreFileTypes": {
+    "message": "무시할 파일 형식"
+  },
+  "optionsMiscellaneousPanelTitle": {
+    "message": "기타 설정",
+    "description": "Title of the miscellaneous options panel"
+  },
+  "optionsCompletionSoundTitle": {
+    "message": "완료 알림음",
+    "description": "Title of the completion sound section"
+  },
+  "optionsPlaySound": {
+    "message": "다운로드가 완료되면 소리 재생",
+    "description": "Play completion sound checkbox label"
+  },
+  "optionsCustomSoundNote": {
+    "message": "자유롭게 알림음을 설정할수 있습니다. (1MB 제한)",
+    "description": "Message about choosing a custom sound"
+  },
+  "optionsRefreshRateTitle": {
+    "message": "새로고침 시간",
+    "description": "Title of the refresh rate section"
+  },
+  "optionsRefreshRateNote": {
+    "message": "막대를 새로 고치는 빈도를 설정합니다.",
+    "description": "Description of what the refresh rate does"
+  },
+  "optionsHistoryTitle": {
+    "message": "기록",
+    "description": "Title of the history section"
+  },
+  "optionsHistoryLabel": {
+    "message": "상태창에서 다운로드 기록을 지울때 브라우저의 다운로드 기록도 같이 지웁니다.",
+    "description": "Label for the checkbox to enable browser history clearing"
+  }
+}
