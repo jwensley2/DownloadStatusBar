@@ -12,7 +12,7 @@ module.exports = merge(common, {
                 NODE_ENV: '"production"'
             }
         }),
-        new UglifyJSPlugin(),
+        // new UglifyJSPlugin(),
         new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
@@ -20,5 +20,4 @@ module.exports = merge(common, {
             'build',
         ])
     ],
-    devtool: '#source-map'
 });
