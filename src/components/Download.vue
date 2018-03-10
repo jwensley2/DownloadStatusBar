@@ -24,177 +24,179 @@
 <script lang="ts">
     import Vue from 'vue';
     import * as helpers from '../helpers';
+    import {Component, Prop} from 'vue-property-decorator';
+    import {DSBDownload} from '../DSBDownload';
+    import {SyncOptions} from '../config/options';
 
-    export default Vue.extend({
-        name: 'download',
-        props: {
-            download: Object,
-            options: Object,
-        },
-        data() {
-            return {}
-        },
-        computed: {
-            filename(): string {
-                const maxLength = 15;
-                const length = this.download.filename().length;
-                let filename = (this.download.filename()).slice(0, maxLength);
+    @Component({})
+    export default class Download extends Vue {
+        @Prop({})
+        download: DSBDownload;
 
-                if (length > maxLength) {
-                    filename += '…';
+        @Prop({})
+        options: SyncOptions;
+
+        get filename(): string {
+            const maxLength = 15;
+            const length = this.download.filename().length;
+            let filename = (this.download.filename()).slice(0, maxLength);
+
+            if (length > maxLength) {
+                filename += '…';
+            }
+
+            return filename;
+        }
+
+        get status(): string {
+            return this.download.status();
+        }
+
+        get progress(): string {
+            const downloadItem = this.download.downloadItem;
+            const downloaded = helpers.formatFileSize(downloadItem.bytesReceived);
+
+            if (downloadItem.state === 'complete') {
+                return `${helpers.formatFileSize(downloadItem.fileSize)}`;
+            }
+
+            return `${downloaded}`;
+        }
+
+        get percentDone(): string {
+            return this.download.percentDownloaded().toString();
+        }
+
+        get isInProgress(): boolean {
+            return this.download.downloadItem.state === 'in_progress' || this.download.downloadItem.paused;
+        }
+
+        get progressClass() {
+            if (this.download.downloadItem.state === 'complete') {
+                return 'dsb-complete';
+            }
+
+            if (this.download.isCancelled()) {
+                return 'dsb-cancelled';
+            }
+
+            if (this.download.downloadItem.error && !this.download.downloadItem.paused) {
+                return 'dsb-error';
+            }
+
+            return 'dsb-in-progress';
+        }
+
+        get downloadSpeed(): string {
+            if (!this.download) {
+                return '';
+            }
+
+            return `${helpers.formatFileSize(this.download.calculateDownloadSpeed(), true)}/s`;
+        }
+
+        hideTooltip(event: MouseEvent) {
+            let tooltip = document.getElementById('DownloadStatusBarTooltip');
+
+            if (event.relatedTarget && tooltip) {
+                let target = event.relatedTarget !as HTMLElement;
+
+                if (target.isEqualNode(tooltip)) {
+                    return;
                 }
+            }
 
-                return filename;
-            },
-            status(): string {
-                return this.download.status();
-            },
+            this.$tooltip.hide();
+        }
 
-            progress(): string {
-                const downloadItem = this.download.downloadItem;
-                const downloaded = helpers.formatFileSize(downloadItem.bytesReceived);
+        singleClick() {
+            this.$root.$contextMenu.close();
+        }
 
-                if (downloadItem.state === 'complete') {
-                    return `${helpers.formatFileSize(downloadItem.fileSize)}`;
-                }
+        doubleClick() {
+            this.$root.$emit('showDownload', this.download);
+        }
 
-                return `${downloaded}`;
-            },
+        showContextMenu(event: MouseEvent) {
+            const userAgent = window.navigator.userAgent;
+            const inProgress = this.download.downloadItem.state === 'in_progress';
+            const paused = this.download.downloadItem.state === 'interrupted' && this.download.downloadItem.paused;
 
-            percentDone(): string {
-                return this.download.percentDownloaded()
-            },
+            let showTitle = userAgent.includes('Windows') ? 'Show in Explorer' :
+                userAgent.includes('Mac') ? 'Reveal in Finder' : 'Show in Folder';
 
-            isInProgress(): boolean {
-                return this.download.downloadItem.state === 'in_progress' || this.download.downloadItem.paused;
-            },
-
-            progressClass() {
-                if (this.download.downloadItem.state === 'complete') {
-                    return 'dsb-complete';
-                }
-
-                if (this.download.isCancelled()) {
-                    return 'dsb-cancelled';
-                }
-
-                if (this.download.downloadItem.error && !this.download.downloadItem.paused) {
-                    return 'dsb-error';
-                }
-
-                return 'dsb-in-progress';
-            },
-
-            downloadSpeed(): string {
-                if (!this.download) {
-                    return '';
-                }
-
-                return `${helpers.formatFileSize(this.download.calculateDownloadSpeed(), true)}/s`;
-            },
-        },
-
-        methods: {
-            hideTooltip(event: MouseEvent) {
-                let tooltip = document.getElementById('DownloadStatusBarTooltip');
-
-                if (event.relatedTarget && tooltip) {
-                    let target = event.relatedTarget !as HTMLElement;
-
-                    if (target.isEqualNode(tooltip)) {
-                        return;
-                    }
-                }
-
-                this.$tooltip.hide();
-            },
-            singleClick() {
-                this.$root.$contextMenu.close();
-            },
-            doubleClick() {
-                this.$root.$emit('showDownload', this.download);
-            },
-            showContextMenu(event: MouseEvent) {
-                const userAgent = window.navigator.userAgent;
-                const inProgress = this.download.downloadItem.state === 'in_progress';
-                const paused = this.download.downloadItem.state === 'interrupted' && this.download.downloadItem.paused;
-
-                let showTitle = userAgent.includes('Windows') ? 'Show in Explorer' :
-                    userAgent.includes('Mac') ? 'Reveal in Finder' : 'Show in Folder';
-
-                let items = [
-                    {
-                        name: 'Clear Download',
-                        icon: 'eye-slash',
-                        clicked: () => {
-                            this.$root.$emit('clearDownload', this.download);
-                            this.$root.$contextMenu.close();
-                        },
+            let items = [
+                {
+                    name: 'Clear Download',
+                    icon: 'eye-slash',
+                    clicked: () => {
+                        this.$root.$emit('clearDownload', this.download);
+                        this.$root.$contextMenu.close();
                     },
-                ];
+                },
+            ];
 
-                if (!this.download.downloadItem.error) {
-                    items.push({
-                        name: showTitle,
-                        icon: 'folder-open',
-                        clicked: () => {
-                            this.$root.$emit('showDownload', this.download);
-                            this.$root.$contextMenu.close();
-                        },
-                    });
-                }
+            if (!this.download.downloadItem.error) {
+                items.push({
+                    name: showTitle,
+                    icon: 'folder-open',
+                    clicked: () => {
+                        this.$root.$emit('showDownload', this.download);
+                        this.$root.$contextMenu.close();
+                    },
+                });
+            }
 
-                // In progress or paused
-                if (inProgress || paused) {
-                    items.push({
-                        name: 'Cancel Download',
-                        icon: 'times',
-                        clicked: () => {
-                            this.$root.$emit('cancelDownload', this.download);
-                            this.$root.$contextMenu.close();
-                        },
-                    });
-                }
+            // In progress or paused
+            if (inProgress || paused) {
+                items.push({
+                    name: 'Cancel Download',
+                    icon: 'times',
+                    clicked: () => {
+                        this.$root.$emit('cancelDownload', this.download);
+                        this.$root.$contextMenu.close();
+                    },
+                });
+            }
 
-                // Download in progress
-                if (inProgress) {
-                    items.push({
-                        name: 'Pause Download',
-                        icon: 'pause',
-                        clicked: () => {
-                            this.$root.$emit('pauseDownload', this.download);
-                            this.$root.$contextMenu.close();
-                        },
-                    });
-                }
+            // Download in progress
+            if (inProgress) {
+                items.push({
+                    name: 'Pause Download',
+                    icon: 'pause',
+                    clicked: () => {
+                        this.$root.$emit('pauseDownload', this.download);
+                        this.$root.$contextMenu.close();
+                    },
+                });
+            }
 
-                // Download is paused
-                if (paused) {
-                    items.push({
-                        name: 'Resume Download',
-                        icon: 'play',
-                        clicked: () => {
-                            this.$root.$emit('resumeDownload', this.download);
-                            this.$root.$contextMenu.close();
-                        },
-                    });
-                }
+            // Download is paused
+            if (paused) {
+                items.push({
+                    name: 'Resume Download',
+                    icon: 'play',
+                    clicked: () => {
+                        this.$root.$emit('resumeDownload', this.download);
+                        this.$root.$contextMenu.close();
+                    },
+                });
+            }
 
-                if (this.download.downloadItem.state === 'complete') {
-                    items.push({
-                        name: 'Delete Download',
-                        icon: 'trash-o',
-                        clicked: () => {
-                            this.$root.$emit('deleteDownload', this.download);
-                            this.$root.$contextMenu.close();
-                        },
-                    });
-                }
+            if (this.download.downloadItem.state === 'complete') {
+                items.push({
+                    name: 'Delete Download',
+                    icon: 'trash-o',
+                    clicked: () => {
+                        this.$root.$emit('deleteDownload', this.download);
+                        this.$root.$contextMenu.close();
+                    },
+                });
+            }
 
-                this.$root.$contextMenu.open(items, {x: event.clientX, y: event.clientY});
-            },
-        },
-    });
+            this.$root.$contextMenu.open(items, {x: event.clientX, y: event.clientY});
+        }
+    }
 </script>
 
 <style lang="scss" scoped>

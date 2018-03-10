@@ -28,52 +28,51 @@
     import Download from './Download.vue';
     import {defaultSyncOptions, SyncOptions} from '../config/options';
     import * as helpers from '../helpers';
+    import {Component, Prop, Watch} from 'vue-property-decorator';
+    import {DownloadInterface} from '../DSBDownload';
 
-    export default Vue.extend({
-        name: 'download-status-bar',
+    @Component({
         components: {
-            'download': Download,
+            Download,
         },
-        props: {
-            downloads: Array,
-        },
-        data() {
-            return {
-                options: defaultSyncOptions,
-                defaultBottomMargin: 0,
+    })
+    export default class DownloadStatusBar extends Vue {
+        @Prop({default: []})
+        downloads: [DownloadInterface];
+
+        options = defaultSyncOptions;
+        defaultBottomMargin = 0;
+
+        l(messageName: string, substitutions?: string | string[]): string {
+            return helpers.localize(messageName, substitutions);
+        }
+
+        hideContextMenu() {
+            this.$contextMenu.close();
+        }
+
+        openOptions() {
+            this.$root.$emit('openOptions');
+        }
+
+        minimize() {
+            this.options.minimized = !this.options.minimized;
+
+            helpers.saveOptionsToStorage(this.options);
+        }
+
+        setBodyMargin() {
+            const body = document.getElementsByTagName('body')[0] as HTMLElement;
+            const downloadStatusBar = document.getElementById('DownloadStatusBar');
+
+            if (downloadStatusBar && this.downloads.length > 0 && downloadStatusBar.offsetHeight > this.defaultBottomMargin) {
+                body.style.marginBottom = `${downloadStatusBar.offsetHeight}px`;
+            } else {
+                body.style.marginBottom = `${this.defaultBottomMargin}px`;
             }
-        },
-        methods: {
-            l(messageName: string, substitutions?: string | string[]): string {
-                return helpers.localize(messageName, substitutions);
-            },
-            hideContextMenu() {
-                this.$contextMenu.close();
-            },
-            openOptions() {
-                this.$root.$emit('openOptions');
-            },
-            minimize() {
-                this.options.minimized = !this.options.minimized;
+        }
 
-                helpers.saveOptionsToStorage(this.options);
-            },
-            setBodyMargin() {
-                const body = document.getElementsByTagName('body')[0];
-                const downloadStatusBar = document.getElementById('DownloadStatusBar');
-
-                if (downloadStatusBar && this.downloads.length > 0 && downloadStatusBar.offsetHeight > this.defaultBottomMargin) {
-                    body.style.marginBottom = `${downloadStatusBar.offsetHeight}px`;
-                } else {
-                    body.style.marginBottom = `${this.defaultBottomMargin}px`;
-                }
-            },
-        },
-        watch: {
-            downloads() {
-                this.setBodyMargin();
-            },
-        },
+        // Mounted Lifecycle Hook
         mounted() {
             // Load the saved syncOptions
             browser.storage.sync.get(null)
@@ -87,16 +86,23 @@
                 }
             });
 
-            const body = document.getElementsByTagName('body')[0];
+            const body = document.getElementsByTagName('body')[0] as HTMLElement;
             if (window.getComputedStyle(body).marginBottom) {
                 this.defaultBottomMargin = parseInt(window.getComputedStyle(body).marginBottom!);
             }
             this.setBodyMargin();
-        },
+        }
+
+        // Updated Lifecycle Hook
         updated() {
             this.setBodyMargin();
-        },
-    });
+        }
+
+        @Watch('downloads')
+        watchDownloads() {
+            this.setBodyMargin();
+        }
+    }
 </script>
 
 <style scoped lang="scss">

@@ -6,36 +6,29 @@
                     <div class="card">
                         <div class="card-header">{{ l('optionsDisplayPanelTitle') }}</div>
                         <div class="card-body">
-                            <div class="form-check">
-                                <label class="custom-control custom-radio">
-                                    <span class="custom-control-indicator"></span>
-                                    <input type="radio" class="custom-control-input" value="light" v-model="syncOptions.theme">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">{{ l('optionsThemeLight') }}</span>
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" value="dark" v-model="syncOptions.theme">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">{{ l('optionsThemeDark') }}</span>
-                                </label>
+                            <div class="custom-control custom-radio">
+                                <span class="custom-control-indicator"></span>
+                                <input type="radio" class="custom-control-input" id="optionsThemeLight" value="light"
+                                       v-model="syncOptions.theme">
+                                <label class="custom-control-label" for="optionsThemeLight">{{ l('optionsThemeLight') }}</label>
                             </div>
 
-                            <div class="form-check">
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.alwaysShow">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">{{ l('optionsAlwaysShowBar') }}</span>
-                                </label>
+                            <div class="custom-control custom-radio mt-1">
+                                <input type="radio" class="custom-control-input" id="optionsThemeDark" value="dark"
+                                       v-model="syncOptions.theme">
+                                <label class="custom-control-label" for="optionsThemeDark">{{ l('optionsThemeDark') }}</label>
                             </div>
 
-                            <div class="form-check">
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" v-model="syncOptions.showInfoText">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">{{ l('optionsShowDownloadInfo') }}</span>
-                                </label>
+                            <div class="custom-control custom-checkbox mt-2">
+                                <input type="checkbox" class="custom-control-input" id="optionsAlwaysShowBar"
+                                       v-model="syncOptions.alwaysShow">
+                                <label class="custom-control-label" for="optionsAlwaysShowBar">{{ l('optionsAlwaysShowBar') }}</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox mt-2">
+                                <input type="checkbox" class="custom-control-input" id="optionsShowDownloadInfo"
+                                       v-model="syncOptions.showInfoText">
+                                <label class="custom-control-label" for="optionsShowDownloadInfo">{{ l('optionsShowDownloadInfo') }}</label>
                             </div>
                         </div>
                     </div>
@@ -43,11 +36,12 @@
                     <div class="card">
                         <div class="card-header">{{ l('optionsAutoHidePanelTitle') }}</div>
                         <div class="card-body">
-                            <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" v-model="syncOptions.autohideEnable">
-                                <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">{{ l('optionsAutoHideCompleted' )}}</span>
-                            </label>
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input" id="optionsAutoHideCompleted"
+                                       v-model="syncOptions.autohideEnable">
+                                <label class="custom-control-label" for="optionsAutoHideCompleted">{{ l('optionsAutoHideCompleted'
+                                    )}}</label>
+                            </div>
 
                             <div v-if="syncOptions.autohideEnable">
                                 <div class="form-inline">
@@ -108,11 +102,11 @@
                         <div class="card-header">{{ l('optionsMiscellaneousPanelTitle') }}</div>
                         <div class="card-body">
                             <h4>{{ l('optionsCompletionSoundTitle') }}</h4>
-                            <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" v-model="syncOptions.playSoundOnComplete">
-                                <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">{{ l('optionsPlaySound') }}</span>
-                            </label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="optionsPlaySound"
+                                       v-model="syncOptions.playSoundOnComplete">
+                                <label class="custom-control-label" for="optionsPlaySound">{{ l('optionsPlaySound') }}</label>
+                            </div>
 
                             <div v-if="syncOptions.playSoundOnComplete">
                                 <p class="text-muted">{{ l('optionsCustomSoundNote') }}</p>
@@ -148,11 +142,11 @@
                             </div>
 
                             <h4>{{ l('optionsHistoryTitle') }}</h4>
-                            <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" v-model="syncOptions.clearHistory">
-                                <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">{{ l('optionsHistoryLabel') }}</span>
-                            </label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="optionsHistoryLabel"
+                                       v-model="syncOptions.clearHistory">
+                                <label class="custom-control-label" for="optionsHistoryLabel">{{ l('optionsHistoryLabel') }}</label>
+                            </div>
                         </div>
                     </div>
 
@@ -210,150 +204,152 @@
     import fileTypes, {FileType, FileTypeList} from '../config/filetypes';
     import * as helpers from '../helpers';
     import * as _ from 'lodash';
+    import {Component, Watch} from 'vue-property-decorator';
 
-    export default Vue.extend({
-        name: 'options',
-        data(): {
-            syncOptions: SyncOptions,
-            localOptions: LocalOptions
-            fileTypes: FileTypeList
-        } {
-            return {
-                syncOptions: defaultSyncOptions,
-                localOptions: defaultLocalOptions,
-                fileTypes: fileTypes,
+    @Component({})
+    export default class Options extends Vue {
+        syncOptions = defaultSyncOptions;
+        localOptions = defaultLocalOptions;
+        fileTypes = fileTypes;
+
+        get selectableAutohideTypes(): FileTypeList {
+            return _.mapValues(this.fileTypes, (fileTypes) => {
+                return _.filter(fileTypes, (type: FileType) => {
+                    return this.syncOptions.autohideFileTypes.indexOf(type) === -1;
+                })
+            });
+        }
+
+        get selectableIgnoredTypes(): FileTypeList {
+            return _.mapValues(this.fileTypes, (fileTypes) => {
+                return _.filter(fileTypes, (type: FileType) => {
+                    return this.syncOptions.ignoredFileTypes.indexOf(type) === -1;
+                })
+            });
+        }
+
+        l(messageName: string, substitutions?: string | string[]): string {
+            return helpers.localize(messageName, substitutions);
+        }
+
+        saveOptions() {
+            helpers.saveOptionsToStorage(this.syncOptions);
+        }
+
+        autohideTypeEntered(event: Event) {
+            const target = event.target as HTMLFormElement;
+            const type = (event.target as HTMLFormElement).value;
+
+            if (typeof type == 'string' && type.length >= 1) {
+                if (this.syncOptions.autohideCustomTypes.indexOf(type) < 0) {
+                    this.syncOptions.autohideCustomTypes.push(type);
+                }
             }
-        },
-        computed: {
-            selectableAutohideTypes(): FileTypeList {
-                return _.mapValues(this.fileTypes, (fileTypes) => {
-                    return _.filter(fileTypes, (type: FileType) => {
-                        return this.syncOptions.autohideFileTypes.indexOf(type) === -1;
-                    })
-                });
-            },
 
-            selectableIgnoredTypes(): FileTypeList {
-                return _.mapValues(this.fileTypes, (fileTypes) => {
-                    return _.filter(fileTypes, (type: FileType) => {
-                        return this.syncOptions.ignoredFileTypes.indexOf(type) === -1;
-                    })
-                });
-            },
-        },
-        methods: {
-            l(messageName: string, substitutions?: string | string[]): string {
-                return helpers.localize(messageName, substitutions);
-            },
-            saveOptions() {
-                helpers.saveOptionsToStorage(this.syncOptions);
-            },
-            autohideTypeEntered(event: Event) {
-                const target = event.target as HTMLFormElement;
-                const type = (event.target as HTMLFormElement).value;
+            target.value = '';
+        }
 
-                if (typeof type == 'string' && type.length >= 1) {
-                    if (this.syncOptions.autohideCustomTypes.indexOf(type) < 0) {
-                        this.syncOptions.autohideCustomTypes.push(type);
-                    }
+        removeAutohideFileType(type: FileType) {
+            const index = this.syncOptions.autohideFileTypes.indexOf(type);
+            this.syncOptions.autohideFileTypes.splice(index, 1);
+        }
+
+        removeAutohideCustomType(type: string) {
+            const index = this.syncOptions.autohideCustomTypes.indexOf(type);
+            this.syncOptions.autohideCustomTypes.splice(index, 1);
+        }
+
+        selectAutohideType(event: Event) {
+            const target = event.target as HTMLFormElement;
+            const selectedType = helpers.getFileTypeByName(target.value);
+
+            if (selectedType && this.syncOptions.autohideFileTypes.indexOf(selectedType) === -1) {
+                this.syncOptions.autohideFileTypes.push(selectedType);
+            }
+
+            // Clear the input
+            target.value = '';
+        }
+
+        showAutohideTypesSelect(): boolean {
+            return _.reduce(this.selectableAutohideTypes, function (prev, group) {
+                return (group.length > 0 || prev);
+            }, false);
+        }
+
+        ignoredTypeEntered(event: Event) {
+            const target = event.target as HTMLFormElement;
+            const type = (event.target as HTMLFormElement).value;
+
+            if (typeof type == 'string' && type.length >= 1) {
+                if (this.syncOptions.ignoredCustomTypes.indexOf(type) < 0) {
+                    this.syncOptions.ignoredCustomTypes.push(type);
                 }
+            }
 
-                target.value = '';
-            },
-            removeAutohideFileType(type: FileType) {
-                const index = this.syncOptions.autohideFileTypes.indexOf(type);
-                this.syncOptions.autohideFileTypes.splice(index, 1);
-            },
-            removeAutohideCustomType(type: string) {
-                const index = this.syncOptions.autohideCustomTypes.indexOf(type);
-                this.syncOptions.autohideCustomTypes.splice(index, 1);
-            },
-            selectAutohideType(event: Event) {
-                const target = event.target as HTMLFormElement;
-                const selectedType = helpers.getFileTypeByName(target.value);
+            target.value = '';
+        }
 
-                if (selectedType && this.syncOptions.autohideFileTypes.indexOf(selectedType) === -1) {
-                    this.syncOptions.autohideFileTypes.push(selectedType);
-                }
+        removeIgnoredFileType(type: FileType) {
+            const index = this.syncOptions.ignoredFileTypes.indexOf(type);
+            this.syncOptions.ignoredFileTypes.splice(index, 1);
+        }
 
-                // Clear the input
-                target.value = '';
-            },
-            showAutohideTypesSelect(): boolean {
-                return _.reduce(this.selectableAutohideTypes, function (prev, group) {
-                    return (group.length > 0 || prev);
-                }, false);
-            },
+        removeIgnoredCustomType(type: string) {
+            const index = this.syncOptions.ignoredCustomTypes.indexOf(type);
+            this.syncOptions.ignoredCustomTypes.splice(index, 1);
+        }
 
-            ignoredTypeEntered(event: Event) {
-                const target = event.target as HTMLFormElement;
-                const type = (event.target as HTMLFormElement).value;
+        selectIgnoredType(event: Event) {
+            const target = event.target as HTMLFormElement;
+            const selectedType = helpers.getFileTypeByName(target.value);
 
-                if (typeof type == 'string' && type.length >= 1) {
-                    if (this.syncOptions.ignoredCustomTypes.indexOf(type) < 0) {
-                        this.syncOptions.ignoredCustomTypes.push(type);
-                    }
-                }
+            if (selectedType && this.syncOptions.ignoredFileTypes.indexOf(selectedType) === -1) {
+                this.syncOptions.ignoredFileTypes.push(selectedType);
+            }
 
-                target.value = '';
-            },
-            removeIgnoredFileType(type: FileType) {
-                const index = this.syncOptions.ignoredFileTypes.indexOf(type);
-                this.syncOptions.ignoredFileTypes.splice(index, 1);
-            },
-            removeIgnoredCustomType(type: string) {
-                const index = this.syncOptions.ignoredCustomTypes.indexOf(type);
-                this.syncOptions.ignoredCustomTypes.splice(index, 1);
-            },
-            selectIgnoredType(event: Event) {
-                const target = event.target as HTMLFormElement;
-                const selectedType = helpers.getFileTypeByName(target.value);
+            // Clear the input
+            target.value = '';
+        }
 
-                if (selectedType && this.syncOptions.ignoredFileTypes.indexOf(selectedType) === -1) {
-                    this.syncOptions.ignoredFileTypes.push(selectedType);
-                }
+        showIgnoredTypesSelect(): boolean {
+            return _.reduce(this.selectableIgnoredTypes, function (prev, group) {
+                return (group.length > 0 || prev);
+            }, false);
+        }
 
-                // Clear the input
-                target.value = '';
-            },
-            showIgnoredTypesSelect(): boolean {
-                return _.reduce(this.selectableIgnoredTypes, function (prev, group) {
-                    return (group.length > 0 || prev);
-                }, false);
-            },
+        saveCustomSound(files: File[]) {
+            const file = _.first(files);
+            let reader = new FileReader();
 
-            saveCustomSound(files: File[]) {
-                const file = _.first(files);
-                let reader = new FileReader();
+            if (!file) {
+                return;
+            }
 
-                if (!file) {
-                    return;
-                }
+            if (file.size > (1024 * 1024)) {
+                alert(`"${file.name}" is ${helpers.formatFileSize(file.size)}`);
+                return;
+            }
 
-                if (file.size > (1024 * 1024)) {
-                    alert(`"${file.name}" is ${helpers.formatFileSize(file.size)}`);
-                    return;
-                }
+            reader.addEventListener('load', () => {
+                this.localOptions.customSound = {
+                    'name': file.name,
+                    'data': reader.result,
+                };
 
-                reader.addEventListener('load', () => {
-                    this.localOptions.customSound = {
-                        'name': file.name,
-                        'data': reader.result,
-                    };
+                browser.storage.local.set({'customSound': this.localOptions.customSound});
+            });
 
-                    browser.storage.local.set({'customSound': this.localOptions.customSound});
-                });
+            reader.readAsDataURL(file);
+        }
 
-                reader.readAsDataURL(file);
-            },
+        removeCustomSound() {
+            browser.storage.local.remove('customSound').then(() => {
+                this.localOptions.customSound = undefined;
+            });
+        }
 
-            removeCustomSound() {
-                browser.storage.local.remove('customSound').then(() => {
-                    this.localOptions.customSound = undefined;
-                });
-            },
-        },
-
+        // Mounted Lifecycle Hook
         mounted() {
             // Load the saved syncOptions
             browser.storage.sync.get(null)
@@ -365,17 +361,15 @@
                 .then((options: LocalOptions) => {
                     this.localOptions = helpers.mergeLocalDefaultOptions(options);
                 });
-        },
+        }
 
-        watch: {
-            syncOptions: {
-                handler(options) {
-                    helpers.saveOptionsToStorage(options);
-                },
-                deep: true,
-            },
-        },
-    })
+        @Watch('syncOptions', {deep: true})
+        watchSyncOptions(options: SyncOptions) {
+            console.log('watchSyncOptions');
+
+            helpers.saveOptionsToStorage(options);
+        }
+    }
 </script>
 
 <style lang="scss">
