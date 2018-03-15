@@ -189,7 +189,7 @@ export class DSBDownload implements DownloadInterface {
         }
 
         if (this.downloadItem.error) {
-            return `${helpers.localize('downloadStatusInProgress')}: ${this.downloadItem.error}`;
+            return `${helpers.localize('downloadStatusError')}: ${this.downloadItem.error}`;
         }
 
         if (this.downloadItem.totalBytes === -1 || !this.downloadItem.estimatedEndTime) {
