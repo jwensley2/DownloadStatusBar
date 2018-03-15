@@ -1,6 +1,6 @@
 import Vue, {VNode} from "vue";
 import * as helpers from "./helpers";
-import ContextMenu from "./context-menu/ContextMenu";
+import ContextMenuPlugin from "./context-menu/ContextMenuPlugin";
 import Tooltip from "./tooltip/Tooltip";
 import DownloadStatusBarComponent from "./components/DownloadStatusBar.vue";
 import {DownloadInterface, DSBDownload} from "./DSBDownload";
@@ -17,7 +17,7 @@ class DownloadStatusBar {
             document.body.appendChild(this.statusBar);
         }
 
-        Vue.use(ContextMenu);
+        Vue.use(ContextMenuPlugin);
         Vue.use(Tooltip);
 
         let app = this.app = new Vue({

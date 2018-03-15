@@ -52,92 +52,83 @@
     import events from './events';
     import * as helpers from '../helpers';
     import {DSBDownload} from '../DSBDownload';
+    import {Component, Prop} from 'vue-property-decorator';
 
-    export default Vue.extend({
-        name: 'tooltip',
-        props: {
-            theme: String,
-        },
-        data(): {
-            download: DSBDownload | null,
-            element: HTMLElement | null,
-            tooltipShown: boolean,
-            left: string,
-        } {
-            return {
-                download: null,
-                element: null,
-                tooltipShown: false,
-                left: '0',
+    @Component({})
+    export default class Tooltip extends Vue {
+        @Prop({})
+        theme: String;
+
+        download: DSBDownload | null = null;
+        element: HTMLElement | null = null;
+        tooltipShown = false;
+        left = '0';
+
+        get filename(): string {
+            return this.download!.downloadItem.filename;
+        }
+
+        get status(): string {
+            return this.download!.status();
+        }
+
+        get progress(): string {
+            return this.download!.progress();
+        }
+
+        get downloaded(): string {
+            return helpers.formatFileSize(this.download!.downloadItem.bytesReceived);
+        }
+
+        get totalsize(): string {
+            return helpers.formatFileSize(this.download!.downloadItem.totalBytes);
+        }
+
+        get filesize(): string {
+            return helpers.formatFileSize(this.download!.downloadItem.fileSize);
+        }
+
+        get percentDone(): number {
+            return this.download!.percentDownloaded();
+        }
+
+        get isImage(): boolean {
+            if (!this.download) {
+                return false;
             }
-        },
-        computed: {
-            filename(): string {
-                return this.download!.downloadItem.filename;
-            },
-            status(): string {
-                return this.download!.status();
-            },
 
-            progress(): string {
-                return this.download!.progress();
-            },
+            return this.download.isImage();
+        }
 
-            downloaded(): string {
-                return helpers.formatFileSize(this.download!.downloadItem.bytesReceived);
-            },
+        get downloadSpeed(): string {
+            if (!this.download) {
+                return helpers.localize('downloadSpeedUnknown');
+            }
 
-            totalsize(): string {
-                return helpers.formatFileSize(this.download!.downloadItem.totalBytes);
-            },
+            return `${helpers.formatFileSize(this.download.calculateDownloadSpeed())}/s`;
+        }
 
-            filesize(): string {
-                return helpers.formatFileSize(this.download!.downloadItem.fileSize);
-            },
+        l(messageName: string, substitutions?: string | string[]): string {
+            return helpers.localize(messageName, substitutions);
+        }
 
-            percentDone(): number {
-                return this.download!.percentDownloaded();
-            },
+        calculateLeftPosition(): string {
+            if (this.element) {
+                let downloadOffset = this.element.offsetLeft;
 
-            isImage(): boolean {
-                if (!this.download) {
-                    return false;
+                if (downloadOffset + this.$el.offsetWidth > window.innerWidth) {
+                    return `${window.innerWidth - this.$el.offsetWidth}px`;
+                } else {
+                    return `${downloadOffset}px`;
                 }
+            }
 
-                return this.download.isImage();
-            },
-
-            downloadSpeed(): string {
-                if (!this.download) {
-                    return helpers.localize('downloadSpeedUnknown');
-                }
-
-                return `${helpers.formatFileSize(this.download.calculateDownloadSpeed())}/s`;
-            },
-        },
-
-        methods: {
-            l(messageName: string, substitutions?: string | string[]): string {
-                return helpers.localize(messageName, substitutions);
-            },
-            calculateLeftPosition(): string {
-                if (this.element) {
-                    let downloadOffset = this.element.offsetLeft;
-
-                    if (downloadOffset + this.$el.offsetWidth > window.innerWidth) {
-                        return `${window.innerWidth - this.$el.offsetWidth}px`;
-                    } else {
-                        return `${downloadOffset}px`;
-                    }
-                }
-
-                return '0';
-            },
-        },
+            return '0';
+        }
 
         updated() {
             this.left = this.calculateLeftPosition();
-        },
+        }
 
         mounted() {
             events.$on('showTooltip', (download: DSBDownload, element: HTMLElement) => {
@@ -149,8 +140,8 @@
             events.$on('hideTooltip', () => {
                 this.tooltipShown = false;
             });
-        },
-    });
+        }
+    }
 </script>
 
 <style lang="scss" scoped>

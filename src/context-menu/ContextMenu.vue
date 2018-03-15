@@ -12,38 +12,41 @@
     </div>
 </template>
 
-<script>
-    const events = require('./events').default;
+<script lang="ts">
+    import Vue from 'vue';
+    import {Component, Prop} from 'vue-property-decorator';
+    import events from './events';
 
-    module.exports = {
-        name: 'context-menu',
-        props: ['theme'],
-        data: function () {
-            return {
-                isOpen: false,
-                items: [],
-                position: null
+    export type ContextMenuItem = { name: string, icon: string, clicked: () => void };
+    type ContextMenuPosition = { x: number, y: number };
+
+    @Component({})
+    export default class ContextMenu extends Vue {
+        @Prop({})
+        theme: String;
+
+        isOpen = false;
+        items: Array<ContextMenuItem> = [];
+        position?: ContextMenuPosition;
+
+        get left() {
+            if (this.position) {
+                return `${this.position.x}px`;
             }
-        },
-        computed: {
-            left: function () {
-                if (this.position) {
-                    return `${this.position.x}px`;
-                }
 
-                return 0;
-            },
-            bottom: function () {
-                if (this.position) {
-                    return `${window.innerHeight - this.position.y}px`;
-                }
+            return 0;
+        }
 
-                return 0;
+        get bottom() {
+            if (this.position) {
+                return `${window.innerHeight - this.position.y}px`;
             }
-        },
+
+            return 0;
+        }
 
         mounted() {
-            events.$on('openMenu', (items, position) => {
+            events.$on('openMenu', (items: [ContextMenuItem], position: ContextMenuPosition) => {
                 this.isOpen = true;
                 this.items = items;
                 this.position = position;
@@ -58,45 +61,45 @@
 </script>
 
 <style lang="scss" scoped>
-    $icomoon-font-path: "moz-extension://__MSG_@@extension_id__/fonts";
+    $icomoon-font-path : "moz-extension://__MSG_@@extension_id__/fonts";
     @import "../../icomoon/style";
 
     #DownloadStatusBarContextMenu {
-        font: 400 normal 14px/1 Arial, sans-serif;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: auto;
-        top: auto;
-        background: #FFF;
-        border: 1px solid #AAA;
-        z-index: 100;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: block;
-        color: black;
+        font       : 400 normal 14px/1 Arial, sans-serif;
+        position   : absolute;
+        bottom     : 0;
+        left       : 0;
+        right      : auto;
+        top        : auto;
+        background : #FFF;
+        border     : 1px solid #AAA;
+        z-index    : 100;
+        list-style : none;
+        padding    : 0;
+        margin     : 0;
+        display    : block;
+        color      : black;
 
         li {
-            cursor: pointer;
-            padding: 10px;
-            margin: 0;
+            cursor  : pointer;
+            padding : 10px;
+            margin  : 0;
 
             &:hover {
-                background: #CCC;
+                background : #CCC;
             }
 
             + li {
-                border-top: 1px dotted #CCC;
+                border-top : 1px dotted #CCC;
             }
         }
 
         &.theme-dark {
-            background: #333;
-            color: #EEE;
+            background : #333;
+            color      : #EEE;
 
             li:hover {
-                background: #666;
+                background : #666;
             }
         }
     }

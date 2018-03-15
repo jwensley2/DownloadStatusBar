@@ -27,6 +27,7 @@
     import {Component, Prop} from 'vue-property-decorator';
     import {DSBDownload} from '../DSBDownload';
     import {SyncOptions} from '../config/options';
+    import {ContextMenuItem} from '../context-menu/ContextMenu.vue';
 
     @Component({})
     export default class Download extends Vue {
@@ -125,7 +126,7 @@
             let showTitle = userAgent.includes('Windows') ? 'Show in Explorer' :
                 userAgent.includes('Mac') ? 'Reveal in Finder' : 'Show in Folder';
 
-            let items = [
+            let items: [ContextMenuItem] = [
                 {
                     name: 'Clear Download',
                     icon: 'eye-slash',

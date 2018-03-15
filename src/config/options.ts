@@ -45,6 +45,4 @@ export type LocalOptions = {
     },
 }
 
-export const defaultLocalOptions: LocalOptions = {
-    customSound: undefined,
-};
+export const defaultLocalOptions: LocalOptions = {};
