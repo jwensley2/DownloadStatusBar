@@ -2,7 +2,7 @@
     <div class="dsb-item"
          @click="singleClick"
          @dblclick="doubleClick"
-         @mouseover="showTooltip($refs[`downloads-${download.downloadItem.id}`], download)"
+         @mouseover="showTooltip($refs[`downloads-${download.downloadItem.id}`], download.downloadItem.id)"
          @mouseleave="hideTooltip($event)"
          @contextmenu.prevent="showContextMenu"
          :ref="`downloads-${download.downloadItem.id}`"

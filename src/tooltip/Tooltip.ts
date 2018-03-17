@@ -8,13 +8,14 @@ declare module 'vue/types/vue' {
     // 3. Declare augmentation for Vue
     interface Vue {
         $tooltip: {
+            shown: boolean,
             show: Function,
             hide: Function
         }
     }
 }
 
-class Tooltip implements PluginObject<{}> {
+export default class Tooltip implements PluginObject<{}> {
     [key: string]: any;
 
     install: PluginFunction<{}>;
@@ -39,8 +40,8 @@ class Tooltip implements PluginObject<{}> {
 
         Vue.mixin({
             methods: {
-                showTooltip(element: HTMLElement, download: DownloadItem) {
-                    events.$emit('showTooltip', download, element);
+                showTooltip(element: HTMLElement, downloadId: number) {
+                    events.$emit('showTooltip', downloadId, element);
                 },
                 hideTooltip() {
                     events.$emit('hideTooltip');
@@ -49,5 +50,3 @@ class Tooltip implements PluginObject<{}> {
         })
     }
 }
-
-export default Tooltip;

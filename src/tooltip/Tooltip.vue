@@ -51,7 +51,6 @@
     import Vue from 'vue';
     import events from './events';
     import * as helpers from '../helpers';
-    import {DSBDownload} from '../DSBDownload';
     import {Component, Prop} from 'vue-property-decorator';
 
     @Component({})
@@ -59,10 +58,14 @@
         @Prop({})
         theme: String;
 
-        download: DSBDownload | null = null;
+        downloadId: number | null = null;
         element: HTMLElement | null = null;
         tooltipShown = false;
         left = '0';
+
+        get download() {
+            return this.$store.getters.getDownload(this.downloadId);
+        }
 
         get filename(): string {
             return this.download!.downloadItem.filename;
@@ -131,9 +134,9 @@
         }
 
         mounted() {
-            events.$on('showTooltip', (download: DSBDownload, element: HTMLElement) => {
+            events.$on('showTooltip', (downloadId: number, element: HTMLElement) => {
                 this.tooltipShown = true;
-                this.download = download;
+                this.downloadId = downloadId;
                 this.element = element;
             });
 

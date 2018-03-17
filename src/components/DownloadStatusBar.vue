@@ -28,8 +28,7 @@
     import Download from './Download.vue';
     import {defaultSyncOptions, SyncOptions} from '../config/options';
     import * as helpers from '../helpers';
-    import {Component, Prop, Watch} from 'vue-property-decorator';
-    import {DownloadInterface} from '../DSBDownload';
+    import {Component, Watch} from 'vue-property-decorator';
 
     @Component({
         components: {
@@ -37,11 +36,12 @@
         },
     })
     export default class DownloadStatusBar extends Vue {
-        @Prop({default: []})
-        downloads: [DownloadInterface];
-
         options = defaultSyncOptions;
         defaultBottomMargin = 0;
+
+        get downloads() {
+            return this.$store.getters.getDownloads;
+        }
 
         l(messageName: string, substitutions?: string | string[]): string {
             return helpers.localize(messageName, substitutions);
