@@ -24,6 +24,8 @@
   },
   "content_scripts": [
     {
+      "match_about_blank": true,
+      "run_at": "document_end",
       "matches": [
         "<all_urls>"
       ],
