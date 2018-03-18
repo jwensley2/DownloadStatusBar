@@ -93,7 +93,7 @@
     "message": "Dolda filtyper"
   },
   "optionsAutoHideOptional": {
-    "message": "Optional. If nothing is selected all file types will auto hide."
+    "message": "Valfritt. Om inga filtyper är valda kommer alla att döljas automatiskt."
   },
   "optionsSelectType": {
     "message": "Välj typ",
