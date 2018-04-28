@@ -8,6 +8,7 @@ module.exports = {
         background: './src/background.ts',
         content: './src/content.ts',
         options: './src/options.ts',
+        confirmation: './src/confirmation.ts',
     },
     output: {
         path: path.resolve(__dirname, './build'),
@@ -77,6 +78,7 @@ module.exports = {
             {from: 'manifest.json', to: './'},
             {from: '.web-extension-id', to: './'},
             {from: 'src/options.html', to: './'},
+            {from: 'src/confirmation.html', to: './'},
             {from: 'icons', to: './icons'},
             {from: 'icomoon/fonts', to: './fonts'},
             {from: 'sounds', to: './sounds'},

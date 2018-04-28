@@ -80,6 +80,9 @@ class DownloadStatus {
                     case 'clearDownload':
                         self.clearDownload(download);
                         break;
+                    case 'openDownload':
+                        self.openDownload(download);
+                        break;
                     case 'showDownload':
                         self.showDownload(download);
                         break;
@@ -233,6 +236,20 @@ class DownloadStatus {
                 id: download.downloadItem.id,
             });
         }
+    }
+
+    /**
+     * Show a download in explorer/finder
+     *
+     * @param {DSBDownload} download
+     */
+    openDownload(download: DSBDownload) {
+        browser.windows.create({
+            url: browser.extension.getURL('confirmation.html') + `?id=${download.downloadItem.id}`,
+            type: 'panel',
+            width: 200,
+            height: 100,
+        });
     }
 
     /**

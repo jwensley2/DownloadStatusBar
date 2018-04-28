@@ -1,6 +1,5 @@
 import Vue, {VNode} from 'vue';
 import Vuex from 'vuex';
-import * as helpers from './helpers';
 import ContextMenuPlugin from './context-menu/ContextMenuPlugin';
 import Tooltip from './tooltip/Tooltip';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
@@ -46,8 +45,13 @@ class DownloadStatusBar {
             browser.runtime.sendMessage({event: 'clearDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('showDownload', (download: DSBDownload) => {
+        app.$on('openDownload', (download: DSBDownload) => {
             // Tell the background process to open the download
+            browser.runtime.sendMessage({event: 'openDownload', download: JSON.stringify(download)});
+        });
+
+        app.$on('showDownload', (download: DSBDownload) => {
+            // Tell the background process to show the download
             browser.runtime.sendMessage({event: 'showDownload', download: JSON.stringify(download)});
         });
 

@@ -115,7 +115,7 @@
         }
 
         doubleClick() {
-            this.$root.$emit('showDownload', this.download);
+            this.$root.$emit('openDownload', this.download);
         }
 
         showContextMenu(event: MouseEvent) {
