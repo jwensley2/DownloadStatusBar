@@ -191,6 +191,7 @@
         .dsb-tooltip-cell {
             overflow      : hidden;
             padding-left  : 5px;
+            text-align    : left;
             text-overflow : ellipsis;
             word-break    : break-all;
         }
