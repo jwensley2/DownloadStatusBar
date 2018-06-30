@@ -167,19 +167,28 @@
         }
     }
 
+    .dsb-bar-button {
+        box-shadow  : none;
+        box-sizing  : border-box;
+        cursor      : pointer;
+        height      : auto;
+        line-height : 1;
+        min-height  : 0;
+        min-width   : 0;
+        width       : auto;
+    }
+
     .dsb-clear-downloads {
+        @extend .dsb-bar-button;
         background         : light-theme("button");
         border             : 0 solid light-theme("button-border");
         border-right-width : 1px;
-        box-shadow         : none;
-        box-sizing         : border-box;
         color              : light-theme("text") !important;
-        cursor             : pointer;
         display            : inline-block;
         font               : normal 600 14px/1 Arial, sans-serif;
+        height             : auto;
         margin             : 0 5px 0 0;
         padding            : 0 15px;
-        width              : auto;
 
         &:hover {
             background : light-theme("button-hover");
@@ -187,9 +196,9 @@
     }
 
     .dsb-icon-button {
+        @extend .dsb-bar-button;
         background  : none;
         border      : 0;
-        cursor      : pointer;
         margin      : 0;
         overflow    : hidden;
         padding     : 0;

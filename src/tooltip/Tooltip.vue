@@ -170,6 +170,7 @@
 
         .dsb-tooltip-table {
             @include reset;
+            border    : 0 !important;
             max-width : 100%;
         }
 
@@ -183,7 +184,7 @@
 
         .dsb-tooltip-heading, .dsb-tooltip-cell {
             @include reset;
-            background      : light-theme("background");
+            background      : light-theme("background") !important;
             border-collapse : collapse;
             line-height     : 1.2;
         }
@@ -227,7 +228,7 @@
             color      : dark-theme("text");
 
             .dsb-tooltip-heading, .dsb-tooltip-cell {
-                background : dark-theme("background");
+                background : dark-theme("background") !important;
                 color      : dark-theme("text");
             }
 
