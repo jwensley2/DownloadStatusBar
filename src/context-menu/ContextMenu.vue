@@ -27,7 +27,7 @@
 
         isOpen = false;
         items: Array<ContextMenuItem> = [];
-        position?: ContextMenuPosition;
+        position: ContextMenuPosition | null = null;
 
         get left() {
             if (this.position) {
