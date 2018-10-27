@@ -7,13 +7,14 @@ import {DSBDownload} from './DSBDownload';
  * Remove finished downloads from the array of downloads
  *
  * @param {DSBDownload[]} downloads
+ * @param {boolean} removeFailed
  * @returns {DSBDownload[]}
  */
-export function filterFinishedDownloads(downloads: DSBDownload[]): DSBDownload[] {
+export function filterFinishedDownloads(downloads: DSBDownload[], removeFailed: boolean = false): DSBDownload[] {
     return downloads.filter(function (download: DSBDownload) {
         const downloadItem = download.downloadItem;
 
-        if (downloadItem.error && !downloadItem.paused) {
+        if (downloadItem.error && !downloadItem.paused && !removeFailed) {
             return false;
         }
 

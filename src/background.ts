@@ -325,7 +325,7 @@ class DownloadStatus {
     }
 
     clearDownloads() {
-        this.downloads = helpers.filterFinishedDownloads(this.downloads);
+        this.downloads = helpers.filterFinishedDownloads(this.downloads, this.options.clearFailed);
         this.refresh();
 
         if (this.options.clearHistory) {

@@ -158,5 +158,13 @@
   "optionsHistoryLabel": {
     "message": "Also clear browser history when clearing download(s)",
     "description": "Label for the checkbox to enable browser history clearing"
+  },
+  "optionsClearingTitle": {
+    "message": "Clearing",
+    "description": "Title of the clearing section"
+  },
+  "optionsClearFailedLabel": {
+    "message": "Clear button clears failed downloads",
+    "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
   }
 }

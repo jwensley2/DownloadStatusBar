@@ -109,7 +109,7 @@
                             </div>
 
                             <div v-if="syncOptions.playSoundOnComplete">
-                                <p class="text-muted">{{ l('optionsCustomSoundNote') }}</p>
+                                <p class="text-muted small">{{ l('optionsCustomSoundNote') }}</p>
                                 <div v-if="localOptions.customSound">
                                     {{ localOptions.customSound.name }}
                                     <button class="btn btn-danger btn-sm" @click="removeCustomSound">X</button>
@@ -128,7 +128,7 @@
 
                             <h4 class="mt-4">{{ l('optionsRefreshRateTitle') }}</h4>
                             <div class="form-group">
-                                <p class="form-text text-muted"></p>
+                                <p class="small text-muted mt-1 mb-2">{{ l('optionsRefreshRateNote') }}</p>
                                 <div class="form-inline">
                                     <input id="refresh-rate"
                                            class="form-control mr-2"
@@ -142,10 +142,19 @@
                             </div>
 
                             <h4>{{ l('optionsHistoryTitle') }}</h4>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="optionsHistoryLabel"
-                                       v-model="syncOptions.clearHistory">
-                                <label class="custom-control-label" for="optionsHistoryLabel">{{ l('optionsHistoryLabel') }}</label>
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="optionsHistoryLabel" v-model="syncOptions.clearHistory">
+                                    <label class="custom-control-label" for="optionsHistoryLabel">{{ l('optionsHistoryLabel') }}</label>
+                                </div>
+                            </div>
+
+                            <h4>{{ l('optionsClearingTitle') }}</h4>
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="optionsClearFailedLabel" v-model="syncOptions.clearFailed">
+                                    <label class="custom-control-label" for="optionsClearFailedLabel">{{ l('optionsClearFailedLabel') }}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,12 +167,8 @@
                                 <small class="text-muted">{{ l('optionsClickToRemove') }}</small>
                             </h5>
                             <p>
-                                    <span v-for="type in syncOptions.ignoredFileTypes"
-                                          class="badge badge-primary mr-1"
-                                          @click="removeIgnoredFileType(type)">{{ type.name }}</span>
-                                <span v-for="type in syncOptions.ignoredCustomTypes"
-                                      class="badge badge-primary mr-1"
-                                      @click="removeIgnoredCustomType(type)">{{ type }}</span>
+                                <span v-for="type in syncOptions.ignoredFileTypes" class="badge badge-primary mr-1" @click="removeIgnoredFileType(type)">{{ type.name }}</span>
+                                <span v-for="type in syncOptions.ignoredCustomTypes" class="badge badge-primary mr-1" @click="removeIgnoredCustomType(type)">{{ type }}</span>
                             </p>
 
                             <div v-if="showIgnoredTypesSelect()" class="form-group form-inline">

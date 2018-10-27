@@ -16,7 +16,8 @@ export type SyncOptions = {
     playSoundOnComplete: boolean,
     minimized: boolean,
     refreshRate: number,
-    clearHistory: boolean
+    clearHistory: boolean,
+    clearFailed: boolean,
 }
 
 export const defaultSyncOptions: SyncOptions = {
@@ -33,6 +34,7 @@ export const defaultSyncOptions: SyncOptions = {
     minimized: false,
     refreshRate: 1000,
     clearHistory: false,
+    clearFailed: false,
 };
 
 /**

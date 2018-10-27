@@ -27,7 +27,7 @@
     import {Component, Prop} from 'vue-property-decorator';
     import {DSBDownload} from '../DSBDownload';
     import {SyncOptions} from '../config/options';
-    import {ContextMenuItem} from '../context-menu/ContextMenu.vue';
+    import {ContextMenuItem} from '../context-menu/ContextMenu';
 
     @Component({})
     export default class Download extends Vue {
@@ -203,7 +203,6 @@
 <style lang="scss" scoped>
     @import "../scss/variables";
     @import "../scss/mixins";
-    @import "~bootstrap/scss/bootstrap-reboot";
 
     .dsb-item {
         background      : light-theme("download");
