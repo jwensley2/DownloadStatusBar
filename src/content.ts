@@ -9,15 +9,8 @@ import {DSBState, storeOptions} from './state';
 class DownloadStatusBar {
     private app: Vue;
     protected _downloads: DSBDownload[] = [];
-    protected statusBar: HTMLElement = DownloadStatusBar.makeStatusBarElement();
 
     constructor() {
-        if (document.getElementById('DownloadStatusBarContainer')) {
-            this.statusBar = document.getElementById('DownloadStatusBarContainer')!;
-        } else {
-            document.body.appendChild(this.statusBar);
-        }
-
         Vue.use(ContextMenuPlugin);
         Vue.use(Tooltip);
         Vue.use(Vuex);
@@ -25,7 +18,7 @@ class DownloadStatusBar {
         const store = new Vuex.Store<DSBState>(storeOptions);
 
         let app = this.app = new Vue({
-            el: '#DownloadStatusBarContainer',
+            el: DownloadStatusBar.makeStatusBarElement(),
             store,
             render(render): VNode {
                 return render(DownloadStatusBarComponent);
@@ -82,11 +75,20 @@ class DownloadStatusBar {
     }
 
     private static makeStatusBarElement(): HTMLElement {
-        let container = document.createElement('div');
+        const outerContainer = document.createElement('div');
+        const innerContainer = document.createElement('div');
+        const shadow = outerContainer.attachShadow({mode: 'closed'});
+        const link = document.createElement('link') as HTMLLinkElement;
 
-        container.id = 'DownloadStatusBarContainer';
+        link.rel='stylesheet';
+        link.href = browser.extension.getURL('content.css');
 
-        return container;
+        document.body.appendChild(outerContainer);
+        shadow.appendChild(link);
+        shadow.appendChild(innerContainer);
+        innerContainer.id = 'DownloadStatusBarContainer';
+
+        return innerContainer;
     }
 }
 
