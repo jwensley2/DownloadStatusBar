@@ -1,7 +1,7 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import moment = require("moment");
 
-export function makeDownloadItem(downloadItem?: DownloadItem): DownloadItem {
+export function makeDownloadItem(downloadItem?: Partial<DownloadItem>): DownloadItem {
     let defaults = {
         id: 0,
         url: "https://test.com/myfile.txt",

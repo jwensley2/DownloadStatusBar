@@ -13,6 +13,7 @@ function localize(messageName: string, substitutions?: string | string[]): strin
 
 type Colors = {
     background: string,
+    backgroundHover: string,
     button: string,
     buttonHover: string,
     buttonBorder: string,
@@ -36,6 +37,7 @@ export const darkTheme: Theme = {
     custom: false,
     colors: {
         background: '#333333',
+        backgroundHover: "#666666",
         button: 'transparent',
         buttonHover: '#444444',
         buttonBorder: '#555555',
@@ -53,6 +55,7 @@ export const lightTheme: Theme = {
     custom: false,
     colors: {
         background: '#EFEFEF',
+        backgroundHover: "#FFFFFF",
         button: 'transparent',
         buttonHover: '#CCCCCC',
         buttonBorder: '#AAAAAA',
@@ -66,6 +69,7 @@ export const lightTheme: Theme = {
 
 export const colorLabels: Colors = {
     background: 'Background',
+    backgroundHover: 'Background Hover',
     button: 'Button',
     buttonHover: 'Button Hover',
     buttonBorder: 'Button Border',

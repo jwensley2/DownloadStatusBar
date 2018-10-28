@@ -224,7 +224,8 @@ export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
 
     for (let customTheme of customThemes) {
         if (customTheme.id === id) {
-            return customTheme;
+            const copy = _.merge({}, customTheme);
+            return _.merge(customTheme, lightTheme, copy);
         }
     }
 

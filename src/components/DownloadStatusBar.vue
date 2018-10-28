@@ -12,7 +12,7 @@
                       :options="options"></download>
         </div>
 
-        <context-menu :theme="options.theme"></context-menu>
+        <context-menu></context-menu>
         <tooltip :theme="options.theme"></tooltip>
 
 
