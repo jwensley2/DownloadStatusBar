@@ -2,7 +2,6 @@
     <div v-if="isOpen">
         <ul id="DownloadStatusBarContextMenu"
             :style="{left: left, bottom: bottom}"
-            :class="`theme-${theme}`"
         >
             <li v-for="item in items" @click="item.clicked">
                 <i :class="`icon-${item.icon}`" aria-hidden="true" v-if="item.icon"></i>
@@ -71,14 +70,14 @@
         left       : 0;
         right      : auto;
         top        : auto;
-        background : #FFF;
+        background : var(--background);
         border     : 1px solid #AAA;
         z-index    : 100;
         list-style : none;
         padding    : 0;
         margin     : 0;
         display    : block;
-        color      : black;
+        color      : var(--text);
 
         li {
             cursor  : pointer;
@@ -86,20 +85,11 @@
             margin  : 0;
 
             &:hover {
-                background : #CCC;
+                background : var(--backgroundHover);
             }
 
             + li {
                 border-top : 1px dotted #CCC;
-            }
-        }
-
-        &.theme-dark {
-            background : #333;
-            color      : #EEE;
-
-            li:hover {
-                background : #666;
             }
         }
     }

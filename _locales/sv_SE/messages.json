@@ -68,11 +68,11 @@
     "message": "Visningsalternativ",
     "description": "Title of the display options panel."
   },
-  "optionsThemeLight": {
+  "themeLight": {
     "message": "Ljust",
     "description": "The name of the light theme"
   },
-  "optionsThemeDark": {
+  "themeDark": {
     "message": "Mörkt",
     "description": "The name of the dark theme"
   },

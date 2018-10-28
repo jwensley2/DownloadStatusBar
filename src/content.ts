@@ -5,6 +5,10 @@ import Tooltip from './tooltip/Tooltip';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
 import {DownloadInterface, DSBDownload} from './DSBDownload';
 import {DSBState, storeOptions} from './state';
+import * as _ from 'lodash';
+import {SyncOptions} from './config/options';
+import * as helpers from './helpers';
+import {Theme} from './config/themes';
 
 class DownloadStatusBar {
     private app: Vue;
@@ -18,7 +22,7 @@ class DownloadStatusBar {
         const store = new Vuex.Store<DSBState>(storeOptions);
 
         let app = this.app = new Vue({
-            el: DownloadStatusBar.makeStatusBarElement(),
+            el: this.makeStatusBarElement(),
             store,
             render(render): VNode {
                 return render(DownloadStatusBarComponent);
@@ -74,21 +78,43 @@ class DownloadStatusBar {
         this.app.$store.commit('setDownloads', downloads);
     }
 
-    private static makeStatusBarElement(): HTMLElement {
-        const outerContainer = document.createElement('div');
+    private static getStatusBarContainer() {
+        const containerId = 'DownloadStatusBarContainer';
+        let container;
+
+        if (document.getElementById(containerId)) {
+            container = document.getElementById(containerId) as HTMLElement;
+        } else {
+            container = document.createElement('div');
+            container.id = containerId;
+        }
+
+        return container;
+    }
+
+    private makeStatusBarElement(): HTMLElement {
+        const container = DownloadStatusBar.getStatusBarContainer();
+        const shadow = container.attachShadow({mode: 'closed'});
         const innerContainer = document.createElement('div');
-        const shadow = outerContainer.attachShadow({mode: 'closed'});
         const link = document.createElement('link') as HTMLLinkElement;
 
-        link.rel='stylesheet';
-        link.href = browser.extension.getURL('content.css');
+        document.body.appendChild(container);
 
-        document.body.appendChild(outerContainer);
         shadow.appendChild(link);
         shadow.appendChild(innerContainer);
-        innerContainer.id = 'DownloadStatusBarContainer';
+
+        link.rel = 'stylesheet';
+        link.href = browser.extension.getURL('content.css');
 
         return innerContainer;
+    }
+
+    public setTheme(theme: Theme) {
+        let element = DownloadStatusBar.getStatusBarContainer();
+
+        _.forEach(theme.colors, (colour, prop) => {
+            element.style.setProperty(`--${prop}`, colour);
+        })
     }
 }
 
@@ -100,4 +126,18 @@ browser.runtime.onMessage.addListener((json: any) => {
     statusBar.downloads = downloads.map((downloadItem) => {
         return DSBDownload.fromJson(downloadItem);
     });
+});
+
+// Load the config and set the theme
+browser.storage.sync.get(null)
+    .then((options: SyncOptions) => {
+        const syncOptions = helpers.mergeSyncDefaultOptions(options);
+        const theme = helpers.getThemeById(syncOptions.theme, syncOptions.customThemes);
+        statusBar.setTheme(theme);
+    });
+
+// Watch for config changes and update the theme
+browser.storage.onChanged.addListener((changedOptions) => {
+    const theme = helpers.getThemeById(changedOptions.theme.newValue, changedOptions.customThemes.newValue);
+    statusBar.setTheme(theme);
 });

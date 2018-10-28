@@ -6,7 +6,7 @@
          @mouseleave="hideTooltip($event)"
          @contextmenu.prevent="showContextMenu"
          :ref="`downloads-${download.downloadItem.id}`"
-         :class="[`dsb-theme-${options.theme}`, progressClass]"
+         :class="[progressClass]"
     >
         <div v-if="isInProgress" class="dsb-progress-bar" :style="`width: ${percentDone}%`"></div>
 
@@ -200,15 +200,15 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import "../scss/variables";
     @import "../scss/mixins";
 
     .dsb-item {
-        background      : light-theme("download");
+        background      : var(--download);
         border-radius   : 0;
         box-sizing      : border-box;
-        color           : light-theme("text");
+        color           : var(--text);
         cursor          : pointer;
         display         : flex;
         flex            : 0 1 auto;
@@ -232,37 +232,16 @@
         }
 
         &.dsb-complete {
-            background : light-theme("progress");
+            background : var(--progress);
         }
 
         &.dsb-error {
-            background : light-theme("error");
-        }
-
-        &.dsb-theme-dark {
-            background : dark-theme("download");
-            color      : dark-theme("text");
-
-            .dsb-progress-bar {
-                background : dark-theme("progress");
-            }
-
-            &.dsb-complete {
-                background : dark-theme("progress");
-            }
-
-            &.dsb-error {
-                background : dark-theme("error");
-            }
-
-            .dsb-text-line {
-                color : dark-theme("text");
-            }
+            background : var(--error);
         }
     }
 
     .dsb-progress-bar {
-        background    : light-theme("progress");
+        background    : var(--progress);
         border-radius : 0;
         display       : block;
         height        : 100%;
@@ -283,7 +262,7 @@
     .dsb-text-line {
         background     : transparent;
         box-sizing     : content-box;
-        color          : light-theme("text");
+        color          : var(--text);
         display        : block;
         font           : 400 normal 10px/10px Arial, Helvetica, sans-serif;
         height         : auto;

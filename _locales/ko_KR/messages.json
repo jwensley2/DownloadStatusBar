@@ -68,11 +68,11 @@
     "message": "표시 옵션",
     "description": "Title of the display options panel."
   },
-  "optionsThemeLight": {
+  "themeLight": {
     "message": "밝은 모드",
     "description": "The name of the light theme"
   },
-  "optionsThemeDark": {
+  "themeDark": {
     "message": "어두운 모드",
     "description": "The name of the dark theme"
   },

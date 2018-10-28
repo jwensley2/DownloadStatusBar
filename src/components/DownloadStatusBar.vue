@@ -1,6 +1,6 @@
 <template>
     <div id="DownloadStatusBar" v-if="downloads.length > 0 || options.alwaysShow"
-         :class="[`dsb-theme-${options.theme}`, {'dsb-minimized': options.minimized}]"
+         :class="[{'dsb-minimized': options.minimized}]"
          @mouseleave="hideContextMenu">
         <button class="dsb-clear-downloads" v-if="!options.minimized" @click="$root.$emit('clearDownloads')">
             {{ l('barClearButton') }}
@@ -105,19 +105,18 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     @import "../scss/variables";
     @import "../scss/mixins";
     @import "../../icomoon/style";
-    @import "~bootstrap/scss/bootstrap-reboot";
 
     #DownloadStatusBar {
         -moz-osx-font-smoothing : grayscale;
-        background              : light-theme("background");
-        border-top              : 1px solid light-theme("border");
+        background              : var(--background);
+        border-top              : 1px solid var(--border);
         bottom                  : 0;
         box-sizing              : content-box;
-        color                   : light-theme("text");
+        color                   : var(--text);
         display                 : flex;
         flex-direction          : row;
         font                    : normal 400 16px Arial, sans-serif;
@@ -137,33 +136,11 @@
         }
 
         &.dsb-minimized {
-            border-left : 1px solid light-theme("border");
+            border-left : 1px solid var(--border);
             left        : auto;
             overflow    : hidden;
             right       : 0;
             width       : auto;
-        }
-
-        &.dsb-theme-dark {
-            background : dark-theme("background");
-            border-top : 1px solid dark-theme("border");
-            color      : dark-theme("text");
-
-            &.dsb-minimized {
-                border-left : 1px solid dark-theme("border");
-            }
-
-            .dsb-clear-downloads {
-                background   : dark-theme("button");
-                border-right : 1px solid dark-theme("button-border");
-                color        : dark-theme("text") !important;
-
-                &:hover {
-                    background : dark-theme("button-hover");
-                }
-            }
-
-            .dsb-icon-button [class^="icon-"] { color : dark-theme('text') }
         }
     }
 
@@ -180,10 +157,10 @@
 
     .dsb-clear-downloads {
         @extend .dsb-bar-button;
-        background         : light-theme("button");
-        border             : 0 solid light-theme("button-border");
+        background         : var(--button);
+        border             : 0 solid var(--buttonBorder);
         border-right-width : 1px;
-        color              : light-theme("text") !important;
+        color              : var(--text) !important;
         display            : inline-block;
         font               : normal 600 14px/1 Arial, sans-serif;
         height             : auto;
@@ -191,7 +168,7 @@
         padding            : 0 15px;
 
         &:hover {
-            background : light-theme("button-hover");
+            background : var(--buttonHover);
         }
     }
 
@@ -207,7 +184,7 @@
         width       : 30px;
 
         [class^="icon-"] {
-            color       : light-theme('text');
+            color       : var(--text);
             display     : block;
             font-size   : 20px;
             height      : 100%;

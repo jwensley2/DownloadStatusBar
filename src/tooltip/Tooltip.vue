@@ -1,5 +1,5 @@
 <template>
-    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown" :class="`dsb-theme-${theme}`" :style="{left: left}"
+    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown" :style="{left: left}"
          @mouseleave="hideTooltip"
          :ref="'tooltip'">
         <table class="dsb-tooltip-table">
@@ -147,16 +147,15 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import "../scss/variables";
     @import "../scss/mixins";
 
     #DownloadStatusBarTooltip {
-        @include reset;
-        background : light-theme("background");
-        border     : 1px solid light-theme("border");
+        background : var(--background);
+        border     : 1px solid var(--border);
         bottom     : 100%;
-        color      : light-theme("text");
+        color      : var(--text);
         cursor     : default;
         left       : 0;
         margin     : 0;
@@ -169,23 +168,21 @@
         z-index    : 10;
 
         .dsb-tooltip-table {
-            @include reset;
-            border    : 0 !important;
+            border    : 0;
             max-width : 100%;
         }
 
         .dsb-tooltip-table-row {
-            @include reset;
-
             + .dsb-tooltip-table-row {
                 .dsb-tooltip-heading, .dsb-tooltip-cell { padding-top : 5px }
             }
         }
 
         .dsb-tooltip-heading, .dsb-tooltip-cell {
-            @include reset;
-            background      : light-theme("background") !important;
+            background      : var(--background);
             border-collapse : collapse;
+            color           : var(--text);
+            font-size       : 14px;
             line-height     : 1.2;
         }
 
@@ -199,15 +196,15 @@
 
         .dsb-tooltip-heading {
             font-weight    : bold;
-            text-align     : right !important;
+            text-align     : right;
             vertical-align : top;
             white-space    : nowrap;
         }
 
         .dsb-tooltip-url {
             background  : rgba(0, 0, 0, 0.2);
-            border      : 1px solid light-theme("border");
-            color       : light-theme("text");
+            border      : 1px solid var(--border);
+            color       : var(--text);
             line-height : 1;
             max-width   : 500px;
             min-width   : 250px;
@@ -220,22 +217,6 @@
             max-height : 200px;
             max-width  : 300px;
             width      : auto;
-        }
-
-        &.dsb-theme-dark {
-            background : dark-theme("background");
-            border     : 1px solid dark-theme("border");
-            color      : dark-theme("text");
-
-            .dsb-tooltip-heading, .dsb-tooltip-cell {
-                background : dark-theme("background") !important;
-                color      : dark-theme("text");
-            }
-
-            .dsb-tooltip-url {
-                border : 1px solid dark-theme("border");
-                color  : dark-theme("text");
-            }
         }
     }
 </style>

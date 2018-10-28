@@ -1,7 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: {
@@ -19,20 +21,6 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                options: {
-                    loaders: {
-                        sass: ExtractTextPlugin.extract({
-                            use: [
-                                {
-                                    loader: 'css-loader',
-                                    options: {url: false}
-                                },
-                                'sass-loader'
-                            ],
-                            fallback: 'vue-style-loader'
-                        })
-                    }
-                }
             },
             {
                 test: /\.tsx?$/,
@@ -50,14 +38,15 @@ module.exports = {
                 }
             },
             {
-                test: /\.scss$/,
-                use: [{
-                    loader: 'style-loader' // creates style nodes from JS strings
-                }, {
-                    loader: 'css-loader' // translates CSS into CommonJS
-                }, {
-                    loader: 'sass-loader' // compiles Sass to CSS
-                }]
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {url: false}
+                    },
+                    'sass-loader',
+                ],
             }
         ]
     },
@@ -71,7 +60,8 @@ module.exports = {
         hints: false
     },
     plugins: [
-        new ExtractTextPlugin({
+        new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
             filename: '[name].css',
         }),
         new CopyWebpackPlugin([

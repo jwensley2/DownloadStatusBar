@@ -2,6 +2,7 @@ import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from
 import fileTypes, {FileType} from './config/filetypes';
 import * as _ from 'lodash';
 import {DSBDownload} from './DSBDownload';
+import {defaultThemes, lightTheme, Theme} from './config/themes';
 
 /**
  * Remove finished downloads from the array of downloads
@@ -53,7 +54,7 @@ export function getInProgressDownloads(downloads: DSBDownload[]): DSBDownload[] 
  * @param {SyncOptions} options
  * @returns {SyncOptions}
  */
-export function mergeSyncDefaultOptions(options: SyncOptions): SyncOptions {
+export function mergeSyncDefaultOptions(options: Partial<SyncOptions>): SyncOptions {
     let merged = Object.assign({}, defaultSyncOptions, options);
 
     // Replace the saved types with the one in the config if it exists
@@ -198,10 +199,6 @@ export function formatFileSize(bytes: number, round: boolean = false) {
 export function saveOptionsToStorage(options: SyncOptions) {
     options = {...options};
 
-    if (typeof options.autohideDuration === 'string') {
-        options.autohideDuration = parseInt(options.autohideDuration);
-    }
-
     return browser.storage.sync.set(options);
 }
 
@@ -211,4 +208,38 @@ export function saveOptionsToStorage(options: SyncOptions) {
  */
 export function localize(messageName: string, substitutions?: string | string[]): string {
     return browser.i18n.getMessage(messageName, substitutions);
+}
+
+/**
+ * Find the theme matching the provided theme name
+ * @param {string} id
+ * @param {Theme} customThemes
+ */
+export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
+    for (let theme of defaultThemes) {
+        if (theme.id === id) {
+            return theme;
+        }
+    }
+
+    for (let customTheme of customThemes) {
+        if (customTheme.id === id) {
+            return customTheme;
+        }
+    }
+
+    return lightTheme;
+}
+
+/**
+ * Generate a random string
+ */
+export function randomString(length: number) {
+    const chars = [];
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < length; i++)
+        chars.push(possible.charAt(Math.floor(Math.random() * possible.length)));
+
+    return chars.join('');
 }

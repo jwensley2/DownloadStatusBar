@@ -6,19 +6,6 @@
                     <div class="card">
                         <div class="card-header">{{ l('optionsDisplayPanelTitle') }}</div>
                         <div class="card-body">
-                            <div class="custom-control custom-radio">
-                                <span class="custom-control-indicator"></span>
-                                <input type="radio" class="custom-control-input" id="optionsThemeLight" value="light"
-                                       v-model="syncOptions.theme">
-                                <label class="custom-control-label" for="optionsThemeLight">{{ l('optionsThemeLight') }}</label>
-                            </div>
-
-                            <div class="custom-control custom-radio mt-1">
-                                <input type="radio" class="custom-control-input" id="optionsThemeDark" value="dark"
-                                       v-model="syncOptions.theme">
-                                <label class="custom-control-label" for="optionsThemeDark">{{ l('optionsThemeDark') }}</label>
-                            </div>
-
                             <div class="custom-control custom-checkbox mt-2">
                                 <input type="checkbox" class="custom-control-input" id="optionsAlwaysShowBar"
                                        v-model="syncOptions.alwaysShow">
@@ -30,6 +17,27 @@
                                        v-model="syncOptions.showInfoText">
                                 <label class="custom-control-label" for="optionsShowDownloadInfo">{{ l('optionsShowDownloadInfo') }}</label>
                             </div>
+
+                            <div class="mt-1 form-inline">
+                                <label for="baseThemeSelector">{{ l('optionsTheme') }}</label>
+                                <select id="baseThemeSelector" class="form-control form-inline mr-2 ml-2" v-model="syncOptions.theme">
+                                    <option v-for="theme in themeList" :value="theme.id">{{ theme.name }}</option>
+                                </select>
+                                <button class="btn btn-sm btn-primary" @click="customizeTheme">Customize</button>
+                            </div>
+
+                            <div class="mt-3" v-if="currentTheme.custom">
+                                <h5>Customize</h5>
+                                <div class="form-group form-inline">
+                                    <label class="mr-2">Name:</label>
+                                    <input type="text" class="form-control" v-model="currentTheme.name">
+                                </div>
+                                <div v-for="(value, color) in currentTheme.colors">
+                                    <label>{{ colorLabels[color] }}:</label>
+                                    <input type="color" v-model="currentTheme.colors[color]" style="width: 60px">
+                                </div>
+                                <button class="btn btn-sm btn-danger mt-2" @click="deleteTheme(currentTheme)">Delete Theme</button>
+                            </div>
                         </div>
                     </div>
 
@@ -37,10 +45,8 @@
                         <div class="card-header">{{ l('optionsAutoHidePanelTitle') }}</div>
                         <div class="card-body">
                             <div class="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" class="custom-control-input" id="optionsAutoHideCompleted"
-                                       v-model="syncOptions.autohideEnable">
-                                <label class="custom-control-label" for="optionsAutoHideCompleted">{{ l('optionsAutoHideCompleted'
-                                    )}}</label>
+                                <input type="checkbox" class="custom-control-input" id="optionsAutoHideCompleted" v-model="syncOptions.autohideEnable">
+                                <label class="custom-control-label" for="optionsAutoHideCompleted">{{ l('optionsAutoHideCompleted')}}</label>
                             </div>
 
                             <div v-if="syncOptions.autohideEnable">
@@ -51,7 +57,7 @@
                                            max="600"
                                            class="form-control mr-2 ml-2 auto-hide-duration"
                                            value="5"
-                                           v-model="syncOptions.autohideDuration"
+                                           v-model.number="syncOptions.autohideDuration"
                                     >
                                     {{ l('optionsAutoHideSecondsInputAfterText' )}}
                                 </div>
@@ -115,14 +121,15 @@
                                     <button class="btn btn-danger btn-sm" @click="removeCustomSound">X</button>
                                 </div>
 
-                                <div v-else class="form-group form-inline">
+                                <div v-else class="custom-file">
                                     <input id="custom-sound"
-                                           class="form-control"
+                                           class="custom-file-input"
                                            type="file"
                                            maxlength="100000"
                                            accept="audio/ogg,audio/mpeg,audio/wav,application/ogg,audio/webm,audio/x-flac"
                                            @change="saveCustomSound($event.target.files)"
                                     >
+                                    <label class="custom-file-label" for="custom-sound">Choose sound</label>
                                 </div>
                             </div>
 
@@ -210,12 +217,16 @@
     import * as helpers from '../helpers';
     import * as _ from 'lodash';
     import {Component, Watch} from 'vue-property-decorator';
+    import {defaultThemes, Theme, colorLabels} from '../config/themes';
 
     @Component({})
     export default class Options extends Vue {
         syncOptions = defaultSyncOptions;
         localOptions = defaultLocalOptions;
         fileTypes = fileTypes;
+        colorLabels = colorLabels;
+
+        // currentTheme = helpers.getThemeById(this.syncOptions.theme, this.syncOptions.customThemes);
 
         get selectableAutohideTypes(): FileTypeList {
             return _.mapValues(this.fileTypes, (fileTypes) => {
@@ -231,6 +242,17 @@
                     return this.syncOptions.ignoredFileTypes.indexOf(type) === -1;
                 })
             });
+        }
+
+        get currentTheme(): Theme {
+            return helpers.getThemeById(this.syncOptions.theme, this.syncOptions.customThemes);
+        }
+
+        get themeList(): Array<Theme> {
+            let themes = defaultThemes.slice();
+            themes.push(...this.syncOptions.customThemes);
+
+            return themes;
         }
 
         l(messageName: string, substitutions?: string | string[]): string {
@@ -339,10 +361,12 @@
             reader.addEventListener('load', () => {
                 this.localOptions.customSound = {
                     'name': file.name,
-                    'data': reader.result,
+                    'data': reader.result as string,
                 };
 
-                browser.storage.local.set({'customSound': this.localOptions.customSound});
+                browser.storage.local.set({'customSound': this.localOptions.customSound}).then(() => {
+                    this.$forceUpdate();
+                });
             });
 
             reader.readAsDataURL(file);
@@ -352,6 +376,23 @@
             browser.storage.local.remove('customSound').then(() => {
                 this.localOptions.customSound = undefined;
             });
+        }
+
+        customizeTheme() {
+            let newTheme: Theme = Object.assign({}, this.currentTheme);
+            newTheme.name = 'Custom';
+            newTheme.id = helpers.randomString(20);
+            newTheme.custom = true;
+
+            this.syncOptions.customThemes.push(newTheme);
+            this.syncOptions.theme = newTheme.id;
+        }
+
+        deleteTheme(theme: Theme) {
+            let index = this.syncOptions.customThemes.indexOf(theme);
+            this.syncOptions.customThemes.splice(index, 1);
+
+            this.syncOptions.theme = this.themeList[0].id;
         }
 
         // Mounted Lifecycle Hook
@@ -370,8 +411,6 @@
 
         @Watch('syncOptions', {deep: true})
         watchSyncOptions(options: SyncOptions) {
-            console.log('watchSyncOptions');
-
             helpers.saveOptionsToStorage(options);
         }
     }

@@ -68,11 +68,15 @@
     "message": "Display Options",
     "description": "Title of the display options panel."
   },
-  "optionsThemeLight": {
+  "optionsTheme": {
+    "message": "Theme",
+    "description": "Label for the base theme selection"
+  },
+  "themeLight": {
     "message": "Light",
     "description": "The name of the light theme"
   },
-  "optionsThemeDark": {
+  "themeDark": {
     "message": "Dark",
     "description": "The name of the dark theme"
   },

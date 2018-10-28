@@ -1,10 +1,13 @@
-import {FileType} from "./filetypes";
+import {FileType} from './filetypes';
+import {lightTheme, Theme} from './themes';
+import StorageObject = browser.storage.StorageObject;
 
 /**
  * Options to save in the synced storage
  */
-export type SyncOptions = {
+export interface SyncOptions extends StorageObject {
     theme: string,
+    customThemes: Theme[],
     alwaysShow: boolean,
     showInfoText: boolean,
     autohideEnable: boolean,
@@ -20,8 +23,9 @@ export type SyncOptions = {
     clearFailed: boolean,
 }
 
-export const defaultSyncOptions: SyncOptions = {
-    theme: "light",
+export const defaultSyncOptions = <SyncOptions>{
+    theme: lightTheme.name,
+    customThemes: [],
     alwaysShow: false,
     showInfoText: true,
     autohideEnable: false,
@@ -40,11 +44,13 @@ export const defaultSyncOptions: SyncOptions = {
 /**
  * Options to save in local storage
  */
+type Sound = {
+    name: string,
+    data: string,
+};
+
 export type LocalOptions = {
-    customSound?: {
-        name: string,
-        data: string,
-    },
+    customSound?: Sound | undefined,
 }
 
 export const defaultLocalOptions: LocalOptions = {};

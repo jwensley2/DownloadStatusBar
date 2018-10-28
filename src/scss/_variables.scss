@@ -1,27 +1,3 @@
 $icomoon-font-path: "moz-extension://__MSG_@@extension_id__/fonts";
 
 $default-font : 400 normal 14px/14px Arial, Helvetica, sans-serif;
-
-$light-theme : (
-        "background": #EFEFEF,
-        "button": transparent,
-        "button-hover": #CCC,
-        "button-border": #AAA,
-        "border": #888,
-        "download": #AAA,
-        "progress": #2A911F,
-        "text": #111,
-        "error": #FF574F
-);
-
-$dark-theme : (
-        "background": #333,
-        "button": transparent,
-        "button-hover": #444,
-        "button-border": #555,
-        "border": #111,
-        "download": #666,
-        "progress": #222,
-        "text": #EEE,
-        "error": #73100D
-);

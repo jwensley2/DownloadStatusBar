@@ -68,11 +68,11 @@
     "message": "Opzioni di visualizzazione",
     "description": "Title of the display options panel."
   },
-  "optionsThemeLight": {
+  "themeLight": {
     "message": "Tema chiaro",
     "description": "The name of the light theme"
   },
-  "optionsThemeDark": {
+  "themeDark": {
     "message": "Tema scuro",
     "description": "The name of the dark theme"
   },
