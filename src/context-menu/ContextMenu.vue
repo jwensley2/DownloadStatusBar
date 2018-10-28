@@ -24,6 +24,7 @@
         @Prop({})
         theme: String;
 
+        static tag = 'context-menu';
         isOpen = false;
         items: Array<ContextMenuItem> = [];
         position: ContextMenuPosition | null = null;

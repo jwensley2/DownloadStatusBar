@@ -58,6 +58,7 @@
         @Prop({})
         theme: String;
 
+        static tag = 'tooltip';
         downloadId: number | null = null;
         element: HTMLElement | null = null;
         tooltipShown = false;

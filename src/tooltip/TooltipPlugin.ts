@@ -15,20 +15,21 @@ declare module 'vue/types/vue' {
     }
 }
 
-export default class Tooltip implements PluginObject<{}> {
+export default class TooltipPlugin implements PluginObject<{}> {
     [key: string]: any;
 
     install: PluginFunction<{}>;
     static installed = false;
 
     static install(Vue: VueConstructor, options?: {}) {
-        if (Tooltip.installed) {
+        if (TooltipPlugin.installed) {
             return;
         }
 
-        Tooltip.installed = true;
+        TooltipPlugin.installed = true;
 
-        Vue.component('tooltip', TooltipComponent);
+        Vue.component(TooltipComponent.tag, TooltipComponent);
+
         Vue.prototype.$tooltip = {
             show(download: DownloadItem, position: Object) {
                 events.$emit('showTooltip', download, position);

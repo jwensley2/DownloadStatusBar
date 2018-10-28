@@ -1,7 +1,7 @@
 import Vue, {VNode} from 'vue';
 import Vuex from 'vuex';
 import ContextMenuPlugin from './context-menu/ContextMenuPlugin';
-import Tooltip from './tooltip/Tooltip';
+import TooltipPlugin from './tooltip/TooltipPlugin';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
 import {DownloadInterface, DSBDownload} from './DSBDownload';
 import {DSBState, storeOptions} from './state';
@@ -16,7 +16,7 @@ class DownloadStatusBar {
 
     constructor() {
         Vue.use(ContextMenuPlugin);
-        Vue.use(Tooltip);
+        Vue.use(TooltipPlugin);
         Vue.use(Vuex);
 
         const store = new Vuex.Store<DSBState>(storeOptions);

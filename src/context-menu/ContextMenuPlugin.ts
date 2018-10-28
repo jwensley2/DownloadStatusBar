@@ -14,7 +14,7 @@ declare module 'vue/types/vue' {
     }
 }
 
-class ContextMenuPlugin implements PluginObject<{}> {
+export default class ContextMenuPlugin implements PluginObject<{}> {
     [key: string]: any;
 
     install: PluginFunction<{}>;
@@ -27,7 +27,8 @@ class ContextMenuPlugin implements PluginObject<{}> {
 
         ContextMenuPlugin.installed = true;
 
-        Vue.component(ContextMenuComponent.name, ContextMenuComponent);
+        Vue.component(ContextMenuComponent.tag, ContextMenuComponent);
+
         Vue.prototype.$contextMenu = {
             open(items: Object[], position: Object) {
                 events.$emit('openMenu', items, position);
@@ -49,5 +50,3 @@ class ContextMenuPlugin implements PluginObject<{}> {
         })
     }
 }
-
-export default ContextMenuPlugin;
