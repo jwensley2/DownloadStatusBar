@@ -1,5 +1,8 @@
 import moment = require('moment');
 import DownloadQuery = browser.downloads.DownloadQuery;
+import StringDelta = browser.downloads.StringDelta;
+import BooleanDelta = browser.downloads.BooleanDelta;
+import DoubleDelta = browser.downloads.DoubleDelta;
 import * as helpers from './helpers';
 import * as _ from 'lodash';
 import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
@@ -46,27 +49,33 @@ class DownloadStatus {
 
                 if (!download) return;
 
+                // Update change properties
+                for (let [property, change] of Object.entries(downloadDelta)) {
+                    if (property === 'id') continue; // Ignore id
+                    download.downloadItem[property] = (change as StringDelta | BooleanDelta | DoubleDelta).current;
+                }
+
                 // This downloadItem object is a delta of what changed so we need to query for the full downloadItem item
-                this.updateDownload(download).then((download) => {
-                    let startTime = moment(download.downloadItem.startTime);
+                let startTime = moment(download.downloadItem.startTime);
 
-                    // Add the final progress
-                    download.downloadProgress.push({
-                        time: moment(),
-                        bytesReceived: download.downloadItem.fileSize,
-                    });
-
-                    // Play sound if the download doesn't instantly finish
-                    if (moment().diff(startTime, 's') > 1) {
-                        this.playCompletedSound();
-                    }
-
-                    if (helpers.shouldHideDownload(download, this.options)) {
-                        setTimeout(() => {
-                            self.clearDownload(download);
-                        }, this.options.autohideDuration * 1000);
-                    }
+                // Add the final progress
+                download.downloadProgress.push({
+                    time: moment(),
+                    bytesReceived: download.downloadItem.fileSize,
                 });
+
+                // Play sound if the download doesn't instantly finish
+                if (moment().diff(startTime, 's') > 1) {
+                    this.playCompletedSound();
+                }
+
+                if (helpers.shouldHideDownload(download, this.options)) {
+                    setTimeout(() => {
+                        self.clearDownload(download as DSBDownload);
+                    }, this.options.autohideDuration * 1000);
+                }
+
+                this.updateTabs(this.downloads);
             } else {
                 self.startInterval();
             }
@@ -198,8 +207,10 @@ class DownloadStatus {
 
         return new Promise<DSBDownload>((resolve, reject) => {
             browser.downloads.search(query).then((downloads) => {
-                if (downloads.length > 0) {
-                    download.updateDownload(downloads[0]);
+                const first = _.first(downloads);
+
+                if (first && first.id === download.downloadItem.id) {
+                    download.updateDownload(first);
                     resolve(download);
                 } else {
                     reject();

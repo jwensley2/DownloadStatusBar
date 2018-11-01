@@ -69,7 +69,7 @@ export class DSBDownload implements DownloadInterface {
      * Calculate the download speed in bytes/s
      * @returns {number}
      */
-    calculateDownloadSpeed(sampleSize = 10) {
+    calculateDownloadSpeed(sampleSize = 10): number {
         // Get the X most recent samples of the progress
         const samples = this.downloadProgress.slice(-sampleSize);
 
@@ -84,6 +84,9 @@ export class DSBDownload implements DownloadInterface {
         // Calculate the total time and bytes between the first and last samples
         const totalTime = Math.max((last.time.diff(first.time, 's')), 1);
         const totalBytes = last.bytesReceived - first.bytesReceived;
+
+        if (totalBytes <= 0) return 0;
+        if (totalTime <= 0) return totalBytes;
 
         return Math.round(totalBytes / totalTime);
     }
@@ -142,7 +145,7 @@ export class DSBDownload implements DownloadInterface {
      */
     progress(): string {
         const downloaded = helpers.formatFileSize(this.downloadItem.bytesReceived);
-        const totalSize = helpers.formatFileSize(this.downloadItem.totalBytes);
+        const totalSize = this.downloadItem.totalBytes > 0 ? helpers.formatFileSize(this.downloadItem.totalBytes) : 0;
 
         if (this.downloadItem.state === 'complete') {
             return `${helpers.formatFileSize(this.downloadItem.fileSize)}`;
@@ -163,7 +166,7 @@ export class DSBDownload implements DownloadInterface {
     percentDownloaded(): number {
         if (this.downloadItem.state === 'complete') {
             return 100;
-        } else if (this.downloadItem.totalBytes < 0) {
+        } else if (this.downloadItem.totalBytes <= 0) {
             return 0;
         }
 
