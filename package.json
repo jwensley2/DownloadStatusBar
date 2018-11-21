@@ -38,7 +38,7 @@
     "dev": "webpack --config webpack.dev.js --mode=development",
     "prod": "webpack --config webpack.prod.js --mode=production",
     "lint": "web-ext lint -s build",
-    "webext": "web-ext run -s build -u https://test.josephwensley.com/ --ignore-files=*.ts node_modules --keep-profile-changes --firefox-profile=./profile",
+    "webext": "web-ext run -s build -u https://test.josephwensley.com/ --ignore-files=*.ts node_modules --keep-profile-changes --firefox=firefoxdeveloperedition --firefox-profile=./profile",
     "webext-noprofile": "web-ext run -s build -u https://test.josephwensley.com/ --ignore-files=*.ts node_modules",
     "webext-build": "web-ext build -s build --overwrite-dest",
     "test": "nyc --reporter=lcov --require ts-node/register tape tests/**/*-test.{ts,js} | tap-spec && nyc report ---reporter=text"
