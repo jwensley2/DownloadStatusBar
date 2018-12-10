@@ -151,4 +151,12 @@
     "message": "Rensa även webbläsarens historik när nerladdningarna rensas",
     "description": "Label for the checkbox to enable browser history clearing"
   }
+  "optionsClearingTitle": {
+    "message": "Rensning",
+    "description": "Title of the clearing section"
+  },
+  "optionsClearFailedLabel": {
+    "message": "Rensaknappen rensar även misslyckade nerladdningar",
+    "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
+  }
 }
