@@ -1,0 +1,174 @@
+{
+  "extensionName": {
+    "message": "WX下载状态栏",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "为你的浏览器增加下载状态栏",
+    "description": "Description of the extension."
+  },
+  "downloadStatusComplete": {
+    "message": "完成"
+  },
+  "downloadStatusPaused": {
+    "message": "暂停"
+  },
+  "downloadStatusCancelled": {
+    "message": "取消"
+  },
+  "downloadStatusError": {
+    "message": "错误"
+  },
+  "downloadStatusInProgress": {
+    "message": "正在进行"
+  },
+  "downloadSpeedUnknown": {
+    "message": "未知"
+  },
+  "barClearButton": {
+    "message": "清除",
+    "description": "Text for the clear downloads button"
+  },
+  "tooltipFilenameHeading": {
+    "message": "文件名"
+  },
+  "tooltipUrlHeading": {
+    "message": "网址"
+  },
+  "tooltipReferrerHeading": {
+    "message": "Referrer"
+  },
+  "tooltipReferrerNone": {
+    "message": "None",
+    "description": "Text to show if there is no referrer"
+  },
+  "tooltipSpeedHeading": {
+    "message": "速度"
+  },
+  "tooltipStatusHeading": {
+    "message": "状态"
+  },
+  "tooltipProgressHeading": {
+    "message": "进度"
+  },
+  "tooltipFilesizeHeading": {
+    "message": "文件大小"
+  },
+  "tooltipMimeHeading": {
+    "message": "MIME 类型"
+  },
+  "tooltipMimeUnknown": {
+    "message": "未知",
+    "description": "Message to show if the mime type is not known"
+  },
+  "tooltipPreviewHeading": {
+    "message": "预览"
+  },
+  "optionsDisplayPanelTitle": {
+    "message": "外观选项",
+    "description": "Title of the display options panel."
+  },
+  "optionsTheme": {
+    "message": "主题",
+    "description": "Label for the base theme selection"
+  },
+  "themeLight": {
+    "message": "明亮",
+    "description": "The name of the light theme"
+  },
+  "themeDark": {
+    "message": "黑暗",
+    "description": "The name of the dark theme"
+  },
+  "optionsAlwaysShowBar": {
+    "message": "总是显示本状态栏"
+  },
+  "optionsShowDownloadInfo": {
+    "message": "显示下载信息"
+  },
+  "optionsAutoHidePanelTitle": {
+    "message": "自动隐藏",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsAutoHideCompleted": {
+    "message": "自动隐藏完成的下载项"
+  },
+  "optionsAutoHideFileTypes": {
+    "message": "需要隐藏的文件类型"
+  },
+  "optionsAutoHideOptional": {
+    "message": "如果没有选中任何项，则所有文件类型将会被自动隐藏。（可选的）"
+  },
+  "optionsAutoHideSecondsInputBeforeText": {
+    "message": "自动隐藏还有",
+    "description": "The text before the seconds input field"
+  },
+  "optionsAutoHideSecondsInputAfterText": {
+    "message": "秒",
+    "description": "The text after the seconds input field"
+  },
+  "optionsSelectType": {
+    "message": "选择类型",
+    "description": "Label of the select file type dropdown"
+  },
+  "optionsSelectFileType": {
+    "message": "选择文件类型",
+    "description": "Placeholder for the select file type dropdown"
+  },
+  "optionsAddOtherType": {
+    "message": "添加其他类型"
+  },
+  "optionsClickToRemove": {
+    "message": "（点击移除）"
+  },
+  "optionsIgnoreFilesPanelTitle": {
+    "message": "忽略文件类型",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsIgnoreFilesDescription": {
+    "message": "这些文件类型将不会在下载状态栏显示"
+  },
+  "optionsIgnoreFileTypes": {
+    "message": "忽略的文件类"
+  },
+  "optionsMiscellaneousPanelTitle": {
+    "message": "其他",
+    "description": "Title of the miscellaneous options panel"
+  },
+  "optionsCompletionSoundTitle": {
+    "message": "完成音效",
+    "description": "Title of the completion sound section"
+  },
+  "optionsPlaySound": {
+    "message": "下载完成时播放音效",
+    "description": "Play completion sound checkbox label"
+  },
+  "optionsCustomSoundNote": {
+    "message": "你也可以选择一个自定义音效（最大1MB）",
+    "description": "Message about choosing a custom sound"
+  },
+  "optionsRefreshRateTitle": {
+    "message": "刷新速率",
+    "description": "Title of the refresh rate section"
+  },
+  "optionsRefreshRateNote": {
+    "message": "控制状态栏的刷新速度",
+    "description": "Description of what the refresh rate does"
+  },
+  "optionsHistoryTitle": {
+    "message": "历史",
+    "description": "Title of the history section"
+  },
+  "optionsHistoryLabel": {
+    "message": "清除下载状态栏的同时清除浏览器自身的历史",
+    "description": "Label for the checkbox to enable browser history clearing"
+  },
+  "optionsClearingTitle": {
+    "message": "清除",
+    "description": "Title of the clearing section"
+  },
+  "optionsClearFailedLabel": {
+    "message": "清除时也清除失败的下载",
+    "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
+  }
+}
