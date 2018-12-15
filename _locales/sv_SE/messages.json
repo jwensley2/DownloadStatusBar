@@ -68,6 +68,10 @@
     "message": "Visningsalternativ",
     "description": "Title of the display options panel."
   },
+  "optionsTheme": {
+    "message": "Tema",
+    "description": "Label for the base theme selection"
+  },
   "themeLight": {
     "message": "Ljust",
     "description": "The name of the light theme"
@@ -94,6 +98,14 @@
   },
   "optionsAutoHideOptional": {
     "message": "Valfritt. Om inga filtyper är valda kommer alla att döljas automatiskt."
+  },
+  "optionsAutoHideSecondsInputBeforeText": {
+    "message": "Dölj efter",
+    "description": "The text before the seconds input field"
+  },
+  "optionsAutoHideSecondsInputAfterText": {
+    "message": "sekunder",
+    "description": "The text after the seconds input field"
   },
   "optionsSelectType": {
     "message": "Välj typ",
@@ -150,5 +162,13 @@
   "optionsHistoryLabel": {
     "message": "Rensa även webbläsarens historik när nerladdningarna rensas",
     "description": "Label for the checkbox to enable browser history clearing"
+  },
+  "optionsClearingTitle": {
+    "message": "Rensning",
+    "description": "Title of the clearing section"
+  },
+  "optionsClearFailedLabel": {
+    "message": "Rensaknappen rensar misslyckade nerladdningar",
+    "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
   }
 }
