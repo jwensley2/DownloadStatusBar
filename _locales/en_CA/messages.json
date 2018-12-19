@@ -64,6 +64,35 @@
   "tooltipPreviewHeading": {
     "message": "Preview"
   },
+  "tooltipShowInExplorer": {
+    "message": "Show in Explorer",
+    "description": "Show Folder in Windows."
+  },
+  "tooltipRevealInFinder": {
+    "message": "Reveal in Finder",
+    "description": "Show Folder in Mac."
+  },
+  "tooltipShowInFolder": {
+    "message": "Show in Folder",
+    "description": "Show Folder in Unknown OS."
+  },
+  "tooltipClearDownload": {
+    "message": "Clear Download",
+    "description": "Clear the download info on bar."
+  },
+  "tooltipCancelDownload": {
+    "message": "Cancel Download"
+  },
+  "tooltipPauseDownload": {
+    "message": "Pause Download"
+  },
+  "tooltipResumeDownload": {
+    "message": "Resume Download"
+  },
+  "tooltipDeleteDownload": {
+    "message": "Delete Download",
+    "description": "Clear the download info on bar and delete download file."
+  },
   "optionsDisplayPanelTitle": {
     "message": "Display Options",
     "description": "Title of the display options panel."
