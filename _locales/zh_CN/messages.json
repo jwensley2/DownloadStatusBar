@@ -109,6 +109,66 @@
     "message": "黑暗",
     "description": "The name of the dark theme"
   },
+  "optionsCustomizeTheme": {
+    "message": "增加自定义主题",
+    "description": "Caption for the add a new customize theme button"
+  },
+  "customizeThemePanelTitle": {
+    "message": "自定义主题",
+    "description": "Title for the customize theme panel"
+  },
+  "customizeThemeName": {
+    "message": "主题名称",
+    "description": "Label for the customize theme name"
+  },
+  "customizeThemeDefaultName": {
+    "message": "我的主题",
+    "description": "Text for the customize theme default name"
+  },
+  "customizeThemeDeleteTheme": {
+    "message": "删除主题",
+    "description": "Caption for the delete this customize theme button"
+  },
+  "customizeThemeLabelBackground": {
+    "message": "下载栏背景色",
+    "description": "Label for the dowmload bar's background"
+  },
+  "customizeThemeLabelBackgroundHover": {
+    "message": "悬停时菜单背景色",
+    "description": "Label for the dowmload bar's menu background when mouse hover"
+  },
+  "customizeThemeLabelButton": {
+    "message": "按钮颜色",
+    "description": "Label for the button's background"
+  },
+  "customizeThemeLabelButtonHover": {
+    "message": "悬停时按钮颜色",
+    "description": "Label for the button's background when mouse hover"
+  },
+  "customizeThemeLabelButtonBorder": {
+    "message": "按钮边框",
+    "description": "Label for the button's border"
+  },
+  "customizeThemeLabelBorder": {
+    "message": "下载栏边框",
+    "description": "Label for the dowmload bar's border"
+  },
+  "customizeThemeLabelDownload": {
+    "message": "下载进度背景色",
+    "description": "Label for the dowmload progress's background"
+  },
+  "customizeThemeLabelProgress": {
+    "message": "下载进度前景色",
+    "description": "Label for the dowmload progress's foreground"
+  },
+  "customizeThemeLabelText": {
+    "message": "文字颜色",
+    "description": "Label for the dowmload bar's text"
+  },
+  "customizeThemeLabelError": {
+    "message": "错误时颜色",
+    "description": "Label for progress's background when the dowmload has error"
+  },
   "optionsAlwaysShowBar": {
     "message": "总是显示本状态栏"
   },
@@ -158,7 +218,7 @@
     "message": "这些文件类型将不会在下载状态栏显示"
   },
   "optionsIgnoreFileTypes": {
-    "message": "忽略的文件类"
+    "message": "忽略的文件类型"
   },
   "optionsMiscellaneousPanelTitle": {
     "message": "其他",
@@ -176,6 +236,10 @@
     "message": "你也可以选择一个自定义音效（最大1MB）",
     "description": "Message about choosing a custom sound"
   },
+  "optionsCustomSoundPlaceholder": {
+    "message": "选择声音",
+    "description": "Placeholder of input, about choosing a sound"
+  },
   "optionsRefreshRateTitle": {
     "message": "刷新速率",
     "description": "Title of the refresh rate section"
@@ -183,6 +247,10 @@
   "optionsRefreshRateNote": {
     "message": "控制状态栏的刷新速度",
     "description": "Description of what the refresh rate does"
+  },
+  "optionsRefreshRateMillisecond": {
+    "message": "毫秒",
+    "description": "Unit of the refresh rate"
   },
   "optionsHistoryTitle": {
     "message": "历史",

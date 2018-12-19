@@ -109,6 +109,66 @@
     "message": "Dark",
     "description": "The name of the dark theme"
   },
+  "optionsCustomizeTheme": {
+    "message": "Customize",
+    "description": "Caption for the add a new customize theme button"
+  },
+  "customizeThemePanelTitle": {
+    "message": "Customize",
+    "description": "Title for the customize theme panel"
+  },
+  "customizeThemeName": {
+    "message": "Name",
+    "description": "Label for the customize theme name"
+  },
+  "customizeThemeDefaultName": {
+    "message": "Custom",
+    "description": "Text for the customize theme default name"
+  },
+  "customizeThemeDeleteTheme": {
+    "message": "Delete Theme",
+    "description": "Caption for the delete this customize theme button"
+  },
+  "customizeThemeLabelBackground": {
+    "message": "Background",
+    "description": "Label for the dowmload bar's background"
+  },
+  "customizeThemeLabelBackgroundHover": {
+    "message": "Background Hover",
+    "description": "Label for the dowmload bar's menu background when mouse hover"
+  },
+  "customizeThemeLabelButton": {
+    "message": "Button",
+    "description": "Label for the button's background"
+  },
+  "customizeThemeLabelButtonHover": {
+    "message": "Button Hover",
+    "description": "Label for the button's background when mouse hover"
+  },
+  "customizeThemeLabelButtonBorder": {
+    "message": "Button Border",
+    "description": "Label for the button's border"
+  },
+  "customizeThemeLabelBorder": {
+    "message": "Border",
+    "description": "Label for the dowmload bar's border"
+  },
+  "customizeThemeLabelDownload": {
+    "message": "Download",
+    "description": "Label for the dowmload progress's background"
+  },
+  "customizeThemeLabelProgress": {
+    "message": "Progress",
+    "description": "Label for the dowmload progress's foreground"
+  },
+  "customizeThemeLabelText": {
+    "message": "Text",
+    "description": "Label for the dowmload bar's text"
+  },
+  "customizeThemeLabelError": {
+    "message": "Error",
+    "description": "Label for progress's background when the dowmload has error"
+  },
   "optionsAlwaysShowBar": {
     "message": "Always show the status bar"
   },
@@ -176,6 +236,10 @@
     "message": "You may optionally choose a custom sound (1MB MAX)",
     "description": "Message about choosing a custom sound"
   },
+  "optionsCustomSoundPlaceholder": {
+    "message": "Choose sound",
+    "description": "Placeholder of input, about choosing a sound"
+  },
   "optionsRefreshRateTitle": {
     "message": "Refresh Rate",
     "description": "Title of the refresh rate section"
@@ -183,6 +247,10 @@
   "optionsRefreshRateNote": {
     "message": "Controls how often the bar is refreshed",
     "description": "Description of what the refresh rate does"
+  },
+  "optionsRefreshRateMillisecond": {
+    "message": "ms",
+    "description": "Unit of the refresh rate"
   },
   "optionsHistoryTitle": {
     "message": "History",
