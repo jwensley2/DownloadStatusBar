@@ -10,8 +10,8 @@ To add translations for a new language copy [\_locales/en_CA/messages.json](_loc
 Only the "message" values need to be translated, the "description" is just to give some context to translators.
 
 **Related Links:**
-- https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/i18n/Locale-Specific_Message_reference
-- https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Internationalization
+- https://developer.mozilla.org/Add-ons/WebExtensions/API/i18n/Locale-Specific_Message_reference
+- https://developer.mozilla.org/Add-ons/WebExtensions/Internationalization
 
 ## Testing
 Run `npm run dev` to build the dev build then `npm run webext` to start a Firefox instance with the addon
