@@ -23,20 +23,20 @@
                                 <select id="baseThemeSelector" class="form-control form-inline mr-2 ml-2" v-model="syncOptions.theme">
                                     <option v-for="theme in themeList" :value="theme.id">{{ theme.name }}</option>
                                 </select>
-                                <button class="btn btn-sm btn-primary" @click="customizeTheme">Customize</button>
+                                <button class="btn btn-sm btn-primary" @click="customizeTheme">{{ l('optionsCustomizeTheme') }}</button>
                             </div>
 
                             <div class="mt-3" v-if="currentTheme.custom">
-                                <h5>Customize</h5>
+                                <h5>{{ l('customizeThemePanelTitle') }}</h5>
                                 <div class="form-group form-inline">
-                                    <label class="mr-2">Name:</label>
+                                    <label class="mr-2">{{ l('customizeThemeName') }}:</label>
                                     <input type="text" class="form-control" v-model="currentTheme.name">
                                 </div>
                                 <div v-for="(value, color) in currentTheme.colors">
                                     <label>{{ colorLabels[color] }}:</label>
                                     <input type="color" v-model="currentTheme.colors[color]" style="width: 60px">
                                 </div>
-                                <button class="btn btn-sm btn-danger mt-2" @click="deleteTheme(currentTheme)">Delete Theme</button>
+                                <button class="btn btn-sm btn-danger mt-2" @click="deleteTheme(currentTheme)">{{ l('customizeThemeDeleteTheme') }}</button>
                             </div>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                                            accept="audio/ogg,audio/mpeg,audio/wav,application/ogg,audio/webm,audio/x-flac"
                                            @change="saveCustomSound($event.target.files)"
                                     >
-                                    <label class="custom-file-label" for="custom-sound">Choose sound</label>
+                                    <label class="custom-file-label" for="custom-sound">{{ l('optionsCustomSoundPlaceholder') }}</label>
                                 </div>
                             </div>
 
@@ -144,7 +144,7 @@
                                            min="100"
                                            max="2000"
                                            v-model="syncOptions.refreshRate">
-                                    (ms)
+                                    ({{ l('optionsRefreshRateMillisecond') }})
                                 </div>
                             </div>
 
@@ -380,7 +380,7 @@
 
         customizeTheme() {
             let newTheme: Theme = Object.assign({}, this.currentTheme);
-            newTheme.name = 'Custom';
+            newTheme.name = helpers.localize('customizeThemeDefaultName');
             newTheme.id = helpers.randomString(20);
             newTheme.custom = true;
 

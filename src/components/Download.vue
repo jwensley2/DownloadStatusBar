@@ -123,12 +123,12 @@
             const inProgress = this.download.downloadItem.state === 'in_progress';
             const paused = this.download.downloadItem.state === 'interrupted' && this.download.downloadItem.paused;
 
-            let showTitle = userAgent.includes('Windows') ? 'Show in Explorer' :
-                userAgent.includes('Mac') ? 'Reveal in Finder' : 'Show in Folder';
+            let showTitle = userAgent.includes('Windows') ? helpers.localize('tooltipShowInExplorer') :
+                userAgent.includes('Mac') ? helpers.localize('tooltipRevealInFinder') : helpers.localize('tooltipShowInFolder');
 
             let items: [ContextMenuItem] = [
                 {
-                    name: 'Clear Download',
+                    name: helpers.localize('tooltipClearDownload'),
                     icon: 'eye-slash',
                     clicked: () => {
                         this.$root.$emit('clearDownload', this.download);
@@ -151,7 +151,7 @@
             // In progress or paused
             if (inProgress || paused) {
                 items.push({
-                    name: 'Cancel Download',
+                    name: helpers.localize('tooltipCancelDownload'),
                     icon: 'times',
                     clicked: () => {
                         this.$root.$emit('cancelDownload', this.download);
@@ -163,7 +163,7 @@
             // Download in progress
             if (inProgress) {
                 items.push({
-                    name: 'Pause Download',
+                    name: helpers.localize('tooltipPauseDownload'),
                     icon: 'pause',
                     clicked: () => {
                         this.$root.$emit('pauseDownload', this.download);
@@ -175,7 +175,7 @@
             // Download is paused
             if (paused) {
                 items.push({
-                    name: 'Resume Download',
+                    name: helpers.localize('tooltipResumeDownload'),
                     icon: 'play',
                     clicked: () => {
                         this.$root.$emit('resumeDownload', this.download);
@@ -186,7 +186,7 @@
 
             if (this.download.downloadItem.state === 'complete') {
                 items.push({
-                    name: 'Delete Download',
+                    name: helpers.localize('tooltipDeleteDownload'),
                     icon: 'trash-o',
                     clicked: () => {
                         this.$root.$emit('deleteDownload', this.download);

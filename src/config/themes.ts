@@ -68,16 +68,16 @@ export const lightTheme: Theme = {
 };
 
 export const colorLabels: Colors = {
-    background: 'Background',
-    backgroundHover: 'Background Hover',
-    button: 'Button',
-    buttonHover: 'Button Hover',
-    buttonBorder: 'Button Border',
-    border: 'Border',
-    download: 'Download',
-    progress: 'Progress',
-    text: 'Text',
-    error: 'Error',
+    background: localize('customizeThemeLabelBackground'),
+    backgroundHover: localize('customizeThemeLabelBackgroundHover'),
+    button: localize('customizeThemeLabelButton'),
+    buttonHover: localize('customizeThemeLabelButtonHover'),
+    buttonBorder: localize('customizeThemeLabelButtonBorder'),
+    border: localize('customizeThemeLabelBorder'),
+    download: localize('customizeThemeLabelDownload'),
+    progress: localize('customizeThemeLabelProgress'),
+    text: localize('customizeThemeLabelText'),
+    error: localize('customizeThemeLabelError'),
 };
 
 export const defaultThemes: Array<Theme> = [

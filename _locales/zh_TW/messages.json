@@ -39,7 +39,7 @@
     "message": "Referrer"
   },
   "tooltipReferrerNone": {
-    "message": "None",
+    "message": "無",
     "description": "Text to show if there is no referrer"
   },
   "tooltipSpeedHeading": {
@@ -64,6 +64,35 @@
   "tooltipPreviewHeading": {
     "message": "預覽"
   },
+  "tooltipShowInExplorer": {
+    "message": "打開所在資料夾",
+    "description": "Show Folder in Windows."
+  },
+  "tooltipRevealInFinder": {
+    "message": "打開所在資料夾",
+    "description": "Show Folder in Mac."
+  },
+  "tooltipShowInFolder": {
+    "message": "打開所在資料夾",
+    "description": "Show Folder in Unknown OS."
+  },
+  "tooltipClearDownload": {
+    "message": "清除下載",
+    "description": "Clear the download info on bar."
+  },
+  "tooltipCancelDownload": {
+    "message": "取消下載"
+  },
+  "tooltipPauseDownload": {
+    "message": "暫停下載"
+  },
+  "tooltipResumeDownload": {
+    "message": "恢復下載"
+  },
+  "tooltipDeleteDownload": {
+    "message": "刪除下載檔案",
+    "description": "Clear the download info on bar and delete download file."
+  },
   "optionsDisplayPanelTitle": {
     "message": "外觀選項",
     "description": "Title of the display options panel."
@@ -79,6 +108,66 @@
   "themeDark": {
     "message": "黑暗",
     "description": "The name of the dark theme"
+  },
+  "optionsCustomizeTheme": {
+    "message": "增加自訂主題",
+    "description": "Caption for the add a new customize theme button"
+  },
+  "customizeThemePanelTitle": {
+    "message": "自訂主題",
+    "description": "Title for the customize theme panel"
+  },
+  "customizeThemeName": {
+    "message": "主題名稱",
+    "description": "Label for the customize theme name"
+  },
+  "customizeThemeDefaultName": {
+    "message": "我的主題",
+    "description": "Text for the customize theme default name"
+  },
+  "customizeThemeDeleteTheme": {
+    "message": "刪除主題",
+    "description": "Caption for the delete this customize theme button"
+  },
+  "customizeThemeLabelBackground": {
+    "message": "下載欄背景色",
+    "description": "Label for the dowmload bar's background"
+  },
+  "customizeThemeLabelBackgroundHover": {
+    "message": "懸停時菜單背景色",
+    "description": "Label for the dowmload bar's menu background when mouse hover"
+  },
+  "customizeThemeLabelButton": {
+    "message": "按鈕顏色",
+    "description": "Label for the button's background"
+  },
+  "customizeThemeLabelButtonHover": {
+    "message": "懸停時按鈕顏色",
+    "description": "Label for the button's background when mouse hover"
+  },
+  "customizeThemeLabelButtonBorder": {
+    "message": "按鈕邊框",
+    "description": "Label for the button's border"
+  },
+  "customizeThemeLabelBorder": {
+    "message": "下載欄邊框",
+    "description": "Label for the dowmload bar's border"
+  },
+  "customizeThemeLabelDownload": {
+    "message": "下載進度背景色",
+    "description": "Label for the dowmload progress's background"
+  },
+  "customizeThemeLabelProgress": {
+    "message": "下載進度前景色",
+    "description": "Label for the dowmload progress's foreground"
+  },
+  "customizeThemeLabelText": {
+    "message": "文字顏色",
+    "description": "Label for the dowmload bar's text"
+  },
+  "customizeThemeLabelError": {
+    "message": "錯誤時顏色",
+    "description": "Label for progress's background when the dowmload has error"
   },
   "optionsAlwaysShowBar": {
     "message": "總是顯示本狀態列"
@@ -129,7 +218,7 @@
     "message": "這些檔案類型將不會在下載狀態列顯示"
   },
   "optionsIgnoreFileTypes": {
-    "message": "忽略的文件類"
+    "message": "忽略的檔案類型"
   },
   "optionsMiscellaneousPanelTitle": {
     "message": "其他",
@@ -147,6 +236,10 @@
     "message": "你也可以選擇一個自訂音效（最大1MB）",
     "description": "Message about choosing a custom sound"
   },
+  "optionsCustomSoundPlaceholder": {
+    "message": "選擇聲音",
+    "description": "Placeholder of input, about choosing a sound"
+  },
   "optionsRefreshRateTitle": {
     "message": "刷新速率",
     "description": "Title of the refresh rate section"
@@ -154,6 +247,10 @@
   "optionsRefreshRateNote": {
     "message": "控制狀態列的刷新速度",
     "description": "Description of what the refresh rate does"
+  },
+  "optionsRefreshRateMillisecond": {
+    "message": "毫秒",
+    "description": "Unit of the refresh rate"
   },
   "optionsHistoryTitle": {
     "message": "歷史",
