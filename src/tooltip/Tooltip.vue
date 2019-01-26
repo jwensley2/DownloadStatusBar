@@ -118,10 +118,11 @@
 
         calculateLeftPosition(): string {
             if (this.element) {
-                let downloadOffset = this.element.offsetLeft;
+                const $el = this.$el as HTMLElement;
+                const downloadOffset = this.element.offsetLeft;
 
-                if (downloadOffset + this.$el.offsetWidth > window.innerWidth) {
-                    return `${window.innerWidth - this.$el.offsetWidth}px`;
+                if (downloadOffset + $el.offsetWidth > window.innerWidth) {
+                    return `${window.innerWidth - $el.offsetWidth}px`;
                 } else {
                     return `${downloadOffset}px`;
                 }
