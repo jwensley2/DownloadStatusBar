@@ -112,6 +112,11 @@ class DownloadStatusBar {
     public setTheme(theme: Theme) {
         let element = DownloadStatusBar.getStatusBarContainer();
 
+        // Prevent some sites from breaking
+        element.style.setProperty('height', 'auto');
+        element.style.setProperty('width', 'auto');
+        element.style.setProperty('display', 'block');
+
         _.forEach(theme.colors, (colour, prop) => {
             element.style.setProperty(`--${prop}`, colour);
         })
