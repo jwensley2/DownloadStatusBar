@@ -97,7 +97,7 @@
         }
 
         hideTooltip(event: MouseEvent) {
-            let tooltip = document.getElementById('DownloadStatusBarTooltip');
+            let tooltip = this.$root.$el.querySelectorAll('#DownloadStatusBarTooltip')[0];
 
             if (event.relatedTarget && tooltip) {
                 let target = event.relatedTarget !as HTMLElement;
