@@ -63,7 +63,7 @@
 
         setBodyMargin() {
             const body = document.getElementsByTagName('body')[0] as HTMLElement;
-            const downloadStatusBar = document.getElementById('DownloadStatusBar');
+            const downloadStatusBar = this.$el as HTMLElement;
 
             if (downloadStatusBar && this.downloads.length > 0 && downloadStatusBar.offsetHeight > this.defaultBottomMargin) {
                 body.style.marginBottom = `${downloadStatusBar.offsetHeight}px`;
