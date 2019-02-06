@@ -1,18 +1,18 @@
 @import "variables";
 
 @font-face {
-  font-family: 'dsb-icomoon';
+  font-family: '#{$icomoon-font-family}';
   src:
-    url('#{$icomoon-font-path}/dsb-icomoon.ttf?xq9tpv') format('truetype'),
-    url('#{$icomoon-font-path}/dsb-icomoon.woff?xq9tpv') format('woff'),
-    url('#{$icomoon-font-path}/dsb-icomoon.svg?xq9tpv#dsb-icomoon') format('svg');
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?z6vh1k') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?z6vh1k') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?z6vh1k##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"], [class^="icon-"]:before, [class*=" icon-"]:before  {
+[class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'dsb-icomoon' !important;
+  font-family: '#{$icomoon-font-family}' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -113,6 +113,11 @@
 .icon-play {
   &:before {
     content: $icon-play;
+  }
+}
+.icon-copy {
+  &:before {
+    content: $icon-copy;
   }
 }
 

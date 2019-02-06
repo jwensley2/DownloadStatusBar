@@ -5,17 +5,25 @@
         <table class="dsb-tooltip-table">
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipFilenameHeading') }}:</th>
-                <td class="dsb-tooltip-cell"><input class="dsb-tooltip-url" type="url" :value="filename" readonly></td>
+                <td class="dsb-tooltip-cell">
+                    <input class="dsb-tooltip-url" type="url" :value="filename" readonly>
+                    <copy-button class="dsb-tooltip-copy-button" :value="filename"></copy-button>
+                </td>
             </tr>
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipUrlHeading') }}:</th>
-                <td class="dsb-tooltip-cell"><input class="dsb-tooltip-url" type="url" :value="download.downloadItem.url" readonly></td>
+                <td class="dsb-tooltip-cell">
+                    <input class="dsb-tooltip-url" type="url" :value="download.downloadItem.url" readonly>
+                    <copy-button class="dsb-tooltip-copy-button" :value="download.downloadItem.url"></copy-button>
+                </td>
             </tr>
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipReferrerHeading') }}:</th>
                 <td class="dsb-tooltip-cell">
-                    <input v-if="download.downloadItem.referrer" class="dsb-tooltip-url" type="url" :value="download.downloadItem.referrer"
-                           readonly>
+                    <template v-if="download.downloadItem.referrer">
+                        <input class="dsb-tooltip-url" type="url" :value="download.downloadItem.referrer" readonly>
+                        <copy-button class="dsb-tooltip-copy-button" :value="download.downloadItem.referrer"></copy-button>
+                    </template>
                     <span v-else>{{ l('tooltipReferrerNone') }}</span>
                 </td>
             </tr>
@@ -52,8 +60,11 @@
     import events from './events';
     import * as helpers from '../helpers';
     import {Component, Prop} from 'vue-property-decorator';
+    import CopyButton from '../components/CopyButton.vue';
 
-    @Component({})
+    @Component({
+        components: {CopyButton}
+    })
     export default class Tooltip extends Vue {
         @Prop({})
         theme: String;
@@ -194,6 +205,7 @@
             text-align    : left;
             text-overflow : ellipsis;
             word-break    : break-all;
+            display       : flex;
         }
 
         .dsb-tooltip-heading {
@@ -219,6 +231,10 @@
             max-height : 200px;
             max-width  : 300px;
             width      : auto;
+        }
+
+        .dsb-tooltip-copy-button {
+            margin-left: 2px;
         }
     }
 </style>
