@@ -3,6 +3,7 @@ import fileTypes, {FileType} from './config/filetypes';
 import * as _ from 'lodash';
 import {DSBDownload} from './DSBDownload';
 import {defaultThemes, lightTheme, Theme} from './config/themes';
+import * as mm from 'micromatch';
 
 /**
  * Remove finished downloads from the array of downloads
@@ -167,8 +168,11 @@ export function downloadMatchesFiletypes(download: DSBDownload, fileTypes: FileT
 export function downloadMatchesCustomTypes(download: DSBDownload, types: string[]): boolean {
     const downloadItem = download.downloadItem;
     const extension = _.last(downloadItem.filename.match(/\.([^.]*)$/));
+    const filename = downloadItem.filename.replace(/\\/g, '/'); // Normalize to Unix style path
 
-    return types.indexOf(downloadItem.mime) !== -1 || (!!extension && types.indexOf(extension) !== -1);
+    return types.indexOf(downloadItem.mime) !== -1
+        || (!!extension && types.indexOf(extension) !== -1)
+        || mm.any(filename, types, {matchBase: true});
 }
 
 /**

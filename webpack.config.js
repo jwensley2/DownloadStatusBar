@@ -75,5 +75,8 @@ module.exports = {
             {from: '_locales', to: './_locales'}
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ]
+    ],
+    node: {
+        fs: 'empty'
+    },
 };
