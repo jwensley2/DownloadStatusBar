@@ -1,6 +1,6 @@
 {
   "name": "downloadstatusbar",
-  "version": "1.9.3",
+  "version": "1.10.0",
   "description": "Adds a bar to show the status of your downloads",
   "main": "background.js",
   "devDependencies": {
