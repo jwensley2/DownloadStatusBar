@@ -1,0 +1,271 @@
+{
+  "extensionName": {
+    "message": "WX Download Status Bar",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "Adiciona uma barra para mostrar o status dos seus downloads",
+    "description": "Description of the extension."
+  },
+  "downloadStatusComplete": {
+    "message": "Completo"
+  },
+  "downloadStatusPaused": {
+    "message": "Pausado"
+  },
+  "downloadStatusCancelled": {
+    "message": "Cancelado"
+  },
+  "downloadStatusError": {
+    "message": "Erro"
+  },
+  "downloadStatusInProgress": {
+    "message": "Em progresso"
+  },
+  "downloadSpeedUnknown": {
+    "message": "Desconhecido"
+  },
+  "barClearButton": {
+    "message": "Limpar",
+    "description": "Text for the clear downloads button"
+  },
+  "tooltipFilenameHeading": {
+    "message": "Nome do arquivo"
+  },
+  "tooltipUrlHeading": {
+    "message": "Url"
+  },
+  "tooltipReferrerHeading": {
+    "message": "Referenciador"
+  },
+  "tooltipReferrerNone": {
+    "message": "Nenhum",
+    "description": "Text to show if there is no referrer"
+  },
+  "tooltipSpeedHeading": {
+    "message": "Velocidade"
+  },
+  "tooltipStatusHeading": {
+    "message": "Status"
+  },
+  "tooltipProgressHeading": {
+    "message": "Progresso"
+  },
+  "tooltipFilesizeHeading": {
+    "message": "Tamanho"
+  },
+  "tooltipMimeHeading": {
+    "message": "MIME tipo"
+  },
+  "tooltipMimeUnknown": {
+    "message": "Desconhecido",
+    "description": "Message to show if the mime type is not known"
+  },
+  "tooltipPreviewHeading": {
+    "message": "Prévia"
+  },
+  "tooltipShowInExplorer": {
+    "message": "Mostrar no Explorer",
+    "description": "Show Folder in Windows."
+  },
+  "tooltipRevealInFinder": {
+    "message": "Revelar no Finder",
+    "description": "Show Folder in Mac."
+  },
+  "tooltipShowInFolder": {
+    "message": "Mostrar na pasta",
+    "description": "Show Folder in Unknown OS."
+  },
+  "tooltipClearDownload": {
+    "message": "Limpar Download",
+    "description": "Clear the download info on bar."
+  },
+  "tooltipCancelDownload": {
+    "message": "Cancelar Download"
+  },
+  "tooltipPauseDownload": {
+    "message": "Pausar Download"
+  },
+  "tooltipResumeDownload": {
+    "message": "Retomar Download"
+  },
+  "tooltipDeleteDownload": {
+    "message": "Excluir Download",
+    "description": "Clear the download info on bar and delete download file."
+  },
+  "optionsDisplayPanelTitle": {
+    "message": "Mostrar Opções",
+    "description": "Title of the display options panel."
+  },
+  "optionsTheme": {
+    "message": "Tema",
+    "description": "Label for the base theme selection"
+  },
+  "themeLight": {
+    "message": "Claro",
+    "description": "The name of the light theme"
+  },
+  "themeDark": {
+    "message": "Escuro",
+    "description": "The name of the dark theme"
+  },
+  "optionsCustomizeTheme": {
+    "message": "Personalizado",
+    "description": "Caption for the add a new customize theme button"
+  },
+  "customizeThemePanelTitle": {
+    "message": "Personalizar",
+    "description": "Title for the customize theme panel"
+  },
+  "customizeThemeName": {
+    "message": "Nome",
+    "description": "Label for the customize theme name"
+  },
+  "customizeThemeDefaultName": {
+    "message": "Personalizado",
+    "description": "Text for the customize theme default name"
+  },
+  "customizeThemeDeleteTheme": {
+    "message": "Excluir Tema",
+    "description": "Caption for the delete this customize theme button"
+  },
+  "customizeThemeLabelBackground": {
+    "message": "Fundo",
+    "description": "Label for the dowmload bar's background"
+  },
+  "customizeThemeLabelBackgroundHover": {
+    "message": "Fundo de detalhes",
+    "description": "Label for the dowmload bar's menu background when mouse hover"
+  },
+  "customizeThemeLabelButton": {
+    "message": "Botão",
+    "description": "Label for the button's background"
+  },
+  "customizeThemeLabelButtonHover": {
+    "message": "Fundo do botão",
+    "description": "Label for the button's background when mouse hover"
+  },
+  "customizeThemeLabelButtonBorder": {
+    "message": "Borda Botão",
+    "description": "Label for the button's border"
+  },
+  "customizeThemeLabelBorder": {
+    "message": "Borda",
+    "description": "Label for the dowmload bar's border"
+  },
+  "customizeThemeLabelDownload": {
+    "message": "Download",
+    "description": "Label for the dowmload progress's background"
+  },
+  "customizeThemeLabelProgress": {
+    "message": "Progresso",
+    "description": "Label for the dowmload progress's foreground"
+  },
+  "customizeThemeLabelText": {
+    "message": "Texto",
+    "description": "Label for the dowmload bar's text"
+  },
+  "customizeThemeLabelError": {
+    "message": "Erro",
+    "description": "Label for progress's background when the dowmload has error"
+  },
+  "optionsAlwaysShowBar": {
+    "message": "Sempre mostrar a barra de status"
+  },
+  "optionsShowDownloadInfo": {
+    "message": "Mostrar inf. de download"
+  },
+  "optionsAutoHidePanelTitle": {
+    "message": "Ocultar automaticamente",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsAutoHideCompleted": {
+    "message": "Ocultar Aut. Downloads Completos"
+  },
+  "optionsAutoHideFileTypes": {
+    "message": "Tipo de arq. a ocultar"
+  },
+  "optionsAutoHideOptional": {
+    "message": "Opcional. Se nada for selecionado, todos os arq. serão ocultados aut."
+  },
+  "optionsAutoHideSecondsInputBeforeText": {
+    "message": "Ocultar após",
+    "description": "The text before the seconds input field"
+  },
+  "optionsAutoHideSecondsInputAfterText": {
+    "message": "segundos",
+    "description": "The text after the seconds input field"
+  },
+  "optionsSelectType": {
+    "message": "Selecionar tipo",
+    "description": "Label of the select file type dropdown"
+  },
+  "optionsSelectFileType": {
+    "message": "Secionar tipo de arq.",
+    "description": "Placeholder for the select file type dropdown"
+  },
+  "optionsAddOtherType": {
+    "message": "Adic. outro tipo"
+  },
+  "optionsClickToRemove": {
+    "message": "Clicar para remover"
+  },
+  "optionsIgnoreFilesPanelTitle": {
+    "message": "Ignorar tipo de arq.",
+    "description": "Title of the auto hiding options panel"
+  },
+  "optionsIgnoreFilesDescription": {
+    "message": "Esses tipos de arquivo não serão exibidos na barra"
+  },
+  "optionsIgnoreFileTypes": {
+    "message": "Tipos de arq. ignorados"
+  },
+  "optionsMiscellaneousPanelTitle": {
+    "message": "Diversos",
+    "description": "Title of the miscellaneous options panel"
+  },
+  "optionsCompletionSoundTitle": {
+    "message": "Som de conclusão",
+    "description": "Title of the completion sound section"
+  },
+  "optionsPlaySound": {
+    "message": "Toca um som quando um download for concluído",
+    "description": "Play completion sound checkbox label"
+  },
+  "optionsCustomSoundNote": {
+    "message": "Você pode, opcionalmente, escolher um som personalizado (1MB MAX)",
+    "description": "Message about choosing a custom sound"
+  },
+  "optionsCustomSoundPlaceholder": {
+    "message": "Escolher som",
+    "description": "Placeholder of input, about choosing a sound"
+  },
+  "optionsRefreshRateTitle": {
+    "message": "Taxa de atualização",
+    "description": "Title of the refresh rate section"
+  },
+  "optionsRefreshRateNote": {
+    "message": "Controla a frequência que a barra é atualizada",
+    "description": "Description of what the refresh rate does"
+  },
+  "optionsRefreshRateMillisecond": {
+    "message": "ms",
+    "description": "Unit of the refresh rate"
+  },
+  "optionsHistoryTitle": {
+    "message": "Histórico",
+    "description": "Title of the history section"
+  },
+  "optionsHistoryLabel": {
+    "message": "Limpar também o histórico do navegador ao limpar o download(s)",
+    "description": "Label for the checkbox to enable browser history clearing"
+  },
+  "optionsClearingTitle": {
+    "message": "Limpeza",
+    "description": "Title of the clearing section"
+  },
+  "optionsClearFailedLabel": {
+    "message": "Botão Limpar limpa downloads com falha ",
+    "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
+  }
+}
