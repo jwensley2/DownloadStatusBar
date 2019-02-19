@@ -5,7 +5,7 @@
 # DownloadStatusBar
 
 ## Localization
-To add translations for a new language copy [\_locales/en_CA/messages.json](_locales/en_CA/messages.json) to a new folder with the proper language code inside [\_locales](_locales)
+To add translations for a new language copy [\_locales/en_CA/messages.json](_locales/en_CA/messages.json) to a new folder with the proper language code inside [\_locales](_locales) then follow [this guide](https://guides.github.com/activities/forking/) to create a pull request.
 
 Only the "message" values need to be translated, the "description" is just to give some context to translators.
 
