@@ -15,7 +15,7 @@
     "micromatch": "^3.1.10",
     "mini-css-extract-plugin": "^0.4.5",
     "moment": "^2.24.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "nyc": "^11.9.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
