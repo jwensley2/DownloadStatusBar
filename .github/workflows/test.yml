@@ -23,3 +23,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm test
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v2.7.4
+      env:
+        CC_TEST_REPORTER_ID: ff7164f0824f0f368f2da7e9f2de49badffcd68ed0b2043c20eaaea2d96c53c0
