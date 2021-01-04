@@ -217,4 +217,8 @@
         margin         : -5px 0 0 0;
         overflow       : hidden;
     }
+
+    @media print {
+      #DownloadStatusBar { display : none }
+    }
 </style>
