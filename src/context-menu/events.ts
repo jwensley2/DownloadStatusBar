@@ -1,5 +1,14 @@
-import Vue from "vue";
+import mitt, {Emitter} from 'mitt';
+import {ContextMenuItem, ContextMenuPosition} from './types';
 
-const events: Vue = new Vue();
+type Events = {
+    openMenu: {
+        items: ContextMenuItem[],
+        position: ContextMenuPosition,
+    },
+    closeMenu: undefined
+};
+
+const events: Emitter<Events> = mitt<Events>();
 
 export default events;

@@ -1,12 +1,9 @@
-import {PluginFunction, PluginObject} from 'vue';
-import {VueConstructor} from 'vue/types/vue';
+import {App} from 'vue';
 import TooltipComponent from './Tooltip.vue';
 import events from './events';
-import DownloadItem = browser.downloads.DownloadItem;
 
-declare module 'vue/types/vue' {
-    // 3. Declare augmentation for Vue
-    interface Vue {
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
         $tooltip: {
             shown: boolean,
             show: Function,
@@ -15,39 +12,36 @@ declare module 'vue/types/vue' {
     }
 }
 
-export default class TooltipPlugin implements PluginObject<{}> {
-    [key: string]: any;
+export default {
+    install(app: App) {
+        app.component('tooltip', TooltipComponent);
 
-    install: PluginFunction<{}>;
-    static installed = false;
-
-    static install(Vue: VueConstructor, options?: {}) {
-        if (TooltipPlugin.installed) {
-            return;
-        }
-
-        TooltipPlugin.installed = true;
-
-        Vue.component(TooltipComponent.tag, TooltipComponent);
-
-        Vue.prototype.$tooltip = {
-            show(download: DownloadItem, position: Object) {
-                events.$emit('showTooltip', download, position);
-            },
-            hide() {
-                events.$emit('hideTooltip');
-            },
+        const show = (element: HTMLElement, downloadId: number) => {
+            events.emit('showTooltip', {
+                id: downloadId,
+                element: element,
+            });
         };
 
-        Vue.mixin({
+        const hide = () => {
+            events.emit('hideTooltip');
+        };
+
+        app.provide('showTooltip', show);
+        app.provide('hideTooltip', hide);
+
+        app.mixin({
             methods: {
                 showTooltip(element: HTMLElement, downloadId: number) {
-                    events.$emit('showTooltip', downloadId, element);
+                    events.emit('showTooltip', {
+                        id: downloadId,
+                        element: element
+                    });
                 },
                 hideTooltip() {
-                    events.$emit('hideTooltip');
+                    events.emit('hideTooltip');
                 },
             },
         })
     }
-}
+};

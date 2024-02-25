@@ -1,4 +1,4 @@
-import moment = require('moment');
+import moment from 'moment';
 import DownloadQuery = browser.downloads.DownloadQuery;
 import StringDelta = browser.downloads.StringDelta;
 import BooleanDelta = browser.downloads.BooleanDelta;
@@ -7,17 +7,18 @@ import * as helpers from './helpers';
 import * as _ from 'lodash';
 import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
 import {DownloadInterface, DSBDownload} from './DSBDownload';
+import StorageObject = browser.storage.StorageObject;
 
 class DownloadStatus {
     protected downloads: DSBDownload[] = [];
-    protected interval: number | null;
+    protected interval: number | null = null;
     protected options: SyncOptions = defaultSyncOptions;
 
     constructor() {
         const self = this;
 
         browser.storage.sync.get(null)
-            .then((options: SyncOptions) => {
+            .then((options: StorageObject) => {
                 this.options = helpers.mergeSyncDefaultOptions(options);
             });
 
@@ -49,10 +50,11 @@ class DownloadStatus {
 
                 if (!download) return;
 
-                // Update change properties
+                // Update changed properties
                 for (let [property, change] of Object.entries(downloadDelta)) {
+                    const downloadItem = download.downloadItem as any
                     if (property === 'id') continue; // Ignore id
-                    download.downloadItem[property] = (change as StringDelta | BooleanDelta | DoubleDelta).current;
+                    downloadItem[property] = (change as StringDelta | BooleanDelta | DoubleDelta).current;
                 }
 
                 // This downloadItem object is a delta of what changed so we need to query for the full downloadItem item

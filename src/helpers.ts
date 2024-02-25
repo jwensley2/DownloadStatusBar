@@ -1,8 +1,8 @@
-import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
-import fileTypes, {FileType} from './config/filetypes';
-import * as _ from 'lodash';
-import {DSBDownload} from './DSBDownload';
-import {defaultThemes, lightTheme, Theme} from './config/themes';
+import _ from 'lodash';
+import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
+import fileTypes, {FileType} from '@/config/filetypes';
+import {DSBDownload} from '@/DSBDownload';
+import {defaultThemes, lightTheme, Theme} from '@/config/themes';
 import * as mm from 'micromatch';
 
 /**

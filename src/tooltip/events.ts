@@ -1,5 +1,13 @@
-import Vue from "vue";
+import mitt, {Emitter} from 'mitt';
 
-const events: Vue = new Vue();
+type Events = {
+    showTooltip: {
+        id: number,
+        element: HTMLElement,
+    },
+    hideTooltip: undefined
+};
+
+const events: Emitter<Events> = mitt<Events>();
 
 export default events;
