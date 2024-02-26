@@ -5,34 +5,38 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
-    import {Component, Prop} from 'vue-property-decorator';
+import {defineComponent} from 'vue';
 
-    @Component({})
-    export default class CopyButton extends Vue {
-        @Prop({})
-        value: String;
+export default defineComponent({
+    props: {
+        value: String,
+    },
+    setup(props) {
+        return {
+            copyValue() {
+                let navigator = window.navigator;
 
-        copyValue() {
-            let navigator = window.navigator as any;
-
-            navigator.clipboard.writeText(this.value);
+                if (props.value) {
+                    navigator.clipboard.writeText(props.value);
+                }
+            }
         }
     }
+})
 </script>
 
 <style lang="scss" scoped>
-    @import "../scss/variables";
-    @import "../../icomoon/style";
+@import "../scss/variables";
+@import "../../icomoon/style";
 
-    button {
-        background : none;
-        border     : 0;
-        color      : var(--text);
-        height     : 100%;
+button {
+  background : none;
+  border     : 0;
+  color      : var(--text);
+  height     : 100%;
 
-        &:hover {
-            background : var(--buttonHover)
-        }
-    }
+  &:hover {
+    background : var(--buttonHover)
+  }
+}
 </style>

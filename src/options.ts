@@ -1,9 +1,5 @@
-import Vue, {VNode} from "vue";
-import Options from "./components/Options.vue";
+import {createApp, VNode, h} from 'vue';
+import Options from './components/Options.vue';
 
-let app = new Vue({
-    el: "#options",
-    render(render): VNode {
-        return render(Options, {});
-    },
-});
+createApp(Options)
+    .mount('#options');

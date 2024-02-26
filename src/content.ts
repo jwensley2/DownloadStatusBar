@@ -1,81 +1,78 @@
-import Vue, {VNode} from 'vue';
-import Vuex from 'vuex';
+import {createApp} from 'vue';
+import {createPinia} from 'pinia'
 import ContextMenuPlugin from './context-menu/ContextMenuPlugin';
 import TooltipPlugin from './tooltip/TooltipPlugin';
 import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
 import {DownloadInterface, DSBDownload} from './DSBDownload';
-import {DSBState, storeOptions} from './state';
 import * as _ from 'lodash';
-import {SyncOptions} from './config/options';
 import * as helpers from './helpers';
 import {Theme} from './config/themes';
+import {useDownloadsStore} from './stores/downloads';
+import events from './events';
+import StorageObject = browser.storage.StorageObject;
 
 class DownloadStatusBar {
-    private app: Vue;
+    private app;
     protected _downloads: DSBDownload[] = [];
 
     constructor() {
-        Vue.use(ContextMenuPlugin);
-        Vue.use(TooltipPlugin);
-        Vue.use(Vuex);
+        const rootElement = this.makeStatusBarElement();
 
-        const store = new Vuex.Store<DSBState>(storeOptions);
+        this.app = createApp(DownloadStatusBarComponent)
+            .use(createPinia())
+            .use(ContextMenuPlugin)
+            .use(TooltipPlugin)
+            .provide('rootElement', rootElement)
+            .mount(rootElement);
 
-        let app = this.app = new Vue({
-            el: this.makeStatusBarElement(),
-            store,
-            render(render): VNode {
-                return render(DownloadStatusBarComponent);
-            },
-        });
-
-        app.$on('clearDownloads', () => {
+        events.on('clearDownloads', () => {
             // Tell the background to clear it's downloads
             browser.runtime.sendMessage({event: 'clearDownloads'});
 
             // Close the context menu
-            this.app.$contextMenu.close();
+            // this.app.$contextMenu.close();
         });
 
-        app.$on('clearDownload', (download: DSBDownload) => {
+        events.on('clearDownload', (download: DSBDownload) => {
             // Tell the background process to clear the download
             browser.runtime.sendMessage({event: 'clearDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('openDownload', (download: DSBDownload) => {
+        events.on('openDownload', (download: DSBDownload) => {
             // Tell the background process to open the download
             browser.runtime.sendMessage({event: 'openDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('showDownload', (download: DSBDownload) => {
+        events.on('showDownload', (download: DSBDownload) => {
             // Tell the background process to show the download
             browser.runtime.sendMessage({event: 'showDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('cancelDownload', (download: DSBDownload) => {
+        events.on('cancelDownload', (download: DSBDownload) => {
             browser.runtime.sendMessage({event: 'cancelDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('pauseDownload', (download: DSBDownload) => {
+        events.on('pauseDownload', (download: DSBDownload) => {
             browser.runtime.sendMessage({event: 'pauseDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('resumeDownload', (download: DSBDownload) => {
+        events.on('resumeDownload', (download: DSBDownload) => {
             browser.runtime.sendMessage({event: 'resumeDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('deleteDownload', (download: DSBDownload) => {
+        events.on('deleteDownload', (download: DSBDownload) => {
             browser.runtime.sendMessage({event: 'deleteDownload', download: JSON.stringify(download)});
         });
 
-        app.$on('openOptions', () => {
+        events.on('openOptions', () => {
             browser.runtime.sendMessage({event: 'openOptions'});
         });
     }
 
     set downloads(downloads: DSBDownload[]) {
+        const store = useDownloadsStore();
         this._downloads = downloads;
-        this.app.$store.commit('setDownloads', downloads);
+        store.setDownloads(downloads);
     }
 
     private static getStatusBarContainer() {
@@ -83,11 +80,11 @@ class DownloadStatusBar {
         let container;
 
         if (document.getElementById(containerId)) {
-            container = document.getElementById(containerId) as HTMLElement;
-        } else {
-            container = document.createElement('div');
-            container.id = containerId;
+            return document.getElementById(containerId) as HTMLElement;
         }
+
+        container = document.createElement('div');
+        container.id = containerId;
 
         return container;
     }
@@ -135,7 +132,7 @@ browser.runtime.onMessage.addListener((json: any) => {
 
 // Load the config and set the theme
 browser.storage.sync.get(null)
-    .then((options: SyncOptions) => {
+    .then((options: StorageObject) => {
         const syncOptions = helpers.mergeSyncDefaultOptions(options);
         const theme = helpers.getThemeById(syncOptions.theme, syncOptions.customThemes);
         statusBar.setTheme(theme);

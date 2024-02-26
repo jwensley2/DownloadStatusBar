@@ -1,8 +1,8 @@
-import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
-import fileTypes, {FileType} from './config/filetypes';
-import * as _ from 'lodash';
-import {DSBDownload} from './DSBDownload';
-import {defaultThemes, lightTheme, Theme} from './config/themes';
+import _ from 'lodash';
+import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
+import fileTypes, {FileType} from '@/config/filetypes';
+import {DSBDownload} from '@/DSBDownload';
+import {defaultThemes, lightTheme, Theme} from '@/config/themes';
 import * as mm from 'micromatch';
 
 /**
@@ -50,7 +50,7 @@ export function getInProgressDownloads(downloads: DSBDownload[]): DSBDownload[] 
 }
 
 /**
- * Merge the default sync options into an sync options object
+ * Merge the default sync options into a sync options object
  *
  * @param {SyncOptions} options
  * @returns {SyncOptions}
@@ -60,6 +60,10 @@ export function mergeSyncDefaultOptions(options: Partial<SyncOptions>): SyncOpti
 
     // Replace the saved types with the one in the config if it exists
     merged.autohideFileTypes = merged.autohideFileTypes.map((fileType) => {
+        return getFileTypeByName(fileType.name) || fileType;
+    });
+
+    merged.ignoredFileTypes = merged.ignoredFileTypes.map((fileType) => {
         return getFileTypeByName(fileType.name) || fileType;
     });
 
@@ -215,7 +219,7 @@ export function localize(messageName: string, substitutions?: string | string[])
 }
 
 /**
- * Find the theme matching the provided theme name
+ * Find the theme matching the provided theme id
  * @param {string} id
  * @param {Theme} customThemes
  */
@@ -228,8 +232,7 @@ export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
 
     for (let customTheme of customThemes) {
         if (customTheme.id === id) {
-            const copy = _.merge({}, customTheme);
-            return _.merge(customTheme, lightTheme, copy);
+            return Object.assign(customTheme, Object.assign({}, lightTheme, customTheme));
         }
     }
 
@@ -240,11 +243,20 @@ export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
  * Generate a random string
  */
 export function randomString(length: number) {
-    const chars = [];
+    const chars: string[] = [];
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     for (let i = 0; i < length; i++)
         chars.push(possible.charAt(Math.floor(Math.random() * possible.length)));
 
     return chars.join('');
+}
+
+/**
+ * Force removal of ref properties, unref doesn't seem to work in some cases
+ *
+ * @param obj
+ */
+export function forceUnref<T extends object>(obj: T): T {
+    return _.omit(_.assign({}, obj), ['_value', '_rawValue', '__v_isRef', '__v_isShallow']) as T;
 }

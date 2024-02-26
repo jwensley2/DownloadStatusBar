@@ -1,12 +1,10 @@
-import {PluginFunction, PluginObject} from 'vue';
-import {VueConstructor} from 'vue/types/vue';
+import {App} from 'vue';
 import ContextMenuComponent from './ContextMenu.vue';
 import events from './events';
-import DownloadItem = browser.downloads.DownloadItem;
+import {ContextMenuItem, ContextMenuPosition} from './types';
 
-declare module 'vue/types/vue' {
-    // 3. Declare augmentation for Vue
-    interface Vue {
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
         $contextMenu: {
             open: Function,
             close: Function
@@ -14,39 +12,22 @@ declare module 'vue/types/vue' {
     }
 }
 
-export default class ContextMenuPlugin implements PluginObject<{}> {
-    [key: string]: any;
+export default {
+    install(app: App) {
+        app.component('context-menu', ContextMenuComponent);
 
-    install: PluginFunction<{}>;
-    static installed = false;
-
-    static install(Vue: VueConstructor, options?: {}) {
-        if (ContextMenuPlugin.installed) {
-            return;
-        }
-
-        ContextMenuPlugin.installed = true;
-
-        Vue.component(ContextMenuComponent.tag, ContextMenuComponent);
-
-        Vue.prototype.$contextMenu = {
-            open(items: Object[], position: Object) {
-                events.$emit('openMenu', items, position);
-            },
-            close() {
-                events.$emit('closeMenu');
-            },
+        const open = (items: ContextMenuItem[], position: ContextMenuPosition) => {
+            events.emit('openMenu', {
+                items: items,
+                position: position
+            });
         };
 
-        Vue.mixin({
-            methods: {
-                showContextMenu(event, download: DownloadItem) {
-                    events.$emit('openMenu', {
-                        download: download,
-                        position: event.position,
-                    });
-                },
-            },
-        })
+        const close = () => {
+            events.emit('closeMenu');
+        };
+
+        app.provide('openContextMenu', open);
+        app.provide('closeContextMenu', close);
     }
 }

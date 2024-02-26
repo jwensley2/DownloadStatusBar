@@ -2,10 +2,13 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const {VueLoaderPlugin} = require('vue-loader');
 const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
+    stats: {
+        errorDetails: true
+    },
     entry: {
         background: './src/background.ts',
         content: './src/content.ts',
@@ -47,13 +50,24 @@ module.exports = {
                     },
                     'sass-loader',
                 ],
+            },
+            {
+                test: /\.mjs$/,
+                include: /node_modules/,
+                type: 'javascript/auto',
             }
         ]
     },
     resolve: {
-        extensions: ['.ts', '.js', '.vue', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.vue'],
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': 'vue/dist/vue.runtime.esm-bundler.js',
+            '@': path.resolve('src/'),
+        },
+        fallback: {
+            fs: false,
+            util: false,
+            path: false,
         }
     },
     performance: {
@@ -64,19 +78,28 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: '[name].css',
         }),
-        new CopyWebpackPlugin([
-            {from: 'manifest.json', to: './'},
-            {from: '.web-extension-id', to: './'},
-            {from: 'src/options.html', to: './'},
-            {from: 'src/confirmation.html', to: './'},
-            {from: 'icons', to: './icons'},
-            {from: 'icomoon/fonts', to: './fonts'},
-            {from: 'sounds', to: './sounds'},
-            {from: '_locales', to: './_locales'}
-        ]),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: 'manifest.json', to: './'},
+                {from: '.web-extension-id', to: './'},
+                {from: 'src/options.html', to: './'},
+                {from: 'src/confirmation.html', to: './'},
+                {from: 'icons', to: './icons'},
+                {from: 'icomoon/fonts', to: './fonts'},
+                {from: 'sounds', to: './sounds'},
+                {from: '_locales', to: './_locales'}
+            ]
+        }),
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,
+            contextRegExp: /moment$/
+        }),
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: true,
+            __VUE_PROD_DEVTOOLS__: false,
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
     ],
-    node: {
-        fs: 'empty'
-    },
 };

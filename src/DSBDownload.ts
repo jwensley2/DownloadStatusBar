@@ -1,7 +1,7 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import * as _ from 'lodash';
 import * as helpers from './helpers';
-import * as moment from 'moment';
+import moment from 'moment';
 import {Moment} from 'moment';
 
 type DownloadProgress = { time: Moment, bytesReceived: number };
