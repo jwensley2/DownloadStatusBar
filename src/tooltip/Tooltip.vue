@@ -1,6 +1,6 @@
 <template>
-    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown" :style="{left: left}"
-         @mouseleave="hideTooltip"
+    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown && download" :style="{left: left}"
+         @mouseleave="events.emit('hideTooltip')"
          :ref="'tooltip'">
         <table class="dsb-tooltip-table">
             <tr class="dsb-tooltip-table-row">
@@ -56,11 +56,11 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref} from 'vue';
-import events from './events';
-import * as helpers from '../helpers';
-import CopyButton from '../components/CopyButton.vue';
-import {useDownloadsStore} from '../stores/downloads';
+import {computed, defineComponent, onMounted, ref, Ref} from 'vue';
+import events from '@/tooltip/events';
+import * as helpers from '@/helpers';
+import CopyButton from '@/components/CopyButton.vue';
+import {useDownloadsStore} from '@/stores/downloads';
 
 export default defineComponent({
     components: {
@@ -74,104 +74,98 @@ export default defineComponent({
     setup() {
         const store = useDownloadsStore();
 
-        let downloadId: number | null = null;
-        let element: HTMLElement | null = null;
+        let downloadId = ref();
+        let element: Ref<HTMLElement | undefined> = ref();
         let tooltipShown = ref(false);
-        let left = '0';
 
         const download = computed(() => {
             if (!downloadId) {
                 return;
             }
 
-            return store.downloadForId(downloadId);
+            return store.downloadForId(downloadId.value);
+        });
+
+        onMounted(() => {
+            events.on('showTooltip', (e) => {
+                tooltipShown.value = true;
+                downloadId.value = e.id;
+                element.value = e.element;
+            });
+
+            events.on('hideTooltip', () => {
+                tooltipShown.value = false;
+            });
         });
 
         return {
-            tooltipShown: tooltipShown,
-            download: download,
+            tooltipShown,
+            download,
+            events,
 
-            filename(): string {
+            left: computed((): string => {
+                const el = element.value;
+
+                if (el) {
+                    const downloadOffset = el.offsetLeft;
+
+                    if (downloadOffset + el.offsetWidth > window.innerWidth) {
+                        return `${window.innerWidth - el.offsetWidth}px`;
+                    } else {
+                        return `${downloadOffset}px`;
+                    }
+                }
+
+                return '0';
+            }),
+
+            filename: computed((): string => {
                 return download.value!.downloadItem.filename;
-            },
+            }),
 
-            status(): string {
+            status: computed((): string => {
                 return download.value!.status();
-            },
+            }),
 
-            progress(): string {
+            progress: computed((): string => {
                 return download.value!.progress();
-            },
+            }),
 
-            downloaded(): string {
+            downloaded: computed((): string => {
                 return helpers.formatFileSize(download.value!.downloadItem.bytesReceived);
-            },
+            }),
 
-            totalsize(): string {
+            totalsize: computed((): string => {
                 return helpers.formatFileSize(download.value!.downloadItem.totalBytes);
-            },
+            }),
 
-            filesize(): string {
+            filesize: computed((): string => {
                 return helpers.formatFileSize(download.value!.downloadItem.fileSize);
-            },
+            }),
 
-            percentDone(): number {
+            percentDone: computed((): number => {
                 return download.value!.percentDownloaded();
-            },
+            }),
 
-            isImage(): boolean {
+            isImage: computed((): boolean => {
                 if (!download.value) {
                     return false;
                 }
 
                 return download.value.isImage();
-            },
+            }),
 
-            downloadSpeed(): string {
+            downloadSpeed: computed((): string => {
                 if (!download.value) {
                     return helpers.localize('downloadSpeedUnknown');
                 }
 
                 return `${helpers.formatFileSize(download.value.calculateDownloadSpeed())}/s`;
-            },
+            }),
 
             l(messageName: string, substitutions?: string | string[]): string {
                 return helpers.localize(messageName, substitutions);
             },
-
-            onUpdated() {
-                const calculateLeftPosition = (): string => {
-                    if (element) {
-                        const downloadOffset = element.offsetLeft;
-
-                        if (downloadOffset + element.offsetWidth > window.innerWidth) {
-                            return `${window.innerWidth - element.offsetWidth}px`;
-                        } else {
-                            return `${downloadOffset}px`;
-                        }
-                    }
-
-                    return '0';
-                };
-
-                left = calculateLeftPosition();
-            },
-
-            onMounted() {
-                console.log('onMounted');
-
-                events.on('showTooltip', (e) => {
-                    console.log('showTooltip', e);
-
-                    tooltipShown.value = true;
-                    downloadId = e.id;
-                    element = e.element;
-                });
-
-                events.on('hideTooltip', () => {
-                    tooltipShown.value = false;
-                });
-            }
         }
     }
 });

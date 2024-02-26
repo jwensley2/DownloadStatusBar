@@ -1,6 +1,6 @@
 <template>
     <div v-if="isOpen">
-        <ul id="DownloadStatusBarContextMenu" :style="{left: left(), bottom: bottom()}">
+        <ul id="DownloadStatusBarContextMenu" :style="{left: left, bottom: bottom}">
             <li v-for="item in items" @click="item.clicked">
                 <i :class="`icon-${item.icon}`" aria-hidden="true" v-if="item.icon"></i>
                 {{ item.name }}
@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, Ref, ref} from 'vue';
-import events from './events';
-import {ContextMenuItem, ContextMenuPosition} from './types';
+import {computed, defineComponent, onMounted, Ref, ref} from 'vue';
+import events from '@/context-menu/events';
+import {ContextMenuItem, ContextMenuPosition} from '@/context-menu/types';
 
 export default defineComponent({
     props: {theme: String},
@@ -22,39 +22,39 @@ export default defineComponent({
         const position: Ref<ContextMenuPosition | null> = ref(null);
         const items: Ref<Array<ContextMenuItem>> = ref([]);
 
+        onMounted(() => {
+            events.on('openMenu', (e) => {
+                isOpen.value = true;
+                items.value = e.items;
+                position.value = e.position;
+            });
+
+            events.on('closeMenu', () => {
+                isOpen.value = false;
+                items.value = [];
+            });
+        });
+
         return {
             isOpen: isOpen,
             items: items,
             position: position,
 
-            left() {
+            left: computed(() => {
                 if (position.value) {
                     return `${position.value.x}px`;
                 }
 
                 return 0;
-            },
+            }),
 
-            bottom() {
+            bottom: computed(() => {
                 if (position.value) {
                     return `${window.innerHeight - position.value.y}px`;
                 }
 
                 return 0;
-            },
-
-            onMounted() {
-                events.on('openMenu', (e) => {
-                    isOpen.value = true;
-                    items.value = e.items;
-                    position.value = e.position;
-                });
-
-                events.on('closeMenu', () => {
-                    isOpen.value = false;
-                    items.value = [];
-                });
-            }
+            }),
         }
     }
 });

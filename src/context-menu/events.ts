@@ -1,5 +1,5 @@
 import mitt, {Emitter} from 'mitt';
-import {ContextMenuItem, ContextMenuPosition} from './types';
+import {ContextMenuItem, ContextMenuPosition} from '@/context-menu/types';
 
 type Events = {
     openMenu: {

@@ -202,7 +202,7 @@ class DownloadStatus {
         });
     };
 
-    updateDownload(download: DSBDownload) {
+    updateDownload(download: DSBDownload): Promise<DSBDownload> {
         let query: DownloadQuery = {
             id: download.downloadItem.id,
         };
@@ -227,7 +227,7 @@ class DownloadStatus {
      * @returns {Promise<DSBDownload[]>}
      */
     updateDownloads(): Promise<DSBDownload[]> {
-        let promises = [];
+        let promises: Promise<DSBDownload>[] = [];
 
         for (let download of this.downloads) {
             promises.push(this.updateDownload(download));

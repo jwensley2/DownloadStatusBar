@@ -2,7 +2,7 @@ import mitt, {Emitter} from 'mitt';
 import {DSBDownload} from './DSBDownload';
 
 type Events = {
-    clearDownloads: null,
+    clearDownloads: undefined,
     clearDownload: DSBDownload,
     openDownload: DSBDownload,
     showDownload: DSBDownload,
@@ -10,7 +10,7 @@ type Events = {
     pauseDownload: DSBDownload,
     resumeDownload: DSBDownload,
     deleteDownload: DSBDownload,
-    openOptions: null,
+    openOptions: undefined,
 };
 
 const events: Emitter<Events> = mitt<Events>();

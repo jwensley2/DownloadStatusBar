@@ -98,5 +98,8 @@ module.exports = {
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
         }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
     ],
 };

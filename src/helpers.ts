@@ -63,6 +63,10 @@ export function mergeSyncDefaultOptions(options: Partial<SyncOptions>): SyncOpti
         return getFileTypeByName(fileType.name) || fileType;
     });
 
+    merged.ignoredFileTypes = merged.ignoredFileTypes.map((fileType) => {
+        return getFileTypeByName(fileType.name) || fileType;
+    });
+
     return merged;
 }
 
@@ -240,7 +244,7 @@ export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
  * Generate a random string
  */
 export function randomString(length: number) {
-    const chars = [];
+    const chars: string[] = [];
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     for (let i = 0; i < length; i++)

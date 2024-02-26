@@ -5,7 +5,7 @@
          @mouseleave="hideContextMenu"
          ref="element"
     >
-        <button class="dsb-clear-downloads" v-if="!options.minimized" @click="$root.$emit('clearDownloads')">
+        <button class="dsb-clear-downloads" v-if="!options.minimized" @click="events.emit('clearDownloads')">
             {{ l('barClearButton') }}
         </button>
         <div class="dsb-downloads" v-if="!options.minimized">
@@ -26,23 +26,22 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, inject, ref, watch} from 'vue';
+import {computed, defineComponent, inject, onMounted, onUpdated, ref, watch} from 'vue';
 import Download from '@/components/Download.vue';
 import {defaultSyncOptions} from '@/config/options';
 import * as helpers from '@/helpers';
+import events from '@/events';
 import {useDownloadsStore} from '@/stores/downloads';
 
 export default defineComponent({
     components: {
         Download
     },
-    setup(props, {emit}) {
-        console.log('setup');
-
+    setup() {
         const store = useDownloadsStore();
         const closeContextMenu = inject('closeContextMenu') as Function;
 
-        let options = defaultSyncOptions;
+        let options = ref(defaultSyncOptions);
         const downloads = computed(() => {
             return store.downloads;
         });
@@ -64,12 +63,38 @@ export default defineComponent({
             setBodyMargin();
         })
 
+        onMounted(() => {
+            // Load the saved syncOptions
+            browser.storage.sync.get(null)
+                .then((newOptions: browser.storage.StorageObject) => {
+                    options.value = helpers.mergeSyncDefaultOptions(newOptions);
+                });
+
+            browser.storage.onChanged.addListener((changedOptions) => {
+                for (let item of Object.keys(changedOptions)) {
+                    options.value[item] = changedOptions[item].newValue;
+                }
+            });
+
+            const body = document.getElementsByTagName('body')[0] as HTMLElement;
+            if (window.getComputedStyle(body).marginBottom) {
+                defaultBottomMargin.value = parseInt(window.getComputedStyle(body).marginBottom!);
+            }
+
+            setBodyMargin();
+        });
+
+        onUpdated(() => {
+            setBodyMargin();
+        });
+
         return {
             element: element,
             downloads: downloads,
-            options: defaultSyncOptions,
+            options,
             defaultBottomMargin: defaultBottomMargin,
             setBodyMargin: setBodyMargin,
+            events: events,
 
             l(messageName: string, substitutions?: string | string[]): string {
                 return helpers.localize(messageName, substitutions);
@@ -80,40 +105,14 @@ export default defineComponent({
             },
 
             openOptions() {
-                emit('openOptions');
+                events.emit('openOptions');
             },
 
             minimize() {
-                options.minimized = !options.minimized;
+                options.value.minimized = !options.value.minimized;
 
-                helpers.saveOptionsToStorage(options);
+                helpers.saveOptionsToStorage(options.value);
             },
-
-            // Mounted Lifecycle Hook
-            onMounted() {
-                // Load the saved syncOptions
-                browser.storage.sync.get(null)
-                    .then((newOptions: browser.storage.StorageObject) => {
-                        options = helpers.mergeSyncDefaultOptions(newOptions);
-                    });
-
-                browser.storage.onChanged.addListener((changedOptions) => {
-                    for (let item of Object.keys(changedOptions)) {
-                        options[item] = changedOptions[item].newValue;
-                    }
-                });
-
-                const body = document.getElementsByTagName('body')[0] as HTMLElement;
-                if (window.getComputedStyle(body).marginBottom) {
-                    defaultBottomMargin.value = parseInt(window.getComputedStyle(body).marginBottom!);
-                }
-                setBodyMargin();
-            },
-
-            // Updated Lifecycle Hook
-            onUpdated() {
-                setBodyMargin();
-            }
         }
     },
 });

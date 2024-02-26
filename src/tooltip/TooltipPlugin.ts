@@ -1,6 +1,6 @@
 import {App} from 'vue';
-import TooltipComponent from './Tooltip.vue';
-import events from './events';
+import TooltipComponent from '@/tooltip/Tooltip.vue';
+import events from '@/tooltip/events';
 
 declare module '@vue/runtime-core' {
     export interface ComponentCustomProperties {
@@ -29,19 +29,5 @@ export default {
 
         app.provide('showTooltip', show);
         app.provide('hideTooltip', hide);
-
-        app.mixin({
-            methods: {
-                showTooltip(element: HTMLElement, downloadId: number) {
-                    events.emit('showTooltip', {
-                        id: downloadId,
-                        element: element
-                    });
-                },
-                hideTooltip() {
-                    events.emit('hideTooltip');
-                },
-            },
-        })
     }
 };

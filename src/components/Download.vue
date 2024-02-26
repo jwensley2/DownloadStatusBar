@@ -2,10 +2,10 @@
     <div class="dsb-item"
          @click="singleClick"
          @dblclick="doubleClick"
-         @mouseover="showTooltip($refs[`downloads-${download.downloadItem.id}`], download.downloadItem.id)"
+         @mouseover="showTooltip(downloadRef, download.downloadItem.id)"
          @mouseleave="hideTooltip($event)"
          @contextmenu.prevent="showContextMenu"
-         :ref="`downloads-${download.downloadItem.id}`"
+         ref="downloadRef"
          :class="[progressClass]"
     >
         <div v-if="isInProgress" class="dsb-progress-bar" :style="`width: ${percentDone}%`"></div>
@@ -22,10 +22,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject} from 'vue';
+import {defineComponent, inject, Ref, ref} from 'vue';
 import * as helpers from '@/helpers';
 import {DSBDownload} from '@/DSBDownload';
 import {ContextMenuItem} from '@/context-menu/types';
+import events from '@/events';
 
 export default defineComponent({
     props: {
@@ -39,10 +40,13 @@ export default defineComponent({
     setup(props, {emit}) {
         const closeContextMenu = inject('closeContextMenu') as Function;
         const openContextMenu = inject('openContextMenu') as Function;
+        const showTooltip = inject('showTooltip') as Function;
         const hideTooltip = inject('hideTooltip') as Function;
         const rootElement = inject('rootElement') as HTMLElement;
+        const downloadRef = ref();
 
         return {
+            downloadRef,
             get filename(): string {
                 const maxLength = 15;
                 const length = props.download.filename().length;
@@ -102,6 +106,10 @@ export default defineComponent({
                 return `${helpers.formatFileSize(props.download.calculateDownloadSpeed(), true)}/s`;
             },
 
+            showTooltip(download: Ref, id: number) {
+                showTooltip(download, id);
+            },
+
             hideTooltip(event: MouseEvent) {
                 let tooltip = rootElement.querySelectorAll('#DownloadStatusBarTooltip')[0];
 
@@ -137,7 +145,7 @@ export default defineComponent({
                         name: helpers.localize('tooltipClearDownload'),
                         icon: 'eye-slash',
                         clicked: () => {
-                            emit('clearDownload', props.download);
+                            events.emit('clearDownload', props.download);
                             closeContextMenu();
                         },
                     },
@@ -148,7 +156,7 @@ export default defineComponent({
                         name: showTitle,
                         icon: 'folder-open',
                         clicked: () => {
-                            emit('showDownload', props.download);
+                            events.emit('showDownload', props.download);
                             closeContextMenu();
                         },
                     });
@@ -160,7 +168,7 @@ export default defineComponent({
                         name: helpers.localize('tooltipCancelDownload'),
                         icon: 'times',
                         clicked: () => {
-                            emit('cancelDownload', props.download);
+                            events.emit('cancelDownload', props.download);
                             closeContextMenu();
                         },
                     });
@@ -172,7 +180,7 @@ export default defineComponent({
                         name: helpers.localize('tooltipPauseDownload'),
                         icon: 'pause',
                         clicked: () => {
-                            emit('pauseDownload', props.download);
+                            events.emit('pauseDownload', props.download);
                             closeContextMenu();
                         },
                     });
@@ -184,7 +192,7 @@ export default defineComponent({
                         name: helpers.localize('tooltipResumeDownload'),
                         icon: 'play',
                         clicked: () => {
-                            emit('resumeDownload', props.download);
+                            events.emit('resumeDownload', props.download);
                             closeContextMenu();
                         },
                     });
@@ -195,7 +203,7 @@ export default defineComponent({
                         name: helpers.localize('tooltipDeleteDownload'),
                         icon: 'trash-o',
                         clicked: () => {
-                            emit('deleteDownload', props.download);
+                            events.emit('deleteDownload', props.download);
                             closeContextMenu();
                         },
                     });
