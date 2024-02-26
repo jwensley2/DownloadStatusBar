@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm test
+    - run: npm coverage
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v2.7.4
       env:
