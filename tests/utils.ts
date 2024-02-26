@@ -1,19 +1,19 @@
 import DownloadItem = browser.downloads.DownloadItem;
-import moment = require("moment");
+import moment = require('moment');
 
 export function makeDownloadItem(downloadItem?: Partial<DownloadItem>): DownloadItem {
     let defaults = {
         id: 0,
-        url: "https://test.com/myfile.txt",
-        referrer: "https://test.com/",
-        filename: "C:\\Users\\Test\\Downloads\\myfile.txt",
+        url: 'https://test.com/myfile.txt',
+        referrer: 'https://test.com/',
+        filename: 'C:\\Users\\Test\\Downloads\\myfile.txt',
         incognito: false,
-        danger: "",
-        mime: "text/plain",
+        danger: '',
+        mime: 'text/plain',
         startTime: moment().toISOString(),
         endTime: undefined,
         estimatedEndTime: null,
-        state: "in_progress",
+        state: 'in_progress',
         paused: false,
         canResume: false,
         error: null,

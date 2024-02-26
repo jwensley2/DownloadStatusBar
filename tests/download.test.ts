@@ -2,7 +2,7 @@ import {DSBDownload} from '../src/DSBDownload';
 import moment from 'moment';
 import * as utils from './utils';
 
-test('download speed', () => {
+test('test download speed', () => {
     const now = moment();
     let downloadItem = utils.makeDownloadItem();
 
@@ -28,7 +28,7 @@ test('download speed', () => {
     expect(download.calculateDownloadSpeed()).toBe(400);
 });
 
-test('filename', () => {
+test('test filename', () => {
     const windowsPath = new DSBDownload(utils.makeDownloadItem());
     const unixPath = new DSBDownload(utils.makeDownloadItem({filename: '/home/tester/myfile.txt'}));
 
@@ -38,7 +38,7 @@ test('filename', () => {
     expect(unixPath.filename()).toBe('myfile.txt');
 });
 
-test('cancelled', () => {
+test('test cancelled', () => {
     const download = new DSBDownload(utils.makeDownloadItem());
     const cancelledDownload = new DSBDownload(utils.makeDownloadItem({state: 'interrupted', error: 'USER_CANCELED'}));
     const pausedDownload = new DSBDownload(utils.makeDownloadItem({state: 'interrupted', paused: true}));
@@ -50,7 +50,7 @@ test('cancelled', () => {
     expect(pausedDownload.isCancelled()).toBe(false);
 });
 
-test('is image', () => {
+test('test is image', () => {
     const imageMimetype = new DSBDownload(utils.makeDownloadItem({mime: 'image/png'}));
     const imageExtension = new DSBDownload(utils.makeDownloadItem({mime: '', filename: 'testimage.png'}));
     const nonImage = new DSBDownload(utils.makeDownloadItem());
@@ -64,7 +64,7 @@ test('is image', () => {
     expect(noMimeOrExtension.isImage()).toBe(false);
 });
 
-test('percent downloaded', () => {
+test('test percent downloaded', () => {
     const download = new DSBDownload(utils.makeDownloadItem({totalBytes: 1000}));
 
     expect.assertions(5);
