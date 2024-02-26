@@ -50,7 +50,7 @@ export function getInProgressDownloads(downloads: DSBDownload[]): DSBDownload[] 
 }
 
 /**
- * Merge the default sync options into an sync options object
+ * Merge the default sync options into a sync options object
  *
  * @param {SyncOptions} options
  * @returns {SyncOptions}
@@ -232,8 +232,7 @@ export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
 
     for (let customTheme of customThemes) {
         if (customTheme.id === id) {
-            const copy = _.merge({}, customTheme);
-            return _.merge(customTheme, lightTheme, copy);
+            return Object.assign(customTheme, Object.assign({}, lightTheme, customTheme));
         }
     }
 
@@ -251,4 +250,13 @@ export function randomString(length: number) {
         chars.push(possible.charAt(Math.floor(Math.random() * possible.length)));
 
     return chars.join('');
+}
+
+/**
+ * Force removal of ref properties, unref doesn't seem to work in some cases
+ *
+ * @param obj
+ */
+export function forceUnref<T extends object>(obj: T): T {
+    return _.omit(_.assign({}, obj), ['_value', '_rawValue', '__v_isRef', '__v_isShallow']) as T;
 }

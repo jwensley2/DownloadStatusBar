@@ -20,7 +20,7 @@
                                 <div class="col-auto">
                                     <label for="baseThemeSelector">{{ l('optionsTheme') }}</label>
                                     <select id="baseThemeSelector" class="form-select me-2 ml-2" v-model="syncOptions.theme">
-                                        <option v-for="theme in themeList" :value="theme.id">{{ theme.name }}</option>
+                                        <option v-for="theme in themeList" :key="theme.id" :value="theme.id">{{ theme.name }}</option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
@@ -212,30 +212,30 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, watch, onMounted, ref} from 'vue';
+import {computed, defineComponent, onMounted, reactive, toRaw, watch} from 'vue';
 import _ from 'lodash';
 import * as helpers from '@/helpers';
 import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
 import fileTypes, {FileType, FileTypeList} from '@/config/filetypes';
-import {defaultThemes, Theme, colorLabels} from '@/config/themes';
+import {colorLabels, defaultThemes, Theme} from '@/config/themes';
 
 export default defineComponent({
     setup() {
-        let syncOptions = ref(defaultSyncOptions);
-        let localOptions = ref(defaultLocalOptions);
+        const syncOptions = reactive({...defaultSyncOptions});
+        const localOptions = reactive({...defaultLocalOptions});
 
-        watch(syncOptions, (options: SyncOptions) => {
-            helpers.saveOptionsToStorage(options);
+        watch(() => syncOptions, (options: SyncOptions) => {
+            helpers.saveOptionsToStorage(toRaw(options));
         }, {deep: true})
 
         const currentTheme = computed((): Theme => {
-            return helpers.getThemeById(syncOptions.value.theme, syncOptions.value.customThemes);
+            return helpers.getThemeById(syncOptions.theme, syncOptions.customThemes);
         });
 
         const selectableAutohideTypes = computed((): FileTypeList => {
             return _.mapValues(fileTypes, (fileTypes) => {
                 return _.filter(fileTypes, (type: FileType) => {
-                    return syncOptions.value.autohideFileTypes.indexOf(type) === -1;
+                    return syncOptions.autohideFileTypes.indexOf(type) === -1;
                 })
             });
         });
@@ -243,14 +243,14 @@ export default defineComponent({
         const selectableIgnoredTypes = computed((): FileTypeList => {
             return _.mapValues(fileTypes, (fileTypes) => {
                 return _.filter(fileTypes, (type: FileType) => {
-                    return syncOptions.value.ignoredFileTypes.indexOf(type) === -1;
+                    return syncOptions.ignoredFileTypes.indexOf(type) === -1;
                 })
             });
         });
 
         const themeList = computed((): Array<Theme> => {
             let themes = defaultThemes.slice();
-            themes.push(...syncOptions.value.customThemes);
+            themes.push(...syncOptions.customThemes);
 
             return themes;
         })
@@ -259,12 +259,14 @@ export default defineComponent({
             // Load the saved syncOptions
             browser.storage.sync.get(null)
                 .then((options: browser.storage.StorageObject) => {
-                    syncOptions.value = helpers.mergeSyncDefaultOptions(options);
+                    // Not sure if there is a better way to do this
+                    Object.assign(syncOptions, helpers.mergeSyncDefaultOptions(helpers.forceUnref(options)));
                 });
 
             browser.storage.local.get(null)
                 .then((options: LocalOptions) => {
-                    localOptions.value = helpers.mergeLocalDefaultOptions(options);
+                    // Not sure if there is a better way to do this
+                    Object.assign(localOptions, helpers.mergeSyncDefaultOptions(helpers.forceUnref(options)));
                 });
         });
 
@@ -282,7 +284,7 @@ export default defineComponent({
             },
 
             saveOptions() {
-                helpers.saveOptionsToStorage(syncOptions.value);
+                helpers.saveOptionsToStorage(syncOptions);
             },
 
             autohideTypeEntered(event: Event) {
@@ -290,8 +292,8 @@ export default defineComponent({
                 const type = (event.target as HTMLFormElement).value;
 
                 if (typeof type == 'string' && type.length >= 1) {
-                    if (syncOptions.value.autohideCustomTypes.indexOf(type) < 0) {
-                        syncOptions.value.autohideCustomTypes.push(type);
+                    if (syncOptions.autohideCustomTypes.indexOf(type) < 0) {
+                        syncOptions.autohideCustomTypes.push(type);
                     }
                 }
 
@@ -299,21 +301,21 @@ export default defineComponent({
             },
 
             removeAutohideFileType(type: FileType) {
-                const index = syncOptions.value.autohideFileTypes.indexOf(type);
-                syncOptions.value.autohideFileTypes.splice(index, 1);
+                const index = syncOptions.autohideFileTypes.indexOf(type);
+                syncOptions.autohideFileTypes.splice(index, 1);
             },
 
             removeAutohideCustomType(type: string) {
-                const index = syncOptions.value.autohideCustomTypes.indexOf(type);
-                syncOptions.value.autohideCustomTypes.splice(index, 1);
+                const index = syncOptions.autohideCustomTypes.indexOf(type);
+                syncOptions.autohideCustomTypes.splice(index, 1);
             },
 
             selectAutohideType(event: Event) {
                 const target = event.target as HTMLFormElement;
                 const selectedType = helpers.getFileTypeByName(target.value);
 
-                if (selectedType && syncOptions.value.autohideFileTypes.indexOf(selectedType) === -1) {
-                    syncOptions.value.autohideFileTypes.push(selectedType);
+                if (selectedType && syncOptions.autohideFileTypes.indexOf(selectedType) === -1) {
+                    syncOptions.autohideFileTypes.push(selectedType);
                 }
 
                 // Clear the input
@@ -331,8 +333,8 @@ export default defineComponent({
                 const type = (event.target as HTMLFormElement).value;
 
                 if (typeof type == 'string' && type.length >= 1) {
-                    if (syncOptions.value.ignoredCustomTypes.indexOf(type) < 0) {
-                        syncOptions.value.ignoredCustomTypes.push(type);
+                    if (syncOptions.ignoredCustomTypes.indexOf(type) < 0) {
+                        syncOptions.ignoredCustomTypes.push(type);
                     }
                 }
 
@@ -340,21 +342,21 @@ export default defineComponent({
             },
 
             removeIgnoredFileType(type: FileType) {
-                const index = syncOptions.value.ignoredFileTypes.indexOf(type);
-                syncOptions.value.ignoredFileTypes.splice(index, 1);
+                const index = syncOptions.ignoredFileTypes.indexOf(type);
+                syncOptions.ignoredFileTypes.splice(index, 1);
             },
 
             removeIgnoredCustomType(type: string) {
-                const index = syncOptions.value.ignoredCustomTypes.indexOf(type);
-                syncOptions.value.ignoredCustomTypes.splice(index, 1);
+                const index = syncOptions.ignoredCustomTypes.indexOf(type);
+                syncOptions.ignoredCustomTypes.splice(index, 1);
             },
 
             selectIgnoredType(event: Event) {
                 const target = event.target as HTMLFormElement;
                 const selectedType = helpers.getFileTypeByName(target.value);
 
-                if (selectedType && syncOptions.value.ignoredFileTypes.indexOf(selectedType) === -1) {
-                    syncOptions.value.ignoredFileTypes.push(selectedType);
+                if (selectedType && syncOptions.ignoredFileTypes.indexOf(selectedType) === -1) {
+                    syncOptions.ignoredFileTypes.push(selectedType);
                 }
 
                 // Clear the input
@@ -381,12 +383,12 @@ export default defineComponent({
                 }
 
                 reader.addEventListener('load', () => {
-                    localOptions.value.customSound = {
+                    localOptions.customSound = {
                         'name': file.name,
                         'data': reader.result as string,
                     };
 
-                    browser.storage.local.set({'customSound': localOptions.value.customSound}).then(() => {
+                    browser.storage.local.set({'customSound': localOptions.customSound}).then(() => {
                         // this.$forceUpdate();
                     });
                 });
@@ -396,25 +398,29 @@ export default defineComponent({
 
             removeCustomSound() {
                 browser.storage.local.remove('customSound').then(() => {
-                    localOptions.value.customSound = undefined;
+                    localOptions.customSound = undefined;
                 });
             },
 
             customizeTheme() {
-                let newTheme: Theme = Object.assign({}, currentTheme.value);
+                let newTheme: Theme = _.cloneDeep(currentTheme.value);
                 newTheme.name = helpers.localize('customizeThemeDefaultName');
                 newTheme.id = helpers.randomString(20);
                 newTheme.custom = true;
 
-                syncOptions.value.customThemes.push(newTheme);
-                syncOptions.value.theme = newTheme.id;
+                syncOptions.customThemes.push(newTheme);
+                syncOptions.theme = newTheme.id;
             },
 
             deleteTheme(theme: Theme) {
-                let index = syncOptions.value.customThemes.indexOf(theme);
-                syncOptions.value.customThemes.splice(index, 1);
+                let index = syncOptions.customThemes.findIndex((t) => {
+                    return t.id === theme.id
+                });
 
-                syncOptions.value.theme = themeList.value[0].id;
+                if (index === -1) return;
+
+                syncOptions.customThemes.splice(index, 1);
+                syncOptions.theme = themeList.value[0].id;
             },
         }
     }
