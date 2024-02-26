@@ -24,9 +24,7 @@
                                     </select>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-primary" @click="customizeTheme">
-                                        {{ l('optionsCustomizeTheme') }}
-                                    </button>
+                                    <button class="btn btn-sm btn-primary" @click="customizeTheme"> {{ l('optionsCustomizeTheme') }}</button>
                                 </div>
                             </div>
 
@@ -51,10 +49,8 @@
                         <div class="card-header">{{ l('optionsAutoHidePanelTitle') }}</div>
                         <div class="card-body">
                             <div class="form-check mb-2">
-                                <input type="checkbox" class="form-check-input" id="optionsAutoHideCompleted"
-                                       v-model="syncOptions.autohideEnable">
-                                <label class="form-check-label"
-                                       for="optionsAutoHideCompleted">{{ l('optionsAutoHideCompleted') }}</label>
+                                <input type="checkbox" class="form-check-input" id="optionsAutoHideCompleted" v-model="syncOptions.autohideEnable">
+                                <label class="form-check-label" for="optionsAutoHideCompleted">{{ l('optionsAutoHideCompleted') }}</label>
                             </div>
 
                             <div v-if="syncOptions.autohideEnable">
@@ -65,16 +61,14 @@
                                                min="1"
                                                max="600"
                                                class="form-control me-2 ml-2 auto-hide-duration"
-                                               v-model.number="syncOptions.autohideDuration"
+                                               v-model="syncOptions.autohideDuration"
                                         >
                                     </div>
                                     <div class="col-auto">{{ l('optionsAutoHideSecondsInputAfterText') }}</div>
                                 </div>
 
 
-                                <h5 class="mt-3">{{ l('optionsAutoHideFileTypes') }}
-                                    <small class="text-muted">{{ l('optionsClickToRemove') }}</small>
-                                </h5>
+                                <h5 class="mt-3">{{ l('optionsAutoHideFileTypes') }} <small class="text-muted">{{ l('optionsClickToRemove') }}</small></h5>
                                 <p class="text-muted">{{ l('optionsAutoHideOptional') }}</p>
                                 <p>
                                     <span v-for="type in syncOptions.autohideFileTypes" class="badge bg-primary me-1" @click.prevent="removeAutohideFileType(type)">{{ type.name }}</span>
@@ -86,7 +80,8 @@
                                     <select
                                             id="autohide-type-select"
                                             class="form-select ml-2"
-                                            @change="selectAutohideType($event)">
+                                            @change="selectAutohideType($event)"
+                                    >
                                         <option :value="null" selected>{{ l('optionsSelectFileType') }}</option>
                                         <template v-for="(group, groupName) in selectableAutohideTypes">
                                             <optgroup v-if="group.length > 0" :label="groupName as string">
@@ -133,8 +128,7 @@
                                            maxlength="100000"
                                            accept="audio/ogg,audio/mpeg,audio/wav,application/ogg,audio/webm,audio/x-flac"
                                     >
-                                    <label class="custom-file-label"
-                                           for="custom-sound">{{ l('optionsCustomSoundPlaceholder') }}</label>
+                                    <label class="custom-file-label" for="custom-sound">{{ l('optionsCustomSoundPlaceholder') }}</label>
                                 </div>
                             </div>
 
@@ -158,20 +152,16 @@
                             <h4 class="mt-3">{{ l('optionsHistoryTitle') }}</h4>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="optionsHistoryLabel"
-                                           v-model="syncOptions.clearHistory">
-                                    <label class="form-check-label"
-                                           for="optionsHistoryLabel">{{ l('optionsHistoryLabel') }}</label>
+                                    <input type="checkbox" class="form-check-input" id="optionsHistoryLabel" v-model="syncOptions.clearHistory">
+                                    <label class="form-check-label" for="optionsHistoryLabel">{{ l('optionsHistoryLabel') }}</label>
                                 </div>
                             </div>
 
                             <h4 class="mt-3">{{ l('optionsClearingTitle') }}</h4>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="optionsClearFailedLabel"
-                                           v-model="syncOptions.clearFailed">
-                                    <label class="form-check-label"
-                                           for="optionsClearFailedLabel">{{ l('optionsClearFailedLabel') }}</label>
+                                    <input type="checkbox" class="form-check-input" id="optionsClearFailedLabel" v-model="syncOptions.clearFailed">
+                                    <label class="form-check-label" for="optionsClearFailedLabel">{{ l('optionsClearFailedLabel') }}</label>
                                 </div>
                             </div>
                         </div>
@@ -181,9 +171,7 @@
                         <div class="card-header">{{ l('optionsIgnoreFilesPanelTitle') }}</div>
                         <div class="card-body">
                             <p>{{ l('optionsIgnoreFilesDescription') }}</p>
-                            <h5>{{ l('optionsIgnoreFileTypes') }}
-                                <small class="text-muted">{{ l('optionsClickToRemove') }}</small>
-                            </h5>
+                            <h5>{{ l('optionsIgnoreFileTypes') }} <small class="text-muted">{{ l('optionsClickToRemove') }}</small></h5>
                             <p>
                                 <span v-for="type in syncOptions.ignoredFileTypes" class="badge bg-primary me-1" @click="removeIgnoredFileType(type)">{{ type.name }}</span>
                                 <span v-for="type in syncOptions.ignoredCustomTypes" class="badge bg-primary me-1" @click="removeIgnoredCustomType(type)">{{ type }}</span>

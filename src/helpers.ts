@@ -219,7 +219,7 @@ export function localize(messageName: string, substitutions?: string | string[])
 }
 
 /**
- * Find the theme matching the provided theme name
+ * Find the theme matching the provided theme id
  * @param {string} id
  * @param {Theme} customThemes
  */
