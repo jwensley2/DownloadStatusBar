@@ -80,14 +80,23 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-                {from: 'manifest.json', to: './'},
+                {
+                    from: 'manifest.json', to: './', transform(content) {
+                        const pkg = require('./package.json');
+                        const manifest = JSON.parse(content.toString());
+
+                        manifest.version = pkg.version;
+
+                        return JSON.stringify(manifest, null, 2);
+                    }
+                },
                 {from: '.web-extension-id', to: './'},
                 {from: 'src/options.html', to: './'},
                 {from: 'src/confirmation.html', to: './'},
                 {from: 'icons', to: './icons'},
                 {from: 'icomoon/fonts', to: './fonts'},
                 {from: 'sounds', to: './sounds'},
-                {from: '_locales', to: './_locales'}
+                {from: '_locales', to: './_locales'},
             ]
         }),
         new webpack.IgnorePlugin({

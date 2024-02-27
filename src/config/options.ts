@@ -22,6 +22,7 @@ export interface SyncOptions extends StorageObject {
     refreshRate: number,
     clearHistory: boolean,
     clearFailed: boolean,
+    clearAfterOpening: boolean,
 }
 
 export const defaultSyncOptions = <SyncOptions>{
@@ -41,6 +42,7 @@ export const defaultSyncOptions = <SyncOptions>{
     refreshRate: 1000,
     clearHistory: false,
     clearFailed: false,
+    clearAfterOpening: false,
 };
 
 /**
@@ -52,7 +54,9 @@ type Sound = {
 };
 
 export type LocalOptions = {
-    customSound?: Sound | undefined,
+    customSound: Sound | undefined,
 }
 
-export const defaultLocalOptions: LocalOptions = {};
+export const defaultLocalOptions: LocalOptions = {
+    customSound: undefined,
+};

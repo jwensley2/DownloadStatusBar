@@ -275,5 +275,9 @@
   "optionsClearFailedLabel": {
     "message": "Clear button clears failed downloads",
     "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
+  },
+  "optionsClearAfterOpeningLabel": {
+    "message": "Clear downloads after opening them",
+    "description": "Label for the checkbox to enable clearing downloads after opening them"
   }
 }

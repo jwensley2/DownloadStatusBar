@@ -8,11 +8,16 @@ import * as _ from 'lodash';
 import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
 import {DownloadInterface, DSBDownload} from './DSBDownload';
 import StorageObject = browser.storage.StorageObject;
+import {createPinia} from 'pinia';
+import {useOptionsStore} from '@/stores/options';
 
 class DownloadStatus {
     protected downloads: DSBDownload[] = [];
     protected interval: number | null = null;
     protected options: SyncOptions = defaultSyncOptions;
+
+    protected pinia = createPinia();
+    protected optionsStore = useOptionsStore(this.pinia);
 
     constructor() {
         const self = this;
@@ -22,9 +27,15 @@ class DownloadStatus {
                 this.options = helpers.mergeSyncDefaultOptions(options);
             });
 
-        browser.storage.onChanged.addListener((changedOptions) => {
-            for (let item of Object.keys(changedOptions)) {
-                this.options[item] = changedOptions[item].newValue;
+        this.optionsStore.loadSyncOptions().then((options) => {
+            this.options = helpers.mergeSyncDefaultOptions(options);
+        });
+
+        browser.storage.onChanged.addListener((changedOptions, areaName) => {
+            if (areaName === 'sync') {
+                for (let item of Object.keys(changedOptions)) {
+                    this.options[item] = changedOptions[item].newValue;
+                }
             }
         });
 
@@ -32,7 +43,7 @@ class DownloadStatus {
             const download = new DSBDownload(downloadItem);
 
             this.options.minimized = false;
-            helpers.saveOptionsToStorage(this.options);
+            this.optionsStore.saveSyncOptions(this.options)
 
             if (helpers.shouldIgnoreDownload(download, this.options)) {
                 return;
@@ -324,7 +335,7 @@ class DownloadStatus {
             return;
         }
 
-        browser.storage.local.get('customSound').then((options: LocalOptions) => {
+        browser.storage.local.get('customSound').then((options: Partial<LocalOptions>) => {
             let audio = new Audio();
 
             if (options.customSound) {

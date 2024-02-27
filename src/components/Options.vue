@@ -140,6 +140,7 @@
                                            type="file"
                                            maxlength="100000"
                                            accept="audio/ogg,audio/mpeg,audio/wav,application/ogg,audio/webm,audio/x-flac"
+                                           @change="saveCustomSound($event.target.files)"
                                     >
                                     <label class="custom-file-label" for="custom-sound">{{ l('optionsCustomSoundPlaceholder') }}</label>
                                 </div>
@@ -175,6 +176,13 @@
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="optionsClearFailedLabel" v-model="syncOptions.clearFailed">
                                     <label class="form-check-label" for="optionsClearFailedLabel">{{ l('optionsClearFailedLabel') }}</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="optionsClearAfterOpening" v-model="syncOptions.clearAfterOpening">
+                                    <label class="form-check-label" for="optionsClearAfterOpening">{{ l('optionsClearAfterOpeningLabel') }}</label>
                                 </div>
                             </div>
                         </div>
@@ -231,14 +239,16 @@ import * as helpers from '@/helpers';
 import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
 import fileTypes, {FileType, FileTypeList} from '@/config/filetypes';
 import {colorLabels, defaultThemes, Theme} from '@/config/themes';
+import {useOptionsStore} from '@/stores/options';
 
 export default defineComponent({
     setup() {
+        const optionsStore = useOptionsStore();
         const syncOptions = reactive({...defaultSyncOptions});
         const localOptions = reactive({...defaultLocalOptions});
 
         watch(() => syncOptions, (options: SyncOptions) => {
-            helpers.saveOptionsToStorage(toRaw(options));
+            optionsStore.saveSyncOptions(options);
         }, {deep: true})
 
         const currentTheme = computed((): Theme => {
@@ -269,18 +279,13 @@ export default defineComponent({
         })
 
         onMounted(() => {
-            // Load the saved syncOptions
-            browser.storage.sync.get(null)
-                .then((options: browser.storage.StorageObject) => {
-                    // Not sure if there is a better way to do this
-                    Object.assign(syncOptions, helpers.mergeSyncDefaultOptions(helpers.forceUnref(options)));
-                });
+            optionsStore.loadSyncOptions().then((options) => {
+                Object.assign(syncOptions, options);
+            });
 
-            browser.storage.local.get(null)
-                .then((options: LocalOptions) => {
-                    // Not sure if there is a better way to do this
-                    Object.assign(localOptions, helpers.mergeSyncDefaultOptions(helpers.forceUnref(options)));
-                });
+            optionsStore.loadLocalOptions().then((options) => {
+                Object.assign(localOptions, options);
+            });
         });
 
         return {
@@ -294,10 +299,6 @@ export default defineComponent({
 
             l(messageName: string, substitutions?: string | string[]): string {
                 return helpers.localize(messageName, substitutions);
-            },
-
-            saveOptions() {
-                helpers.saveOptionsToStorage(syncOptions);
             },
 
             autohideTypeEntered(event: Event) {
@@ -401,17 +402,15 @@ export default defineComponent({
                         'data': reader.result as string,
                     };
 
-                    browser.storage.local.set({'customSound': localOptions.customSound}).then(() => {
-                        // this.$forceUpdate();
-                    });
+                    optionsStore.saveLocalOptions({'customSound': localOptions.customSound});
                 });
 
                 reader.readAsDataURL(file);
             },
 
             removeCustomSound() {
-                browser.storage.local.remove('customSound').then(() => {
-                    localOptions.customSound = undefined;
+                optionsStore.removeLocalOption('customSound').then((options) => {
+                    Object.assign(localOptions, options);
                 });
             },
 

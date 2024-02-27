@@ -1,4 +1,4 @@
-import {createApp} from 'vue';
+import {App, ComponentPublicInstance, createApp} from 'vue';
 import {createPinia} from 'pinia'
 import ContextMenuPlugin from './context-menu/ContextMenuPlugin';
 import TooltipPlugin from './tooltip/TooltipPlugin';
@@ -12,7 +12,7 @@ import events from './events';
 import StorageObject = browser.storage.StorageObject;
 
 class DownloadStatusBar {
-    private app;
+    private app: ComponentPublicInstance;
     protected _downloads: DSBDownload[] = [];
 
     constructor() {
@@ -26,11 +26,8 @@ class DownloadStatusBar {
             .mount(rootElement);
 
         events.on('clearDownloads', () => {
-            // Tell the background to clear it's downloads
+            // Tell the background to clear its downloads
             browser.runtime.sendMessage({event: 'clearDownloads'});
-
-            // Close the context menu
-            // this.app.$contextMenu.close();
         });
 
         events.on('clearDownload', (download: DSBDownload) => {
@@ -139,7 +136,9 @@ browser.storage.sync.get(null)
     });
 
 // Watch for config changes and update the theme
-browser.storage.onChanged.addListener((changedOptions) => {
-    const theme = helpers.getThemeById(changedOptions.theme.newValue, changedOptions.customThemes.newValue);
-    statusBar.setTheme(theme);
+browser.storage.onChanged.addListener((changedOptions, areaName) => {
+    if (areaName === 'sync') {
+        const theme = helpers.getThemeById(changedOptions.theme.newValue, changedOptions.customThemes.newValue);
+        statusBar.setTheme(theme);
+    }
 });

@@ -76,7 +76,7 @@ export function mergeSyncDefaultOptions(options: Partial<SyncOptions>): SyncOpti
  * @param {SyncOptions} options
  * @returns {SyncOptions}
  */
-export function mergeLocalDefaultOptions(options: LocalOptions): LocalOptions {
+export function mergeLocalDefaultOptions(options: Partial<LocalOptions>): LocalOptions {
     return Object.assign({}, defaultLocalOptions, options);
 }
 
@@ -186,7 +186,7 @@ export function downloadMatchesCustomTypes(download: DSBDownload, types: string[
  * @param round
  * @returns {string}
  */
-export function formatFileSize(bytes: number, round: boolean = false) {
+export function formatFileSize(bytes: number, round: boolean = false): string {
     let sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     if (bytes <= 0) return '0B';
     let i = Math.floor(Math.log(bytes) / Math.log(1024));
@@ -198,16 +198,6 @@ export function formatFileSize(bytes: number, round: boolean = false) {
     }
 
     return size + sizes[i];
-}
-
-/**
- * Save the options to the synced storage
- * @param {SyncOptions} options
- */
-export function saveOptionsToStorage(options: SyncOptions) {
-    options = _.cloneDeep(options);
-
-    return browser.storage.sync.set(options);
 }
 
 /**

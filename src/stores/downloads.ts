@@ -5,7 +5,7 @@ interface Downloads {
     downloads: Array<DSBDownload>
 }
 
-export const useDownloadsStore = defineStore('main', {
+export const useDownloadsStore = defineStore('downloads', {
     state: (): Downloads => ({
         downloads: [],
     }),

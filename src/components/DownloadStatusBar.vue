@@ -32,6 +32,7 @@ import {defaultSyncOptions} from '@/config/options';
 import * as helpers from '@/helpers';
 import events from '@/events';
 import {useDownloadsStore} from '@/stores/downloads';
+import {useOptionsStore} from '@/stores/options';
 
 export default defineComponent({
     components: {
@@ -39,6 +40,7 @@ export default defineComponent({
     },
     setup() {
         const store = useDownloadsStore();
+        const optionsStore = useOptionsStore();
         const closeContextMenu = inject('closeContextMenu') as Function;
 
         let options = ref(defaultSyncOptions);
@@ -111,7 +113,7 @@ export default defineComponent({
             minimize() {
                 options.value.minimized = !options.value.minimized;
 
-                helpers.saveOptionsToStorage(options.value);
+                optionsStore.saveSyncOptions(options.value);
             },
         }
     },

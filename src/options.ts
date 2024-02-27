@@ -1,5 +1,9 @@
 import {createApp} from 'vue';
-import Options from './components/Options.vue';
+import Options from '@/components/Options.vue';
+import {createPinia} from 'pinia';
 
-createApp(Options)
-    .mount('#options');
+const pinia = createPinia();
+const app = createApp(Options);
+
+app.use(pinia);
+app.mount('#options');
