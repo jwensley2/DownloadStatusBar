@@ -1,4 +1,4 @@
-import {createApp, VNode, h} from 'vue';
+import {createApp} from 'vue';
 import Options from './components/Options.vue';
 
 createApp(Options)

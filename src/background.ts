@@ -67,7 +67,7 @@ class DownloadStatus {
                 });
 
                 // Play sound if the download doesn't instantly finish
-                if (moment().diff(startTime, 's') > 1) {
+                if (moment().diff(startTime, 's') >= this.options.playSoundDownloadDuration) {
                     this.playCompletedSound();
                 }
 

@@ -115,6 +115,19 @@
                             </div>
 
                             <div v-if="syncOptions.playSoundOnComplete">
+                                <div class="row row-cols-auto g-2 align-items-center mt-1 mb-3">
+                                    <div class="col-auto">{{ l('optionsPlaySoundDownloadDurationBeforeText') }}</div>
+                                    <div class="col-auto">
+                                        <input type="number"
+                                               min="0"
+                                               max="600"
+                                               class="form-control me-2 ml-2 auto-hide-duration"
+                                               v-model="syncOptions.playSoundDownloadDuration"
+                                        >
+                                    </div>
+                                    <div class="col-auto">{{ l('optionsPlaySoundDownloadDurationAfterText') }}</div>
+                                </div>
+
                                 <p class="text-muted small">{{ l('optionsCustomSoundNote') }}</p>
                                 <div v-if="localOptions.customSound">
                                     {{ localOptions.customSound.name }}

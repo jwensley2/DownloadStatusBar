@@ -232,6 +232,14 @@
     "message": "Play a sound when a download completes",
     "description": "Play completion sound checkbox label"
   },
+  "optionsPlaySoundDownloadDurationBeforeText": {
+    "message": "Play sound when download takes longer than",
+    "description": "Text before the play sound download duration input"
+  },
+  "optionsPlaySoundDownloadDurationAfterText": {
+    "message": "seconds",
+    "description": "Text after the play sound download duration input"
+  },
   "optionsCustomSoundNote": {
     "message": "You may optionally choose a custom sound (1MB MAX)",
     "description": "Message about choosing a custom sound"

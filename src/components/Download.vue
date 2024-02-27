@@ -37,7 +37,7 @@ export default defineComponent({
         options: {},
     },
 
-    setup(props, {emit}) {
+    setup(props) {
         const closeContextMenu = inject('closeContextMenu') as Function;
         const openContextMenu = inject('openContextMenu') as Function;
         const showTooltip = inject('showTooltip') as Function;
@@ -129,7 +129,7 @@ export default defineComponent({
             },
 
             doubleClick() {
-                emit('openDownload', props.download);
+                events.emit('openDownload', props.download);
             },
 
             showContextMenu(event: MouseEvent) {
@@ -137,8 +137,12 @@ export default defineComponent({
                 const inProgress = props.download.downloadItem.state === 'in_progress';
                 const paused = props.download.downloadItem.state === 'interrupted' && props.download.downloadItem.paused;
 
-                let showTitle = userAgent.includes('Windows') ? helpers.localize('tooltipShowInExplorer') :
-                    userAgent.includes('Mac') ? helpers.localize('tooltipRevealInFinder') : helpers.localize('tooltipShowInFolder');
+                let showTitle = userAgent.includes('Windows') ?
+                    helpers.localize('tooltipShowInExplorer') :
+                    (userAgent.includes('Mac') ?
+                            helpers.localize('tooltipRevealInFinder') :
+                            helpers.localize('tooltipShowInFolder')
+                    );
 
                 let items: [ContextMenuItem] = [
                     {

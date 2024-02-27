@@ -205,7 +205,7 @@ export function formatFileSize(bytes: number, round: boolean = false) {
  * @param {SyncOptions} options
  */
 export function saveOptionsToStorage(options: SyncOptions) {
-    options = {...options};
+    options = _.cloneDeep(options);
 
     return browser.storage.sync.set(options);
 }
