@@ -1,4 +1,4 @@
-![Tests](https://github.com/jwensley2/DownloadStatusBar/workflows/Test/badge.svg?branch=master)
+[![Test](https://github.com/jwensley2/DownloadStatusBar/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/jwensley2/DownloadStatusBar/actions/workflows/test.yml)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/80b0cfb4b6831e7243dc/test_coverage)](https://codeclimate.com/github/jwensley2/DownloadStatusBar/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/80b0cfb4b6831e7243dc/maintainability)](https://codeclimate.com/github/jwensley2/DownloadStatusBar/maintainability)
 
