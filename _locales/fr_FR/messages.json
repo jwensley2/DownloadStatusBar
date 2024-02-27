@@ -55,18 +55,51 @@
     "message": "Taille du fichier"
   },
   "tooltipMimeHeading": {
-    "message": "type MIME"
+    "message": "Type MIME"
   },
   "tooltipMimeUnknown": {
     "message": "Inconnu",
     "description": "Message to show if the mime type is not known"
   },
   "tooltipPreviewHeading": {
-    "message": "Previsuaisation"
+    "message": "Prévisualisation"
+  },
+  "tooltipShowInExplorer": {
+    "message": "Afficher dans l'explorateur de fichiers",
+    "description": "Show Folder in Windows."
+  },
+  "tooltipRevealInFinder": {
+    "message": "Afficher dans l'application Finder",
+    "description": "Show Folder in Mac."
+  },
+  "tooltipShowInFolder": {
+    "message": "Afficher dans le répertoire",
+    "description": "Show Folder in Unknown OS."
+  },
+  "tooltipClearDownload": {
+    "message": "Effacer le téléchargement",
+    "description": "Clear the download info on bar."
+  },
+  "tooltipCancelDownload": {
+    "message": "Annuler le téléchargement"
+  },
+  "tooltipPauseDownload": {
+    "message": "Mettre le téléchargement en pause"
+  },
+  "tooltipResumeDownload": {
+    "message": "Débloquer le téléchargement"
+  },
+  "tooltipDeleteDownload": {
+    "message": "Effacer le téléchargement",
+    "description": "Clear the download info on bar and delete download file."
   },
   "optionsDisplayPanelTitle": {
     "message": "Options",
     "description": "Title of the display options panel."
+  },
+  "optionsTheme": {
+    "message": "Thème",
+    "description": "Label for the base theme selection"
   },
   "themeLight": {
     "message": "Clair",
@@ -76,11 +109,71 @@
     "message": "Sombre",
     "description": "The name of the dark theme"
   },
+  "optionsCustomizeTheme": {
+    "message": "Personnalisation",
+    "description": "Caption for the add a new customize theme button"
+  },
+  "customizeThemePanelTitle": {
+    "message": "Personnaliser",
+    "description": "Title for the customize theme panel"
+  },
+  "customizeThemeName": {
+    "message": "Nom",
+    "description": "Label for the customize theme name"
+  },
+  "customizeThemeDefaultName": {
+    "message": "Personnalisé",
+    "description": "Text for the customize theme default name"
+  },
+  "customizeThemeDeleteTheme": {
+    "message": "Supprimer le thème",
+    "description": "Caption for the delete this customize theme button"
+  },
+  "customizeThemeLabelBackground": {
+    "message": "Arrière-plan",
+    "description": "Label for the dowmload bar's background"
+  },
+  "customizeThemeLabelBackgroundHover": {
+    "message": "Survol de l'arrière-plan",
+    "description": "Label for the dowmload bar's menu background when mouse hover"
+  },
+  "customizeThemeLabelButton": {
+    "message": "Bouton",
+    "description": "Label for the button's background"
+  },
+  "customizeThemeLabelButtonHover": {
+    "message": "Survol du bouton",
+    "description": "Label for the button's background when mouse hover"
+  },
+  "customizeThemeLabelButtonBorder": {
+    "message": "Bordure du bouton",
+    "description": "Label for the button's border"
+  },
+  "customizeThemeLabelBorder": {
+    "message": "Bordure",
+    "description": "Label for the dowmload bar's border"
+  },
+  "customizeThemeLabelDownload": {
+    "message": "Téléchargement",
+    "description": "Label for the dowmload progress's background"
+  },
+  "customizeThemeLabelProgress": {
+    "message": "Progression",
+    "description": "Label for the dowmload progress's foreground"
+  },
+  "customizeThemeLabelText": {
+    "message": "Texte",
+    "description": "Label for the dowmload bar's text"
+  },
+  "customizeThemeLabelError": {
+    "message": "Erreur",
+    "description": "Label for progress's background when the dowmload has error"
+  },
   "optionsAlwaysShowBar": {
     "message": "Toujours afficher la barre de statut"
   },
   "optionsShowDownloadInfo": {
-    "message": "Afficher les informations"
+    "message": "Afficher les informations du téléchargement"
   },
   "optionsAutoHidePanelTitle": {
     "message": "Masquage automatique",
@@ -90,10 +183,18 @@
     "message": "Masquer automatiquement les téléchargements terminés"
   },
   "optionsAutoHideFileTypes": {
-    "message": "Types de fichier à masquer"
+    "message": "Types de fichiers à masquer"
   },
   "optionsAutoHideOptional": {
-    "message": "Optionnel. Si aucun sélectionné, tous les types de fichier seront masqués."
+    "message": "Optionnel. Si rien n'est sélectionné, tous les types de fichiers seront automatiquement masqués."
+  },
+  "optionsAutoHideSecondsInputBeforeText": {
+    "message": "Masquer après",
+    "description": "The text before the seconds input field"
+  },
+  "optionsAutoHideSecondsInputAfterText": {
+    "message": "secondes",
+    "description": "The text after the seconds input field"
   },
   "optionsSelectType": {
     "message": "Sélectionner le type",
@@ -104,20 +205,20 @@
     "description": "Placeholder for the select file type dropdown"
   },
   "optionsAddOtherType": {
-    "message": "Aouter un autre type"
+    "message": "Ajouter un autre type"
   },
   "optionsClickToRemove": {
     "message": "Cliquer pour retirer"
   },
   "optionsIgnoreFilesPanelTitle": {
-    "message": "Types de fichier ignorés",
+    "message": "Types de fichiers ignorés",
     "description": "Title of the auto hiding options panel"
   },
   "optionsIgnoreFilesDescription": {
-    "message": "Ces types de fichier n'apparaitront pas dans la barre"
+    "message": "Ces types de fichiers n'apparaîtront pas dans la barre"
   },
   "optionsIgnoreFileTypes": {
-    "message": "Types de fichier à ignorer"
+    "message": "Types de fichiers à ignorer"
   },
   "optionsMiscellaneousPanelTitle": {
     "message": "Divers",
@@ -132,23 +233,39 @@
     "description": "Play completion sound checkbox label"
   },
   "optionsCustomSoundNote": {
-    "message": "Optionnel : vous pouvez choisir un fichier son (1MO MAX)",
+    "message": "Optionnel : vous pouvez choisir un de vos fichiers sonores (1Mo MAX)",
     "description": "Message about choosing a custom sound"
   },
+  "optionsCustomSoundPlaceholder": {
+    "message": "Choisir un son",
+    "description": "Placeholder of input, about choosing a sound"
+  },
   "optionsRefreshRateTitle": {
-    "message": "Taux de rafraichissement",
+    "message": "Taux de rafraîchissement",
     "description": "Title of the refresh rate section"
   },
   "optionsRefreshRateNote": {
-    "message": "Contrôler la fréquence de rafraichissement de la barre",
+    "message": "Contrôler la fréquence de rafraîchissement de la barre",
     "description": "Description of what the refresh rate does"
+  },
+  "optionsRefreshRateMillisecond": {
+    "message": "ms",
+    "description": "Unit of the refresh rate"
   },
   "optionsHistoryTitle": {
     "message": "Historique",
     "description": "Title of the history section"
   },
   "optionsHistoryLabel": {
-    "message": "Effacer également les téléchargements du navigateur en effaçant la barre.",
+    "message": "Effacer également l'historique de téléchargement du navigateur lors de l'effacement de la barre",
     "description": "Label for the checkbox to enable browser history clearing"
+  },
+  "optionsClearingTitle": {
+    "message": "Nettoyage",
+    "description": "Title of the clearing section"
+  },
+  "optionsClearFailedLabel": {
+    "message": "Le bouton Effacer efface également les téléchargement en échec",
+    "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
   }
 }
