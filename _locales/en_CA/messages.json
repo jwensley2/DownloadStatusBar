@@ -93,6 +93,10 @@
     "message": "Delete Download",
     "description": "Clear the download info on bar and delete download file."
   },
+  "optionsPageTitle": {
+    "message": "WX Download Status Bar - Options",
+    "description": "The title for the options page"
+  },
   "optionsDisplayPanelTitle": {
     "message": "Display Options",
     "description": "Title of the display options panel."
@@ -265,7 +269,7 @@
     "description": "Title of the history section"
   },
   "optionsHistoryLabel": {
-    "message": "Also clear browser history when clearing download(s)",
+    "message": "Also clear browser download history when clearing download(s)",
     "description": "Label for the checkbox to enable browser history clearing"
   },
   "optionsClearingTitle": {

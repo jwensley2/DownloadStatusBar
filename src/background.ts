@@ -26,6 +26,10 @@ class DownloadStatus {
             .then((options: StorageObject) => {
                 this.options = helpers.mergeSyncDefaultOptions(options);
             });
+        // Auto open options during development
+        if (__DEV_MODE__) {
+            browser.runtime.openOptionsPage();
+        }
 
         this.optionsStore.loadSyncOptions().then((options) => {
             this.options = helpers.mergeSyncDefaultOptions(options);

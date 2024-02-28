@@ -1,9 +1,12 @@
 <template>
-    <div class="container-fluid">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-12"><h1>{{ l('optionsPageTitle') }}</h1></div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <div class="card-deck">
-                    <div class="card">
+                    <div class="card mt-4">
                         <div class="card-header">{{ l('optionsDisplayPanelTitle') }}</div>
                         <div class="card-body">
                             <div class="form-check mt-2">
@@ -16,36 +19,45 @@
                                 <label class="form-check-label" for="optionsShowDownloadInfo">{{ l('optionsShowDownloadInfo') }}</label>
                             </div>
 
-                            <div class="mt-1 row row-cols-auto align-items-end">
-                                <div class="col-auto">
-                                    <label for="baseThemeSelector">{{ l('optionsTheme') }}</label>
-                                    <select id="baseThemeSelector" class="form-select me-2 ml-2" v-model="syncOptions.theme">
-                                        <option v-for="theme in themeList" :key="theme.id" :value="theme.id">{{ theme.name }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <button class="btn btn-sm btn-primary" @click="customizeTheme"> {{ l('optionsCustomizeTheme') }}</button>
+                            <div class="mt-4">
+                                <label for="baseThemeSelector" class="form-label">{{ l('optionsTheme') }}</label>
+
+                                <div class="row row-cols-auto gx-2 align-items-center">
+                                    <div class="col-3">
+                                        <select id="baseThemeSelector" class="form-select" v-model="syncOptions.theme">
+                                            <option v-for="theme in themeList" :key="theme.id" :value="theme.id">{{ theme.name }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary" @click="customizeTheme"> {{ l('optionsCustomizeTheme') }}</button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="mt-3" v-if="currentTheme.custom">
                                 <h5>{{ l('customizeThemePanelTitle') }}</h5>
-                                <div class="form-group form-inline">
-                                    <label class="me-2">{{ l('customizeThemeName') }}:</label>
-                                    <input type="text" class="form-control" v-model="currentTheme.name">
+                                <div class="form-group">
+                                    <label for="customThemeName" class="form-label">{{ l('customizeThemeName') }}</label>
+                                    <input id="customThemeName" type="text" class="form-control" v-model="currentTheme.name">
                                 </div>
-                                <div v-for="(value, color) in currentTheme.colors">
-                                    <label>{{ colorLabels[color] }}:</label>
-                                    <input type="color" v-model="currentTheme.colors[color]" style="width: 60px">
+
+                                <div v-for="(value, color, index) in currentTheme.colors" class="row mt-2 gx-2">
+                                    <div class="col-auto">
+                                        <label :for="`themeColor${index}`" class="form-label">{{ colorLabels[color] }}</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input :id="`themeColor${index}`" type="color" class="form-control" v-model="currentTheme.colors[color]">
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-danger mt-2" @click="deleteTheme(currentTheme)">
+
+                                <button class="btn btn-sm btn-danger mt-3" @click="deleteTheme(currentTheme)">
                                     {{ l('customizeThemeDeleteTheme') }}
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card mt-4">
                         <div class="card-header">{{ l('optionsAutoHidePanelTitle') }}</div>
                         <div class="card-body">
                             <div class="form-check mb-2">
@@ -55,16 +67,14 @@
 
                             <div v-if="syncOptions.autohideEnable">
                                 <div class="row row-cols-auto g-2 align-items-center">
-                                    <div class="col-auto">{{ l('optionsAutoHideSecondsInputBeforeText') }}</div>
-                                    <div class="col-auto">
-                                        <input type="number"
-                                               min="1"
-                                               max="600"
-                                               class="form-control me-2 ml-2 auto-hide-duration"
-                                               v-model="syncOptions.autohideDuration"
-                                        >
-                                    </div>
-                                    <div class="col-auto">{{ l('optionsAutoHideSecondsInputAfterText') }}</div>
+                                    {{ l('optionsAutoHideSecondsInputBeforeText') }}
+                                    <input type="number"
+                                           min="1"
+                                           max="600"
+                                           class="form-control ms-2 me-2 auto-hide-duration d-inline"
+                                           v-model="syncOptions.autohideDuration"
+                                    >
+                                    {{ l('optionsAutoHideSecondsInputAfterText') }}
                                 </div>
 
 
@@ -76,7 +86,7 @@
                                 </p>
 
                                 <div v-if="showAutohideTypesSelect()" class="form-group">
-                                    <label for="autohide-type-select">{{ l('optionsSelectType') }}</label>
+                                    <label for="autohide-type-select" class="form-label">{{ l('optionsSelectType') }}</label>
                                     <select
                                             id="autohide-type-select"
                                             class="form-select ml-2"
@@ -91,8 +101,8 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group form-inline">
-                                    <label for="autohide-type">{{ l('optionsAddOtherType') }}</label>
+                                <div class="form-group mt-2">
+                                    <label for="autohide-type" class="form-label">{{ l('optionsAddOtherType') }}</label>
                                     <input id="autohide-type"
                                            class="form-control ml-2 me-2"
                                            type="text"
@@ -105,44 +115,42 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card mt-4">
                         <div class="card-header">{{ l('optionsMiscellaneousPanelTitle') }}</div>
                         <div class="card-body">
-                            <h4 class="mt-3">{{ l('optionsCompletionSoundTitle') }}</h4>
+                            <h4>{{ l('optionsCompletionSoundTitle') }}</h4>
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="optionsPlaySound" v-model="syncOptions.playSoundOnComplete">
                                 <label class="form-check-label" for="optionsPlaySound">{{ l('optionsPlaySound') }}</label>
                             </div>
 
                             <div v-if="syncOptions.playSoundOnComplete">
-                                <div class="row row-cols-auto g-2 align-items-center mt-1 mb-3">
-                                    <div class="col-auto">{{ l('optionsPlaySoundDownloadDurationBeforeText') }}</div>
-                                    <div class="col-auto">
-                                        <input type="number"
-                                               min="0"
-                                               max="600"
-                                               class="form-control me-2 ml-2 auto-hide-duration"
-                                               v-model="syncOptions.playSoundDownloadDuration"
-                                        >
-                                    </div>
-                                    <div class="col-auto">{{ l('optionsPlaySoundDownloadDurationAfterText') }}</div>
+                                <div class="row row-cols-auto gx-2 align-items-center mt-1 mb-3">
+                                    {{ l('optionsPlaySoundDownloadDurationBeforeText') }}
+                                    <input type="number"
+                                           min="0"
+                                           max="600"
+                                           class="form-control d-inline auto-hide-duration ms-2 me-2"
+                                           v-model="syncOptions.playSoundDownloadDuration"
+                                    >
+                                    {{ l('optionsPlaySoundDownloadDurationAfterText') }}
                                 </div>
 
                                 <p class="text-muted small">{{ l('optionsCustomSoundNote') }}</p>
-                                <div v-if="localOptions.customSound">
-                                    {{ localOptions.customSound.name }}
+                                <div v-if="localOptions.customSound" class="input-group">
+                                    <span class="form-control">{{ localOptions.customSound.name }}</span>
                                     <button class="btn btn-danger btn-sm" @click="removeCustomSound">X</button>
                                 </div>
 
                                 <div v-else class="custom-file">
+                                    <label class="form-label" for="custom-sound">{{ l('optionsCustomSoundPlaceholder') }}</label>
                                     <input id="custom-sound"
-                                           class="custom-file-input"
+                                           class="form-control"
                                            type="file"
                                            maxlength="100000"
                                            accept="audio/ogg,audio/mpeg,audio/wav,application/ogg,audio/webm,audio/x-flac"
                                            @change="saveCustomSound($event.target.files)"
                                     >
-                                    <label class="custom-file-label" for="custom-sound">{{ l('optionsCustomSoundPlaceholder') }}</label>
                                 </div>
                             </div>
 
@@ -151,15 +159,18 @@
                                 <p class="small text-muted mt-1 mb-2">{{ l('optionsRefreshRateNote') }}</p>
                                 <div class="row row-cols-auto g-3 align-items-center">
                                     <div class="col-auto">
-                                        <input id="refresh-rate"
-                                               class="form-control me-2"
-                                               type="number"
-                                               step="100"
-                                               min="100"
-                                               max="2000"
-                                               v-model="syncOptions.refreshRate">
+                                        <div class="input-group">
+                                            <input id="refresh-rate"
+                                                   class="form-control"
+                                                   type="number"
+                                                   step="100"
+                                                   min="100"
+                                                   max="2000"
+                                                   v-model="syncOptions.refreshRate">
+                                            <div class="input-group-text">({{ l('optionsRefreshRateMillisecond') }})</div>
+                                        </div>
                                     </div>
-                                    <div class="col-auto">({{ l('optionsRefreshRateMillisecond') }})</div>
+                                    <div class="col-auto"></div>
                                 </div>
                             </div>
 
@@ -174,21 +185,21 @@
                             <h4 class="mt-3">{{ l('optionsClearingTitle') }}</h4>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="optionsClearFailedLabel" v-model="syncOptions.clearFailed">
-                                    <label class="form-check-label" for="optionsClearFailedLabel">{{ l('optionsClearFailedLabel') }}</label>
+                                    <input type="checkbox" class="form-check-input" id="options-clear-failed-label" v-model="syncOptions.clearFailed">
+                                    <label class="form-check-label" for="options-clear-failed-label">{{ l('optionsClearFailedLabel') }}</label>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="optionsClearAfterOpening" v-model="syncOptions.clearAfterOpening">
-                                    <label class="form-check-label" for="optionsClearAfterOpening">{{ l('optionsClearAfterOpeningLabel') }}</label>
+                                    <input type="checkbox" class="form-check-input" id="options-clear-after-opening" v-model="syncOptions.clearAfterOpening">
+                                    <label class="form-check-label" for="options-clear-after-opening">{{ l('optionsClearAfterOpeningLabel') }}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card mt-4">
                         <div class="card-header">{{ l('optionsIgnoreFilesPanelTitle') }}</div>
                         <div class="card-body">
                             <p>{{ l('optionsIgnoreFilesDescription') }}</p>
@@ -199,10 +210,10 @@
                             </p>
 
                             <div v-if="showIgnoredTypesSelect()" class="mt-3">
-                                <label for="ignore-type-select">{{ l('optionsSelectType') }}</label>
+                                <label for="ignore-type-select" class="form-label">{{ l('optionsSelectType') }}</label>
                                 <select
                                         id="ignore-type-select"
-                                        class="form-control ml-2"
+                                        class="form-select ml-2"
                                         @change="selectIgnoredType($event)"
                                 >
                                     <option :value="null" selected>{{ l('optionsSelectFileType') }}</option>
@@ -215,7 +226,7 @@
                             </div>
 
                             <div class="mt-3 form-inline">
-                                <label for="ignore-type">{{ l('optionsAddOtherType') }}</label>
+                                <label for="ignore-type" class="form-label">{{ l('optionsAddOtherType') }}</label>
                                 <input id="ignore-type"
                                        class="form-control ml-2 me-2"
                                        type="text"
@@ -233,10 +244,10 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted, reactive, toRaw, watch} from 'vue';
+import {computed, defineComponent, onMounted, reactive, watch} from 'vue';
 import _ from 'lodash';
 import * as helpers from '@/helpers';
-import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
+import {defaultLocalOptions, defaultSyncOptions, SyncOptions} from '@/config/options';
 import fileTypes, {FileType, FileTypeList} from '@/config/filetypes';
 import {colorLabels, defaultThemes, Theme} from '@/config/themes';
 import {useOptionsStore} from '@/stores/options';
@@ -450,20 +461,15 @@ html, body {
   width : 100px;
 }
 
-.card-deck {
-  justify-content : space-between;
-}
-
-.card-deck .card {
-  flex-basis : 48%;
-  margin     : 0 1% 20px 1%;
-}
-
 .badge {
   &:hover {
     cursor           : pointer;
     background-color : rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
   }
+}
+
+input[type=color] {
+  min-width : 100px;
 }
 
 @include media-breakpoint-down(sm) {

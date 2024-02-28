@@ -1,4 +1,4 @@
-import {App, ComponentPublicInstance, createApp} from 'vue';
+import {ComponentPublicInstance, createApp} from 'vue';
 import {createPinia} from 'pinia'
 import ContextMenuPlugin from './context-menu/ContextMenuPlugin';
 import TooltipPlugin from './tooltip/TooltipPlugin';
