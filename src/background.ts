@@ -22,10 +22,6 @@ class DownloadStatus {
     constructor() {
         const self = this;
 
-        browser.storage.sync.get(null)
-            .then((options: StorageObject) => {
-                this.options = helpers.mergeSyncDefaultOptions(options);
-            });
         // Auto open options during development
         if (__DEV_MODE__) {
             browser.runtime.openOptionsPage();
