@@ -1,6 +1,6 @@
 <template>
     <div v-if="isOpen">
-        <ul id="DownloadStatusBarContextMenu" :style="{left: left, bottom: bottom}">
+        <ul id="DownloadStatusBarContextMenu" :style="{left: left, bottom: bottom}" ref="menu">
             <li v-for="item in items" @click="item.clicked">
                 <i :class="`icon-${item.icon}`" aria-hidden="true" v-if="item.icon"></i>
                 {{ item.name }}
@@ -18,6 +18,7 @@ export default defineComponent({
     props: {theme: String},
 
     setup() {
+        const menu: Ref<HTMLElement | undefined> = ref();
         const isOpen = ref(false);
         const position: Ref<ContextMenuPosition | null> = ref(null);
         const items: Ref<Array<ContextMenuItem>> = ref([]);
@@ -36,16 +37,20 @@ export default defineComponent({
         });
 
         return {
+            menu,
             isOpen: isOpen,
             items: items,
             position: position,
 
             left: computed(() => {
-                if (position.value) {
-                    return `${position.value.x}px`;
+                const width = menu.value?.offsetWidth ?? 0;
+                let left = position.value?.x ?? 0;
+
+                if (left + width > window.innerWidth) {
+                    left = window.innerWidth - width;
                 }
 
-                return 0;
+                return `${left}px`;
             }),
 
             bottom: computed(() => {
@@ -65,20 +70,21 @@ export default defineComponent({
 @import "../../icomoon/style";
 
 #DownloadStatusBarContextMenu {
-  font       : 400 normal 14px/1 Arial, sans-serif;
-  position   : absolute;
-  bottom     : 0;
-  left       : 0;
-  right      : auto;
-  top        : auto;
-  background : var(--background);
-  border     : 1px solid #AAA;
-  z-index    : 100;
-  list-style : none;
-  padding    : 0;
-  margin     : 0;
-  display    : block;
-  color      : var(--text);
+  font        : 400 normal 14px/1 Arial, sans-serif;
+  position    : absolute;
+  bottom      : 0;
+  left        : 0;
+  right       : auto;
+  top         : auto;
+  background  : var(--background);
+  border      : 1px solid #AAA;
+  z-index     : 100;
+  list-style  : none;
+  padding     : 0;
+  margin      : 0;
+  display     : block;
+  color       : var(--text);
+  white-space : nowrap;
 
   li {
     cursor  : pointer;

@@ -48,15 +48,7 @@ export default defineComponent({
         return {
             downloadRef,
             get filename(): string {
-                const maxLength = 15;
-                const length = props.download.filename().length;
-                let filename = (props.download.filename()).slice(0, maxLength);
-
-                if (length > maxLength) {
-                    filename += '…';
-                }
-
-                return filename;
+                return props.download.filename();
             },
 
             get status(): string {
@@ -231,15 +223,15 @@ export default defineComponent({
   color           : var(--text);
   cursor          : pointer;
   display         : flex;
-  flex            : 0 1 auto;
+  flex            : 1 1 auto;
   flex-direction  : column;
   font            : 400 normal 14px/1 Arial, sans-serif;
   justify-content : center;
   letter-spacing  : normal;
   margin          : 5px 5px 0 5px;
-  max-width       : unset;
+  max-width       : 300px;
   min-height      : 30px;
-  min-width       : unset;
+  min-width       : 125px;
   overflow        : hidden;
   padding         : 3px 6px;
   position        : relative;
@@ -299,8 +291,12 @@ export default defineComponent({
 
 .dsb-filename {
   @extend .dsb-text-line;
-  text-align : left;
-  font-size  : 14px;
+  text-align      : left;
+  font-size       : 14px;
+  flex-grow       : 1;
+  line-height     : 14px;
+  overflow-x      : hidden;
+  white-space     : nowrap;
 }
 
 .dsb-download-info {

@@ -1,7 +1,11 @@
 <template>
-    <div id="DownloadStatusBarTooltip" class="dsb-tooltip" v-if="tooltipShown && download" :style="{left: left}"
+    <div v-if="tooltipShown && download"
+         id="DownloadStatusBarTooltip"
+         class="dsb-tooltip"
+         :style="{left: left}"
          @mouseleave="events.emit('hideTooltip')"
-         :ref="'tooltip'">
+         ref="tooltip"
+    >
         <table class="dsb-tooltip-table">
             <tr class="dsb-tooltip-table-row">
                 <th class="dsb-tooltip-heading">{{ l('tooltipFilenameHeading') }}:</th>
@@ -74,9 +78,10 @@ export default defineComponent({
     setup() {
         const store = useDownloadsStore();
 
-        let downloadId = ref();
-        let element: Ref<HTMLElement | undefined> = ref();
-        let tooltipShown = ref(false);
+        const tooltip: Ref<HTMLElement | undefined> = ref();
+        const element: Ref<HTMLElement | undefined> = ref();
+        const downloadId = ref();
+        const tooltipShown = ref(false);
 
         const download = computed(() => {
             if (!downloadId) {
@@ -99,24 +104,24 @@ export default defineComponent({
         });
 
         return {
+            tooltip,
             tooltipShown,
             download,
             events,
 
             left: computed((): string => {
-                const el = element.value;
+                const download = element.value;
+                const parent = download?.parentElement;
+                const tooltipWidth = tooltip.value?.offsetWidth ?? 0;
 
-                if (el) {
-                    const downloadOffset = el.offsetLeft;
+                let left = (download?.offsetLeft ?? 0) - (parent?.scrollLeft ?? 0);
 
-                    if (downloadOffset + el.offsetWidth > window.innerWidth) {
-                        return `${window.innerWidth - el.offsetWidth}px`;
-                    } else {
-                        return `${downloadOffset}px`;
-                    }
+                // If the tooltip will go outside the window adjust the position to keep it inside
+                if ((left + tooltipWidth) > window.innerWidth) {
+                    left = window.innerWidth - tooltipWidth;
                 }
 
-                return '0';
+                return `${left}px`;
             }),
 
             filename: computed((): string => {

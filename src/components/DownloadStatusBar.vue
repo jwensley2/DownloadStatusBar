@@ -181,6 +181,7 @@ export default defineComponent({
   height             : auto;
   margin             : 0 5px 0 0;
   padding            : 0 15px;
+  flex-shrink        : 0;
 
   &:hover {
     background : var(--buttonHover);
@@ -225,12 +226,13 @@ export default defineComponent({
 }
 
 .dsb-downloads {
-  display        : flex;
-  flex           : 0 -1 auto;
-  flex-direction : row;
-  flex-wrap      : nowrap;
-  margin         : -5px 0 0 0;
-  overflow       : hidden;
+  display         : flex;
+  flex            : 0 1 auto;
+  flex-direction  : row;
+  flex-wrap       : nowrap;
+  margin          : -5px 0 0 0;
+  overflow        : auto hidden;
+  scrollbar-width : thin;
 }
 
 @media print {
