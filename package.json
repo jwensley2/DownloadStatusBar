@@ -1,6 +1,6 @@
 {
   "name": "downloadstatusbar",
-  "version": "1.11",
+  "version": "1.12",
   "description": "Adds a bar to show the status of your downloads",
   "main": "background.js",
   "devDependencies": {
@@ -39,7 +39,7 @@
   "scripts": {
     "watch": "webpack --watch --config webpack.dev.js --mode=development",
     "dev": "webpack --config webpack.dev.js --mode=development",
-    "prod": "webpack --config webpack.prod.js --mode=production",
+    "prod": "npm i --package-lock-only && webpack --config webpack.prod.js --mode=production",
     "lint": "web-ext lint -s build",
     "webext": "web-ext run -s build -u https://test.josephwensley.com/ --ignore-files=*.ts node_modules --keep-profile-changes --firefox-profile=./profile",
     "webextdev": "web-ext run -s build -u https://test.josephwensley.com/ --ignore-files=*.ts node_modules --keep-profile-changes --firefox=firefoxdeveloperedition --firefox-profile=./profile",
