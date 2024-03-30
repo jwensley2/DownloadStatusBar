@@ -3,17 +3,18 @@
 @font-face {
   font-family: '#{$icomoon-font-family}';
   src:
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?z6vh1k') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?z6vh1k') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?z6vh1k##{$icomoon-font-family}') format('svg');
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?6o6obt') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?6o6obt') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?6o6obt##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: '#{$icomoon-font-family}' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -25,99 +26,99 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-copy {
+  &:before {
+    content: $icon-copy; 
+  }
+}
 .icon-angle-right {
   &:before {
-    content: $icon-angle-right;
+    content: $icon-angle-right; 
   }
 }
 .icon-chevron-right {
   &:before {
-    content: $icon-chevron-right;
+    content: $icon-chevron-right; 
   }
 }
 .icon-angle-left {
   &:before {
-    content: $icon-angle-left;
+    content: $icon-angle-left; 
   }
 }
 .icon-chevron-left {
   &:before {
-    content: $icon-chevron-left;
+    content: $icon-chevron-left; 
   }
 }
 .icon-angle-down {
   &:before {
-    content: $icon-angle-down;
+    content: $icon-angle-down; 
   }
 }
 .icon-chevron-down {
   &:before {
-    content: $icon-chevron-down;
+    content: $icon-chevron-down; 
   }
 }
 .icon-angle-up {
   &:before {
-    content: $icon-angle-up;
+    content: $icon-angle-up; 
   }
 }
 .icon-chevron-up {
   &:before {
-    content: $icon-chevron-up;
+    content: $icon-chevron-up; 
   }
 }
 .icon-cog {
   &:before {
-    content: $icon-cog;
+    content: $icon-cog; 
   }
 }
 .icon-gear {
   &:before {
-    content: $icon-gear;
+    content: $icon-gear; 
   }
 }
 .icon-trash-o {
   &:before {
-    content: $icon-trash-o;
+    content: $icon-trash-o; 
   }
 }
 .icon-folder-open {
   &:before {
-    content: $icon-folder-open;
+    content: $icon-folder-open; 
   }
 }
 .icon-close {
   &:before {
-    content: $icon-close;
+    content: $icon-close; 
   }
 }
 .icon-remove {
   &:before {
-    content: $icon-remove;
+    content: $icon-remove; 
   }
 }
 .icon-times {
   &:before {
-    content: $icon-times;
+    content: $icon-times; 
   }
 }
 .icon-eye-slash {
   &:before {
-    content: $icon-eye-slash;
+    content: $icon-eye-slash; 
   }
 }
 .icon-pause {
   &:before {
-    content: $icon-pause;
+    content: $icon-pause; 
   }
 }
 .icon-play {
   &:before {
-    content: $icon-play;
-  }
-}
-.icon-copy {
-  &:before {
-    content: $icon-copy;
+    content: $icon-play; 
   }
 }
 
