@@ -1,15 +1,4 @@
-/**
- * Localize a string
- * @returns {string}
- */
-function localize(messageName: string, substitutions?: string | string[]): string {
-    // Fix for running in tests
-    if (typeof browser === 'undefined') {
-        return messageName;
-    }
-
-    return browser.i18n.getMessage(messageName, substitutions);
-}
+import {localize} from '@/helpers';
 
 type Colors = {
     background: string,
@@ -37,7 +26,7 @@ export const darkTheme: Theme = {
     custom: false,
     colors: {
         background: '#333333',
-        backgroundHover: "#666666",
+        backgroundHover: '#666666',
         button: 'transparent',
         buttonHover: '#444444',
         buttonBorder: '#555555',
@@ -55,7 +44,7 @@ export const lightTheme: Theme = {
     custom: false,
     colors: {
         background: '#EFEFEF',
-        backgroundHover: "#FFFFFF",
+        backgroundHover: '#FFFFFF',
         button: 'transparent',
         buttonHover: '#CCCCCC',
         buttonBorder: '#AAAAAA',

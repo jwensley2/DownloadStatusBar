@@ -1,54 +1,55 @@
 <template>
     <div id="DownloadStatusBar"
-         v-if="downloads.length > 0 || options.alwaysShow"
-         :class="[{'dsb-minimized': options.minimized}]"
+         v-if="downloads.length > 0 || syncOptions.alwaysShow"
+         :class="[{'dsb-minimized': syncOptions.minimized}]"
          @mouseleave="hideContextMenu"
          ref="element"
     >
-        <button class="dsb-clear-downloads" v-if="!options.minimized" @click="events.emit('clearDownloads')">
+        <button class="dsb-clear-downloads" v-if="!syncOptions.minimized" @click="events.emit('clearDownloads')">
             {{ l('barClearButton') }}
         </button>
-        <div class="dsb-downloads" v-if="!options.minimized">
+        <div class="dsb-downloads" v-if="!syncOptions.minimized">
             <download v-for="download in downloads"
                       :key="download.id"
                       :download="download"
-                      :options="options"></download>
+                      :options="syncOptions"></download>
         </div>
 
         <context-menu></context-menu>
-        <tooltip :theme="options.theme"></tooltip>
+        <tooltip :theme="syncOptions.theme"></tooltip>
 
-        <button class="dsb-open-options" v-if="!options.minimized" @click="openOptions">Options<span class="icon-gear"></span></button>
+        <button class="dsb-open-options" v-if="!syncOptions.minimized" @click="openOptions">Options<span class="icon-gear"></span></button>
         <button class="dsb-minimize" @click="minimize">
-            <span :class="!options.minimized ? 'icon-angle-right' : 'icon-angle-left'"></span>
+            <span :class="!syncOptions.minimized ? 'icon-angle-right' : 'icon-angle-left'"></span>
         </button>
     </div>
 </template>
 
 <script lang="ts">
 import {computed, defineComponent, inject, onMounted, onUpdated, ref, watch} from 'vue';
-import Download from '@/components/Download.vue';
-import {defaultSyncOptions} from '@/config/options';
 import * as helpers from '@/helpers';
-import events from '@/events';
 import {useDownloadsStore} from '@/stores/downloads';
-import {useOptionsStore} from '@/stores/options';
+import {useSyncOptionsStore} from '@/stores/syncOptions';
+import events from '@/events';
+import Download from '@/components/Download.vue';
+import Tooltip from '@/tooltip/Tooltip.vue';
 
 export default defineComponent({
     components: {
-        Download
+        Download,
+        Tooltip,
     },
     setup() {
         const store = useDownloadsStore();
-        const optionsStore = useOptionsStore();
+        const syncOptionsStore = useSyncOptionsStore();
         const closeContextMenu = inject('closeContextMenu') as Function;
+        const syncOptions = syncOptionsStore.options;
+        const defaultBottomMargin = ref(0);
+        const element = ref();
 
-        let options = ref(defaultSyncOptions);
         const downloads = computed(() => {
             return store.downloads;
         });
-        const defaultBottomMargin = ref(0);
-        const element = ref();
 
         const setBodyMargin = () => {
             const body = document.getElementsByTagName('body')[0] as HTMLElement;
@@ -66,18 +67,6 @@ export default defineComponent({
         })
 
         onMounted(() => {
-            // Load the saved syncOptions
-            browser.storage.sync.get(null)
-                .then((newOptions: browser.storage.StorageObject) => {
-                    options.value = helpers.mergeSyncDefaultOptions(newOptions);
-                });
-
-            browser.storage.onChanged.addListener((changedOptions) => {
-                for (let item of Object.keys(changedOptions)) {
-                    options.value[item] = changedOptions[item].newValue;
-                }
-            });
-
             const body = document.getElementsByTagName('body')[0] as HTMLElement;
             if (window.getComputedStyle(body).marginBottom) {
                 defaultBottomMargin.value = parseInt(window.getComputedStyle(body).marginBottom!);
@@ -91,12 +80,12 @@ export default defineComponent({
         });
 
         return {
-            element: element,
-            downloads: downloads,
-            options,
-            defaultBottomMargin: defaultBottomMargin,
-            setBodyMargin: setBodyMargin,
-            events: events,
+            element,
+            downloads,
+            syncOptions,
+            defaultBottomMargin,
+            setBodyMargin,
+            events,
 
             l(messageName: string, substitutions?: string | string[]): string {
                 return helpers.localize(messageName, substitutions);
@@ -111,9 +100,8 @@ export default defineComponent({
             },
 
             minimize() {
-                options.value.minimized = !options.value.minimized;
-
-                optionsStore.saveSyncOptions(options.value);
+                syncOptions.minimized = !syncOptions.minimized;
+                syncOptionsStore.save();
             },
         }
     },
@@ -134,7 +122,7 @@ export default defineComponent({
   color                   : var(--text);
   display                 : flex;
   flex-direction          : row;
-  font                    : normal 400 16px Arial, sans-serif;
+  font                    : normal 400 var(--font-size)/var(--font-size) Arial, sans-serif;
   left                    : 0;
   letter-spacing          : normal;
   line-height             : 1;
@@ -177,7 +165,7 @@ export default defineComponent({
   border-right-width : 1px;
   color              : var(--text) !important;
   display            : inline-block;
-  font               : normal 600 14px/1 Arial, sans-serif;
+  font               : normal 600 1em/1em Arial, sans-serif;
   height             : auto;
   margin             : 0 5px 0 0;
   padding            : 0 15px;

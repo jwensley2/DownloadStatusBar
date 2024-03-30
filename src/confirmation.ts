@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {createPinia} from 'pinia';
 import {DSBDownload} from '@/DSBDownload';
-import {useOptionsStore} from '@/stores/options';
+import {useSyncOptionsStore} from '@/stores/syncOptions';
 
 const searchParams = new URLSearchParams(window.location.search);
 const button = document.getElementById('open-download');
@@ -19,15 +19,15 @@ if (button && downloadId) {
  */
 function openDownload(downloadId: number) {
     const pinia = createPinia();
-    const options = useOptionsStore(pinia);
+    const syncOptionsStore = useSyncOptionsStore(pinia);
 
     if (downloadId) {
         browser.downloads.open(downloadId);
     }
 
-    options.loadSyncOptions().then(() => {
+    syncOptionsStore.loaded.then(() => {
         // Clear the download if the option is enabled
-        if (options.syncOptions.clearAfterOpening) {
+        if (syncOptionsStore.options.clearAfterOpening) {
             browser.downloads.search({
                 id: downloadId,
             }).then((downloads) => {

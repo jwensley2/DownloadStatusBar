@@ -1,7 +1,10 @@
 <template>
     <div class="container py-4">
-        <div class="row">
-            <div class="col-12"><h1>{{ l('optionsPageTitle') }}</h1></div>
+        <div class="row align-items-center">
+            <div class="col"><h1>{{ l('optionsPageTitle') }}</h1></div>
+            <div class="col-auto">
+                <button class="btn btn-warning btn-sm" @click="resetOptions">{{ l('optionsResetButton') }}</button>
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
@@ -17,6 +20,16 @@
                             <div class="form-check mt-2">
                                 <input type="checkbox" class="form-check-input" id="optionsShowDownloadInfo" v-model="syncOptions.showInfoText">
                                 <label class="form-check-label" for="optionsShowDownloadInfo">{{ l('optionsShowDownloadInfo') }}</label>
+                            </div>
+
+                            <div class="mt-2 row row-cols-auto g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label class="form-label" for="optionsFontSize">{{ l('optionsFontSize') }}</label>
+                                    <div class="input-group">
+                                        <input type="number" min="1" max="50" class="form-control" id="optionsFontSize" v-model="syncOptions.fontSize">
+                                        <div class="input-group-text">px</div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mt-4">
@@ -101,7 +114,7 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group mt-2">
+                                <div class="mt-2">
                                     <label for="autohide-type" class="form-label">{{ l('optionsAddOtherType') }}</label>
                                     <input id="autohide-type"
                                            class="form-control ml-2 me-2"
@@ -244,22 +257,23 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted, reactive, watch} from 'vue';
+import {computed, defineComponent, onMounted, watch} from 'vue';
 import _ from 'lodash';
 import * as helpers from '@/helpers';
-import {defaultLocalOptions, defaultSyncOptions, SyncOptions} from '@/config/options';
 import fileTypes, {FileType, FileTypeList} from '@/config/filetypes';
 import {colorLabels, defaultThemes, Theme} from '@/config/themes';
-import {useOptionsStore} from '@/stores/options';
+import {useSyncOptionsStore} from '@/stores/syncOptions';
+import {useLocalOptionsStore} from '@/stores/localOptions';
 
 export default defineComponent({
     setup() {
-        const optionsStore = useOptionsStore();
-        const syncOptions = reactive({...defaultSyncOptions});
-        const localOptions = reactive({...defaultLocalOptions});
+        const syncOptionsStore = useSyncOptionsStore();
+        const localOptionsStore = useLocalOptionsStore();
+        const syncOptions = syncOptionsStore.options;
+        const localOptions = localOptionsStore.options;
 
-        watch(() => syncOptions, (options: SyncOptions) => {
-            optionsStore.saveSyncOptions(options);
+        watch(() => syncOptions, () => {
+            syncOptionsStore.save();
         }, {deep: true})
 
         const currentTheme = computed((): Theme => {
@@ -287,16 +301,6 @@ export default defineComponent({
             themes.push(...syncOptions.customThemes);
 
             return themes;
-        })
-
-        onMounted(() => {
-            optionsStore.loadSyncOptions().then((options) => {
-                Object.assign(syncOptions, options);
-            });
-
-            optionsStore.loadLocalOptions().then((options) => {
-                Object.assign(localOptions, options);
-            });
         });
 
         return {
@@ -413,16 +417,15 @@ export default defineComponent({
                         'data': reader.result as string,
                     };
 
-                    optionsStore.saveLocalOptions({'customSound': localOptions.customSound});
+                    localOptionsStore.save();
                 });
 
                 reader.readAsDataURL(file);
             },
 
             removeCustomSound() {
-                optionsStore.removeLocalOption('customSound').then((options) => {
-                    Object.assign(localOptions, options);
-                });
+                localOptionsStore.options.customSound = undefined;
+                localOptionsStore.save();
             },
 
             customizeTheme() {
@@ -445,8 +448,15 @@ export default defineComponent({
                 syncOptions.customThemes.splice(index, 1);
                 syncOptions.theme = themeList.value[0].id;
             },
+
+            resetOptions() {
+                if (confirm(helpers.localize('optionsResetConfirmation'))) {
+                    syncOptionsStore.reset();
+                    localOptionsStore.reset();
+                }
+            },
         }
-    }
+    },
 });
 </script>
 

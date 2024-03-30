@@ -1,15 +1,15 @@
-import {ComponentPublicInstance, createApp} from 'vue';
+import {ComponentPublicInstance, createApp, watch} from 'vue';
 import {createPinia} from 'pinia'
-import ContextMenuPlugin from './context-menu/ContextMenuPlugin';
-import TooltipPlugin from './tooltip/TooltipPlugin';
-import DownloadStatusBarComponent from './components/DownloadStatusBar.vue';
-import {DownloadInterface, DSBDownload} from './DSBDownload';
 import * as _ from 'lodash';
-import * as helpers from './helpers';
-import {Theme} from './config/themes';
-import {useDownloadsStore} from './stores/downloads';
-import events from './events';
-import StorageObject = browser.storage.StorageObject;
+import * as helpers from '@/helpers';
+import {DownloadInterface, DSBDownload} from '@/DSBDownload';
+import {useDownloadsStore} from '@/stores/downloads';
+import {useSyncOptionsStore} from '@/stores/syncOptions';
+import {SyncOptions} from '@/config/options';
+import events from '@/events';
+import ContextMenuPlugin from '@/context-menu/ContextMenuPlugin';
+import TooltipPlugin from '@/tooltip/TooltipPlugin';
+import DownloadStatusBarComponent from '@/components/DownloadStatusBar.vue';
 
 class DownloadStatusBar {
     private app: ComponentPublicInstance;
@@ -24,6 +24,13 @@ class DownloadStatusBar {
             .use(TooltipPlugin)
             .provide('rootElement', rootElement)
             .mount(rootElement);
+
+        let syncOptionsStore = useSyncOptionsStore();
+
+        watch(() => syncOptionsStore.options, (value) => {
+            // Set styles when the options change
+            this.setStyles(value);
+        }, {deep: true})
 
         events.on('clearDownloads', () => {
             // Tell the background to clear its downloads
@@ -74,13 +81,12 @@ class DownloadStatusBar {
 
     private static getStatusBarContainer() {
         const containerId = 'DownloadStatusBarContainer';
-        let container;
 
         if (document.getElementById(containerId)) {
             return document.getElementById(containerId) as HTMLElement;
         }
 
-        container = document.createElement('div');
+        let container = document.createElement('div');
         container.id = containerId;
 
         return container;
@@ -103,13 +109,16 @@ class DownloadStatusBar {
         return innerContainer;
     }
 
-    public setTheme(theme: Theme) {
-        let element = DownloadStatusBar.getStatusBarContainer();
+    public setStyles(options: SyncOptions) {
+        const theme = helpers.getThemeById(options.theme, options.customThemes)
+        const element = DownloadStatusBar.getStatusBarContainer();
 
         // Prevent some sites from breaking
         element.style.setProperty('height', 'auto');
         element.style.setProperty('width', 'auto');
         element.style.setProperty('display', 'block');
+
+        element.style.setProperty('--font-size', `${options.fontSize}px`);
 
         _.forEach(theme.colors, (colour, prop) => {
             element.style.setProperty(`--${prop}`, colour);
@@ -125,20 +134,4 @@ browser.runtime.onMessage.addListener((json: any) => {
     statusBar.downloads = downloads.map((downloadItem) => {
         return DSBDownload.fromJson(downloadItem);
     });
-});
-
-// Load the config and set the theme
-browser.storage.sync.get(null)
-    .then((options: StorageObject) => {
-        const syncOptions = helpers.mergeSyncDefaultOptions(options);
-        const theme = helpers.getThemeById(syncOptions.theme, syncOptions.customThemes);
-        statusBar.setTheme(theme);
-    });
-
-// Watch for config changes and update the theme
-browser.storage.onChanged.addListener((changedOptions, areaName) => {
-    if (areaName === 'sync') {
-        const theme = helpers.getThemeById(changedOptions.theme.newValue, changedOptions.customThemes.newValue);
-        statusBar.setTheme(theme);
-    }
 });

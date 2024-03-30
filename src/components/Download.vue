@@ -22,11 +22,12 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject, Ref, ref} from 'vue';
+import {defineComponent, inject, PropType, Ref, ref} from 'vue';
 import * as helpers from '@/helpers';
 import {DSBDownload} from '@/DSBDownload';
 import {ContextMenuItem} from '@/context-menu/types';
 import events from '@/events';
+import {SyncOptions} from '@/config/options';
 
 export default defineComponent({
     props: {
@@ -34,7 +35,10 @@ export default defineComponent({
             type: DSBDownload,
             required: true,
         },
-        options: {},
+        options: {
+            type: Object as PropType<SyncOptions>,
+            required: true,
+        },
     },
 
     setup(props) {
@@ -206,7 +210,7 @@ export default defineComponent({
                 }
 
                 openContextMenu(items, {x: event.clientX, y: event.clientY});
-            }
+            },
         };
     },
 });
@@ -225,7 +229,7 @@ export default defineComponent({
   display         : flex;
   flex            : 1 1 auto;
   flex-direction  : column;
-  font            : 400 normal 14px/1 Arial, sans-serif;
+  font            : 400 normal 1em/1em Arial, sans-serif;
   justify-content : center;
   letter-spacing  : normal;
   margin          : 5px 5px 0 5px;
@@ -276,7 +280,7 @@ export default defineComponent({
   box-sizing     : content-box;
   color          : var(--text);
   display        : block;
-  font           : 400 normal 10px/10px Arial, Helvetica, sans-serif;
+  white-space    : nowrap;
   height         : auto;
   letter-spacing : normal;
   margin         : 0;
@@ -285,30 +289,30 @@ export default defineComponent({
   position       : relative;
 
   + .dsb-text-line {
-    margin-top : 2px
+    margin-top : 0.2em
   }
 }
 
 .dsb-filename {
   @extend .dsb-text-line;
-  text-align      : left;
-  font-size       : 14px;
-  flex-grow       : 1;
-  line-height     : 14px;
-  overflow-x      : hidden;
-  white-space     : nowrap;
+  text-align  : left;
+  flex-grow   : 1;
+  overflow-x  : hidden;
+  white-space : nowrap;
+  font-size   : 0.9em;
+  line-height : 0.9em;
+  padding     : 0.2em 0;
 }
 
 .dsb-download-info {
-  height : 100%;
-  margin : 0 0 0 10px;
+  max-height : 100%;
+  margin     : 0 0 0 10px;
 }
 
-.dsb-progress {
+.dsb-progress, .dsb-speed, .dsb-percent {
   @extend .dsb-text-line;
-}
-
-.dsb-speed, .dsb-percent {
-  @extend .dsb-text-line;
+  font-family : monospace;
+  font-size   : 0.7em;
+  line-height : 0.7em;
 }
 </style>

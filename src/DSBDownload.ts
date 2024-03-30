@@ -36,7 +36,7 @@ export class DSBDownload implements DownloadInterface {
         return download;
     }
 
-    toJSON() {
+    toJSON(): DownloadInterface {
         return {
             downloadItem: this.downloadItem,
             downloadProgress: this.downloadProgress,
@@ -51,7 +51,7 @@ export class DSBDownload implements DownloadInterface {
         return this._downloadProgress;
     }
 
-    updateDownload(downloadItem: DownloadItem, time?: Moment) {
+    updateDownload(downloadItem: DownloadItem, time?: Moment): void {
         this._downloadItem = downloadItem;
 
         if (downloadItem.state !== 'complete') {
@@ -96,7 +96,7 @@ export class DSBDownload implements DownloadInterface {
      *
      * @returns {string}
      */
-    filename() {
+    filename(): string {
         let m = this.downloadItem.filename.toString().match(/.*[\/\\](.+)/);
 
         if (m && m.length > 1) {
@@ -178,7 +178,7 @@ export class DSBDownload implements DownloadInterface {
      *
      * @returns {string}
      */
-    status() {
+    status(): string {
         if (this.downloadItem.state === 'complete') {
             return helpers.localize('downloadStatusComplete');
         }
@@ -210,16 +210,15 @@ export class DSBDownload implements DownloadInterface {
      *
      * @returns {Promise<void>}
      */
-    pause() {
+    pause(): Promise<void> {
         return browser.downloads.pause(this.downloadItem.id);
     }
 
     /**
      * Resume the download
-     *
-     * @returns {Promise<void>}
+
      */
-    resume() {
+    resume(): Promise<void> {
         return browser.downloads.resume(this.downloadItem.id);
     }
 }

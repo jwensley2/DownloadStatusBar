@@ -1,23 +1,22 @@
 import moment from 'moment';
+import {createPinia} from 'pinia';
+import * as _ from 'lodash';
+import * as helpers from './helpers';
+import {LocalOptions, SyncOptions} from './config/options';
+import {DownloadInterface, DSBDownload} from './DSBDownload';
+import {useSyncOptionsStore} from '@/stores/syncOptions';
 import DownloadQuery = browser.downloads.DownloadQuery;
 import StringDelta = browser.downloads.StringDelta;
 import BooleanDelta = browser.downloads.BooleanDelta;
 import DoubleDelta = browser.downloads.DoubleDelta;
-import * as helpers from './helpers';
-import * as _ from 'lodash';
-import {defaultSyncOptions, LocalOptions, SyncOptions} from './config/options';
-import {DownloadInterface, DSBDownload} from './DSBDownload';
-import StorageObject = browser.storage.StorageObject;
-import {createPinia} from 'pinia';
-import {useOptionsStore} from '@/stores/options';
 
 class DownloadStatus {
     protected downloads: DSBDownload[] = [];
     protected interval: number | null = null;
-    protected options: SyncOptions = defaultSyncOptions;
 
     protected pinia = createPinia();
-    protected optionsStore = useOptionsStore(this.pinia);
+    protected syncOptionsStore = useSyncOptionsStore(this.pinia);
+    protected syncOptions: SyncOptions = this.syncOptionsStore.options;
 
     constructor() {
         const self = this;
@@ -27,14 +26,10 @@ class DownloadStatus {
             browser.runtime.openOptionsPage();
         }
 
-        this.optionsStore.loadSyncOptions().then((options) => {
-            this.options = helpers.mergeSyncDefaultOptions(options);
-        });
-
         browser.storage.onChanged.addListener((changedOptions, areaName) => {
             if (areaName === 'sync') {
                 for (let item of Object.keys(changedOptions)) {
-                    this.options[item] = changedOptions[item].newValue;
+                    this.syncOptions[item] = changedOptions[item].newValue;
                 }
             }
         });
@@ -42,10 +37,10 @@ class DownloadStatus {
         browser.downloads.onCreated.addListener((downloadItem) => {
             const download = new DSBDownload(downloadItem);
 
-            this.options.minimized = false;
-            this.optionsStore.saveSyncOptions(this.options)
+            this.syncOptions.minimized = false;
+            this.syncOptionsStore.save();
 
-            if (helpers.shouldIgnoreDownload(download, this.options)) {
+            if (helpers.shouldIgnoreDownload(download, this.syncOptions)) {
                 return;
             }
 
@@ -78,14 +73,14 @@ class DownloadStatus {
                 });
 
                 // Play sound if the download doesn't instantly finish
-                if (moment().diff(startTime, 's') >= this.options.playSoundDownloadDuration) {
+                if (moment().diff(startTime, 's') >= this.syncOptions.playSoundDownloadDuration) {
                     this.playCompletedSound();
                 }
 
-                if (helpers.shouldHideDownload(download, this.options)) {
+                if (helpers.shouldHideDownload(download, this.syncOptions)) {
                     setTimeout(() => {
                         self.clearDownload(download as DSBDownload);
-                    }, this.options.autohideDuration * 1000);
+                    }, this.syncOptions.autohideDuration * 1000);
                 }
 
                 this.updateTabs(this.downloads);
@@ -169,7 +164,7 @@ class DownloadStatus {
 
         this.interval = window.setInterval(() => {
             this.refresh();
-        }, this.options.refreshRate);
+        }, this.syncOptions.refreshRate);
     }
 
     /**
@@ -255,7 +250,7 @@ class DownloadStatus {
         this.downloads = helpers.removeSelectedDownload(download.downloadItem, this.downloads);
         this.refresh();
 
-        if (this.options.clearHistory) {
+        if (this.syncOptions.clearHistory) {
             browser.downloads.erase({
                 id: download.downloadItem.id,
             });
@@ -331,7 +326,7 @@ class DownloadStatus {
     }
 
     playCompletedSound() {
-        if (!this.options.playSoundOnComplete) {
+        if (!this.syncOptions.playSoundOnComplete) {
             return;
         }
 
@@ -349,10 +344,10 @@ class DownloadStatus {
     }
 
     clearDownloads() {
-        this.downloads = helpers.filterFinishedDownloads(this.downloads, this.options.clearFailed);
+        this.downloads = helpers.filterFinishedDownloads(this.downloads, this.syncOptions.clearFailed);
         this.refresh();
 
-        if (this.options.clearHistory) {
+        if (this.syncOptions.clearHistory) {
             browser.downloads.erase({state: 'complete'});
         }
     }

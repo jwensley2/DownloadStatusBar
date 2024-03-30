@@ -1,9 +1,11 @@
 import _ from 'lodash';
+import * as mm from 'micromatch';
+import moment from 'moment';
 import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
 import fileTypes, {FileType} from '@/config/filetypes';
 import {DSBDownload} from '@/DSBDownload';
 import {defaultThemes, lightTheme, Theme} from '@/config/themes';
-import * as mm from 'micromatch';
+import DownloadItem = browser.downloads.DownloadItem;
 
 /**
  * Remove finished downloads from the array of downloads
@@ -56,7 +58,7 @@ export function getInProgressDownloads(downloads: DSBDownload[]): DSBDownload[] 
  * @returns {SyncOptions}
  */
 export function mergeSyncDefaultOptions(options: Partial<SyncOptions>): SyncOptions {
-    let merged = Object.assign({}, defaultSyncOptions, options);
+    let merged = Object.assign({}, defaultSyncOptions(), options);
 
     // Replace the saved types with the one in the config if it exists
     merged.autohideFileTypes = merged.autohideFileTypes.map((fileType) => {
@@ -71,13 +73,13 @@ export function mergeSyncDefaultOptions(options: Partial<SyncOptions>): SyncOpti
 }
 
 /**
- * Merge the default local options into an local options object
+ * Merge the default local options into a local options object
  *
  * @param {SyncOptions} options
  * @returns {SyncOptions}
  */
 export function mergeLocalDefaultOptions(options: Partial<LocalOptions>): LocalOptions {
-    return Object.assign({}, defaultLocalOptions, options);
+    return Object.assign({}, defaultLocalOptions(), options);
 }
 
 /**
@@ -205,6 +207,10 @@ export function formatFileSize(bytes: number, round: boolean = false): string {
  * @returns {string}
  */
 export function localize(messageName: string, substitutions?: string | string[]): string {
+    if (typeof browser === 'undefined') {
+        return messageName;
+    }
+
     return browser.i18n.getMessage(messageName, substitutions);
 }
 
@@ -249,4 +255,39 @@ export function randomString(length: number) {
  */
 export function forceUnref<T extends object>(obj: T): T {
     return _.omit(_.assign({}, obj), ['_value', '_rawValue', '__v_isRef', '__v_isShallow']) as T;
+}
+
+export function makeFakeDownload(downloadInfo: Partial<DownloadItem>) {
+    const size = 1024 * 1024 * 1024;
+    const now = moment();
+
+    let download = new DSBDownload(Object.assign({}, {
+        id: _.random(),
+        url: 'https://google.com',
+        referrer: 'https://google.com',
+        filename: '/downloads/testingtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest.txt',
+        incognito: false,
+        bytesReceived: 0,
+        canResume: true,
+        danger: '',
+        exists: true,
+        fileSize: size,
+        mime: 'text/plaintext',
+        paused: false,
+        startTime: now.toISOString(),
+        state: 'in_progress',
+        totalBytes: size,
+    }, downloadInfo));
+
+    download.downloadProgress.push({
+        time: now,
+        bytesReceived: 1024,
+    });
+
+    download.downloadProgress.push({
+        time: now.clone().add(1, 'second'),
+        bytesReceived: 1024 * 1000,
+    });
+
+    return download;
 }

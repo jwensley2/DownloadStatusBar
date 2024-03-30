@@ -101,6 +101,14 @@
     "message": "Display Options",
     "description": "Title of the display options panel."
   },
+  "optionsResetButton": {
+    "message": "Reset Options",
+    "description": "The button text for the reset options button"
+  },
+  "optionsResetConfirmation": {
+    "message": "This will reset all options to the default and cannot be undone, please confirm.",
+    "description": "The confirmation message for resetting the options"
+  },
   "optionsTheme": {
     "message": "Theme",
     "description": "Label for the base theme selection"
@@ -178,6 +186,10 @@
   },
   "optionsShowDownloadInfo": {
     "message": "Show download info"
+  },
+  "optionsFontSize": {
+    "message": "Base Font Size",
+    "description": "The label for the base font size field"
   },
   "optionsAutoHidePanelTitle": {
     "message": "Auto Hiding",

@@ -1,1 +1,1 @@
-declare const __DEV_MODE__: string;
+declare const __DEV_MODE__: boolean;

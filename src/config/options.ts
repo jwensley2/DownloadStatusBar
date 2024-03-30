@@ -6,27 +6,28 @@ import StorageObject = browser.storage.StorageObject;
  * Options to save in the synced storage
  */
 export interface SyncOptions extends StorageObject {
-    theme: string,
-    customThemes: Theme[],
-    alwaysShow: boolean,
-    showInfoText: boolean,
-    autohideEnable: boolean,
-    autohideDuration: number,
-    autohideFileTypes: FileType[],
-    autohideCustomTypes: string[],
-    ignoredFileTypes: FileType[],
-    ignoredCustomTypes: string[],
-    playSoundOnComplete: boolean,
-    playSoundDownloadDuration: number,
-    minimized: boolean,
-    refreshRate: number,
-    clearHistory: boolean,
-    clearFailed: boolean,
-    clearAfterOpening: boolean,
+    theme: string;
+    customThemes: Theme[];
+    alwaysShow: boolean;
+    showInfoText: boolean;
+    autohideEnable: boolean;
+    autohideDuration: number;
+    autohideFileTypes: FileType[];
+    autohideCustomTypes: string[];
+    ignoredFileTypes: FileType[];
+    ignoredCustomTypes: string[];
+    playSoundOnComplete: boolean;
+    playSoundDownloadDuration: number;
+    minimized: boolean;
+    refreshRate: number;
+    clearHistory: boolean;
+    clearFailed: boolean;
+    clearAfterOpening: boolean;
+    fontSize: number;
 }
 
-export const defaultSyncOptions = <SyncOptions>{
-    theme: lightTheme.name,
+export const defaultSyncOptions = (): SyncOptions => ({
+    theme: lightTheme.id,
     customThemes: [],
     alwaysShow: false,
     showInfoText: true,
@@ -43,20 +44,21 @@ export const defaultSyncOptions = <SyncOptions>{
     clearHistory: false,
     clearFailed: false,
     clearAfterOpening: false,
-};
+    fontSize: 16,
+});
 
 /**
  * Options to save in local storage
  */
 type Sound = {
-    name: string,
-    data: string,
+    name: string;
+    data: string;
 };
 
 export type LocalOptions = {
-    customSound: Sound | undefined,
+    customSound: Sound | undefined;
 }
 
-export const defaultLocalOptions: LocalOptions = {
+export const defaultLocalOptions = (): LocalOptions => ({
     customSound: undefined,
-};
+});
