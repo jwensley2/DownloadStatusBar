@@ -1,5 +1,5 @@
-import {FileType} from './filetypes';
-import {lightTheme, Theme} from './themes';
+import {FileType} from '@/config/filetypes';
+import {lightTheme, Theme} from '@/config/themes';
 import StorageObject = browser.storage.StorageObject;
 
 /**
@@ -28,7 +28,7 @@ export interface SyncOptions extends StorageObject {
 }
 
 export const defaultSyncOptions = (): SyncOptions => ({
-    theme: lightTheme.id,
+    theme: lightTheme().id,
     customThemes: [],
     alwaysShow: false,
     showInfoText: true,

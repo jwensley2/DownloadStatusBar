@@ -23,11 +23,12 @@
 
 <script lang="ts">
 import {defineComponent, inject, PropType, Ref, ref} from 'vue';
-import * as helpers from '@/helpers';
+import {localize} from '@/helpers/localize';
 import {DSBDownload} from '@/DSBDownload';
 import {ContextMenuItem} from '@/context-menu/types';
 import events from '@/events';
 import {SyncOptions} from '@/config/options';
+import {formatFileSize} from '@/helpers/formatFileSize';
 
 export default defineComponent({
     props: {
@@ -61,10 +62,10 @@ export default defineComponent({
 
             get progress(): string {
                 const downloadItem = props.download.downloadItem;
-                const downloaded = helpers.formatFileSize(downloadItem.bytesReceived);
+                const downloaded = formatFileSize(downloadItem.bytesReceived);
 
                 if (downloadItem.state === 'complete') {
-                    return `${helpers.formatFileSize(downloadItem.fileSize)}`;
+                    return `${formatFileSize(downloadItem.fileSize)}`;
                 }
 
                 return `${downloaded}`;
@@ -99,7 +100,7 @@ export default defineComponent({
                     return '';
                 }
 
-                return `${helpers.formatFileSize(props.download.calculateDownloadSpeed(), true)}/s`;
+                return `${formatFileSize(props.download.calculateDownloadSpeed(), true)}/s`;
             },
 
             showTooltip(download: Ref, id: number) {
@@ -134,15 +135,15 @@ export default defineComponent({
                 const paused = props.download.downloadItem.state === 'interrupted' && props.download.downloadItem.paused;
 
                 let showTitle = userAgent.includes('Windows') ?
-                    helpers.localize('tooltipShowInExplorer') :
+                    localize('tooltipShowInExplorer') :
                     (userAgent.includes('Mac') ?
-                            helpers.localize('tooltipRevealInFinder') :
-                            helpers.localize('tooltipShowInFolder')
+                            localize('tooltipRevealInFinder') :
+                            localize('tooltipShowInFolder')
                     );
 
                 let items: [ContextMenuItem] = [
                     {
-                        name: helpers.localize('tooltipClearDownload'),
+                        name: localize('tooltipClearDownload'),
                         icon: 'eye-slash',
                         clicked: () => {
                             events.emit('clearDownload', props.download);
@@ -165,7 +166,7 @@ export default defineComponent({
                 // In progress or paused
                 if (inProgress || paused) {
                     items.push({
-                        name: helpers.localize('tooltipCancelDownload'),
+                        name: localize('tooltipCancelDownload'),
                         icon: 'times',
                         clicked: () => {
                             events.emit('cancelDownload', props.download);
@@ -177,7 +178,7 @@ export default defineComponent({
                 // Download in progress
                 if (inProgress) {
                     items.push({
-                        name: helpers.localize('tooltipPauseDownload'),
+                        name: localize('tooltipPauseDownload'),
                         icon: 'pause',
                         clicked: () => {
                             events.emit('pauseDownload', props.download);
@@ -189,7 +190,7 @@ export default defineComponent({
                 // Download is paused
                 if (paused) {
                     items.push({
-                        name: helpers.localize('tooltipResumeDownload'),
+                        name: localize('tooltipResumeDownload'),
                         icon: 'play',
                         clicked: () => {
                             events.emit('resumeDownload', props.download);
@@ -200,7 +201,7 @@ export default defineComponent({
 
                 if (props.download.downloadItem.state === 'complete') {
                     items.push({
-                        name: helpers.localize('tooltipDeleteDownload'),
+                        name: localize('tooltipDeleteDownload'),
                         icon: 'trash-o',
                         clicked: () => {
                             events.emit('deleteDownload', props.download);

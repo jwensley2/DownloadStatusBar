@@ -7,6 +7,7 @@
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.178",
     "@types/micromatch": "^4.0.2",
+    "@types/uuid": "^9.0.8",
     "@vue/cli": "^5.0.8",
     "@vue/compiler-sfc": "^3.2.29",
     "bootstrap": "^5.3.3",
@@ -28,6 +29,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
+    "uuid": "^9.0.1",
     "vue": "^3.4.19",
     "vue-loader": "^17.4.2",
     "web-ext": "^7.11.0",
@@ -46,7 +48,8 @@
     "webext-noprofile": "web-ext run -s build -u https://test.josephwensley.com/ --ignore-files=*.ts node_modules",
     "webext-build": "web-ext build -s build --overwrite-dest",
     "test": "jest --verbose",
-    "coverage": "jest --coverage --coverageReporters lcov --coverageReporters text"
+    "coverage": "jest --coverage --coverageReporters lcov --coverageReporters text",
+    "find-circular-deps": "npx madge --ts-config tsconfig.json --extensions ts --circular ./src"
   },
   "author": "Joseph Wensley",
   "license": "MIT",

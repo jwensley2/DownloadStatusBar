@@ -1,8 +1,8 @@
 import DownloadItem = browser.downloads.DownloadItem;
 import * as _ from 'lodash';
-import * as helpers from './helpers';
-import moment from 'moment';
-import {Moment} from 'moment';
+import moment, {Moment} from 'moment';
+import {formatFileSize} from '@/helpers/formatFileSize';
+import {localize} from '@/helpers/localize';
 
 type DownloadProgress = { time: Moment, bytesReceived: number };
 
@@ -144,11 +144,11 @@ export class DSBDownload implements DownloadInterface {
      * @returns {string}
      */
     progress(): string {
-        const downloaded = helpers.formatFileSize(this.downloadItem.bytesReceived);
-        const totalSize = this.downloadItem.totalBytes > 0 ? helpers.formatFileSize(this.downloadItem.totalBytes) : 0;
+        const downloaded = formatFileSize(this.downloadItem.bytesReceived);
+        const totalSize = this.downloadItem.totalBytes > 0 ? formatFileSize(this.downloadItem.totalBytes) : 0;
 
         if (this.downloadItem.state === 'complete') {
-            return `${helpers.formatFileSize(this.downloadItem.fileSize)}`;
+            return `${formatFileSize(this.downloadItem.fileSize)}`;
         }
 
         if (this.downloadItem.totalBytes === -1) {
@@ -180,23 +180,23 @@ export class DSBDownload implements DownloadInterface {
      */
     status(): string {
         if (this.downloadItem.state === 'complete') {
-            return helpers.localize('downloadStatusComplete');
+            return localize('downloadStatusComplete');
         }
 
         if (this.downloadItem.paused) {
-            return helpers.localize('downloadStatusPaused');
+            return localize('downloadStatusPaused');
         }
 
         if (this.isCancelled()) {
-            return helpers.localize('downloadStatusCancelled')
+            return localize('downloadStatusCancelled')
         }
 
         if (this.downloadItem.error) {
-            return `${helpers.localize('downloadStatusError')}: ${this.downloadItem.error}`;
+            return `${localize('downloadStatusError')}: ${this.downloadItem.error}`;
         }
 
         if (this.downloadItem.totalBytes === -1 || !this.downloadItem.estimatedEndTime) {
-            return helpers.localize('downloadStatusInProgress')
+            return localize('downloadStatusInProgress')
         }
 
         let now = moment();

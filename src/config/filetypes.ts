@@ -1,7 +1,7 @@
 export type FileType = { name: string, mimes: string[], extensions: string[] };
 export type FileTypeList = { [k: string]: FileType[] };
 
-const fileTypes: FileTypeList = {
+export const fileTypes: FileTypeList = {
     'Images': [
         {name: 'PNG', mimes: ['image/png'], extensions: ['png']},
         {name: 'JPG', mimes: ['image/jpeg'], extensions: ['jpg', 'jpeg']},

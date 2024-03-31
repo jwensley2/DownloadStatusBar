@@ -1,4 +1,4 @@
-import {DSBDownload} from '../src/DSBDownload';
+import {DSBDownload} from '@/DSBDownload';
 import moment from 'moment';
 import * as utils from './utils';
 

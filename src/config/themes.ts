@@ -1,4 +1,4 @@
-import {localize} from '@/helpers';
+import {localize} from '@/helpers/localize';
 
 type Colors = {
     background: string,
@@ -20,7 +20,7 @@ export type Theme = {
     colors: Colors
 }
 
-export const darkTheme: Theme = {
+export const darkTheme = (): Theme => ({
     id: 'dark',
     name: localize('themeDark'),
     custom: false,
@@ -34,11 +34,11 @@ export const darkTheme: Theme = {
         download: '#666666',
         progress: '#222222',
         text: '#EEEEEE',
-        error: '#73100D'
-    }
-};
+        error: '#73100D',
+    },
+});
 
-export const lightTheme: Theme = {
+export const lightTheme = (): Theme => ({
     id: 'light',
     name: localize('themeLight'),
     custom: false,
@@ -52,11 +52,11 @@ export const lightTheme: Theme = {
         download: '#AAAAAA',
         progress: '#2A911F',
         text: '#111111',
-        error: '#FF574F'
-    }
-};
+        error: '#FF574F',
+    },
+});
 
-export const colorLabels: Colors = {
+export const colorLabels = (): Colors => ({
     background: localize('customizeThemeLabelBackground'),
     backgroundHover: localize('customizeThemeLabelBackgroundHover'),
     button: localize('customizeThemeLabelButton'),
@@ -67,9 +67,9 @@ export const colorLabels: Colors = {
     progress: localize('customizeThemeLabelProgress'),
     text: localize('customizeThemeLabelText'),
     error: localize('customizeThemeLabelError'),
-};
+});
 
 export const defaultThemes: Array<Theme> = [
-    darkTheme,
-    lightTheme
+    darkTheme(),
+    lightTheme(),
 ];

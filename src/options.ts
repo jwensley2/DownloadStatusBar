@@ -1,9 +1,9 @@
 import {createApp} from 'vue';
 import Options from '@/components/Options.vue';
 import {createPinia} from 'pinia';
-import * as helpers from '@/helpers'
+import {localize} from '@/helpers/localize'
 
-document.title = helpers.localize('optionsPageTitle');
+document.title = localize('optionsPageTitle');
 
 const pinia = createPinia();
 const app = createApp(Options);

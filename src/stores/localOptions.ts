@@ -2,10 +2,11 @@ import {reactive, ref, watch} from 'vue';
 import {defineStore} from 'pinia'
 import _ from 'lodash';
 import {defaultLocalOptions, LocalOptions} from '@/config/options';
-import {forceUnref, mergeSyncDefaultOptions} from '@/helpers';
 import ChangeDict = browser.storage.ChangeDict;
 import StorageName = browser.storage.StorageName;
 import StorageObject = browser.storage.StorageObject;
+import {forceUnref} from '@/helpers/forceUnref';
+import {mergeSyncDefaultOptions} from '@/helpers/options';
 
 export const useLocalOptionsStore = defineStore('localOptions', () => {
     const options: LocalOptions = reactive(defaultLocalOptions());

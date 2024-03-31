@@ -62,9 +62,10 @@
 <script lang="ts">
 import {computed, defineComponent, onMounted, ref, Ref} from 'vue';
 import events from '@/tooltip/events';
-import * as helpers from '@/helpers';
 import CopyButton from '@/components/CopyButton.vue';
+import {localize} from '@/helpers/localize';
 import {useDownloadsStore} from '@/stores/downloads';
+import {formatFileSize} from '@/helpers/formatFileSize';
 
 export default defineComponent({
     components: {
@@ -137,15 +138,15 @@ export default defineComponent({
             }),
 
             downloaded: computed((): string => {
-                return helpers.formatFileSize(download.value!.downloadItem.bytesReceived);
+                return formatFileSize(download.value!.downloadItem.bytesReceived);
             }),
 
             totalsize: computed((): string => {
-                return helpers.formatFileSize(download.value!.downloadItem.totalBytes);
+                return formatFileSize(download.value!.downloadItem.totalBytes);
             }),
 
             filesize: computed((): string => {
-                return helpers.formatFileSize(download.value!.downloadItem.fileSize);
+                return formatFileSize(download.value!.downloadItem.fileSize);
             }),
 
             percentDone: computed((): number => {
@@ -162,14 +163,14 @@ export default defineComponent({
 
             downloadSpeed: computed((): string => {
                 if (!download.value) {
-                    return helpers.localize('downloadSpeedUnknown');
+                    return localize('downloadSpeedUnknown');
                 }
 
-                return `${helpers.formatFileSize(download.value.calculateDownloadSpeed())}/s`;
+                return `${formatFileSize(download.value.calculateDownloadSpeed())}/s`;
             }),
 
             l(messageName: string, substitutions?: string | string[]): string {
-                return helpers.localize(messageName, substitutions);
+                return localize(messageName, substitutions);
             },
         }
     }

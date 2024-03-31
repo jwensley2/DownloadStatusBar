@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import {computed, defineComponent, inject, onMounted, onUpdated, ref, watch} from 'vue';
-import * as helpers from '@/helpers';
+import {localize} from '@/helpers/localize';
 import {useDownloadsStore} from '@/stores/downloads';
 import {useSyncOptionsStore} from '@/stores/syncOptions';
 import events from '@/events';
@@ -94,7 +94,7 @@ export default defineComponent({
             events,
 
             l(messageName: string, substitutions?: string | string[]): string {
-                return helpers.localize(messageName, substitutions);
+                return localize(messageName, substitutions);
             },
 
             hideContextMenu() {

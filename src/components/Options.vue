@@ -271,13 +271,17 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted, watch} from 'vue';
+import {computed, defineComponent, watch} from 'vue';
 import _ from 'lodash';
-import * as helpers from '@/helpers';
+import {localize} from '@/helpers/localize';
 import fileTypes, {FileType, FileTypeList} from '@/config/filetypes';
 import {colorLabels, defaultThemes, Theme} from '@/config/themes';
 import {useSyncOptionsStore} from '@/stores/syncOptions';
 import {useLocalOptionsStore} from '@/stores/localOptions';
+import {formatFileSize} from '@/helpers/formatFileSize';
+import {getFileTypeByName} from '@/helpers/getFileTypeByName';
+import {getThemeById} from '@/helpers/getThemeById';
+import {v4 as uuidv4} from 'uuid';
 
 export default defineComponent({
     setup() {
@@ -291,7 +295,7 @@ export default defineComponent({
         }, {deep: true})
 
         const currentTheme = computed((): Theme => {
-            return helpers.getThemeById(syncOptions.theme, syncOptions.customThemes);
+            return getThemeById(syncOptions.theme, syncOptions.customThemes);
         });
 
         const selectableAutohideTypes = computed((): FileTypeList => {
@@ -324,10 +328,10 @@ export default defineComponent({
             selectableAutohideTypes,
             selectableIgnoredTypes,
             themeList,
-            colorLabels,
+            colorLabels: colorLabels(),
 
             l(messageName: string, substitutions?: string | string[]): string {
-                return helpers.localize(messageName, substitutions);
+                return localize(messageName, substitutions);
             },
 
             autohideTypeEntered(event: Event) {
@@ -355,7 +359,7 @@ export default defineComponent({
 
             selectAutohideType(event: Event) {
                 const target = event.target as HTMLFormElement;
-                const selectedType = helpers.getFileTypeByName(target.value);
+                const selectedType = getFileTypeByName(target.value);
 
                 if (selectedType && syncOptions.autohideFileTypes.indexOf(selectedType) === -1) {
                     syncOptions.autohideFileTypes.push(selectedType);
@@ -396,7 +400,7 @@ export default defineComponent({
 
             selectIgnoredType(event: Event) {
                 const target = event.target as HTMLFormElement;
-                const selectedType = helpers.getFileTypeByName(target.value);
+                const selectedType = getFileTypeByName(target.value);
 
                 if (selectedType && syncOptions.ignoredFileTypes.indexOf(selectedType) === -1) {
                     syncOptions.ignoredFileTypes.push(selectedType);
@@ -421,7 +425,7 @@ export default defineComponent({
                 }
 
                 if (file.size > (1024 * 1024)) {
-                    alert(`"${file.name}" is ${helpers.formatFileSize(file.size)}`);
+                    alert(`"${file.name}" is ${formatFileSize(file.size)}`);
                     return;
                 }
 
@@ -444,8 +448,8 @@ export default defineComponent({
 
             customizeTheme() {
                 let newTheme: Theme = _.cloneDeep(currentTheme.value);
-                newTheme.name = helpers.localize('customizeThemeDefaultName');
-                newTheme.id = helpers.randomString(20);
+                newTheme.name = localize('customizeThemeDefaultName');
+                newTheme.id = uuidv4();
                 newTheme.custom = true;
 
                 syncOptions.customThemes.push(newTheme);
@@ -464,7 +468,7 @@ export default defineComponent({
             },
 
             resetOptions() {
-                if (confirm(helpers.localize('optionsResetConfirmation'))) {
+                if (confirm(localize('optionsResetConfirmation'))) {
                     syncOptionsStore.reset();
                     localOptionsStore.reset();
                 }

@@ -2,10 +2,11 @@ import {reactive, ref, watch} from 'vue';
 import {defineStore} from 'pinia'
 import _ from 'lodash';
 import {defaultSyncOptions, SyncOptions} from '@/config/options';
-import {forceUnref, mergeSyncDefaultOptions} from '@/helpers';
 import ChangeDict = browser.storage.ChangeDict;
 import StorageName = browser.storage.StorageName;
 import StorageObject = browser.storage.StorageObject;
+import {forceUnref} from '@/helpers/forceUnref';
+import {mergeSyncDefaultOptions} from '@/helpers/options';
 
 export const useSyncOptionsStore = defineStore('syncOptions', () => {
     const options: SyncOptions = reactive(defaultSyncOptions());
