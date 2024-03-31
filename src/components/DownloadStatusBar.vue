@@ -5,9 +5,10 @@
          @mouseleave="hideContextMenu"
          ref="element"
     >
-        <button class="dsb-clear-downloads" v-if="!syncOptions.minimized" @click="events.emit('clearDownloads')">
+        <button class="dsb-clear-downloads-left" v-if="!syncOptions.minimized && syncOptions.clearPosition === 'left'" @click="events.emit('clearDownloads')">
             {{ l('barClearButton') }}
         </button>
+
         <div class="dsb-downloads" v-if="!syncOptions.minimized">
             <download v-for="download in downloads"
                       :key="download.id"
@@ -18,10 +19,15 @@
         <context-menu></context-menu>
         <tooltip :theme="syncOptions.theme"></tooltip>
 
-        <button class="dsb-open-options" v-if="!syncOptions.minimized" @click="openOptions">Options<span class="icon-gear"></span></button>
-        <button class="dsb-minimize" @click="minimize">
-            <span :class="!syncOptions.minimized ? 'icon-angle-right' : 'icon-angle-left'"></span>
-        </button>
+        <div class="dsb-right-buttons">
+            <button class="dsb-clear-downloads-right" v-if="!syncOptions.minimized && syncOptions.clearPosition === 'right'" @click="events.emit('clearDownloads')">
+                {{ l('barClearButton') }}
+            </button>
+            <button class="dsb-open-options" v-if="!syncOptions.minimized" @click="openOptions">Options<span class="icon-gear"></span></button>
+            <button class="dsb-minimize" @click="minimize">
+                <span :class="!syncOptions.minimized ? 'icon-angle-right' : 'icon-angle-left'"></span>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -147,6 +153,11 @@ export default defineComponent({
   }
 }
 
+.dsb-right-buttons {
+  display     : flex;
+  margin-left : auto;
+}
+
 .dsb-bar-button {
   box-shadow  : none;
   box-sizing  : border-box;
@@ -160,20 +171,32 @@ export default defineComponent({
 
 .dsb-clear-downloads {
   @extend .dsb-bar-button;
-  background         : var(--button);
-  border             : 0 solid var(--buttonBorder);
-  border-right-width : 1px;
-  color              : var(--text) !important;
-  display            : inline-block;
-  font               : normal 600 1em/1em Arial, sans-serif;
-  height             : auto;
-  margin             : 0 5px 0 0;
-  padding            : 0 15px;
-  flex-shrink        : 0;
+  background  : var(--button);
+  border      : 0 solid var(--buttonBorder);
+  color       : var(--text) !important;
+  display     : inline-block;
+  font        : normal 600 1em/1em Arial, sans-serif;
+  height      : auto;
+  padding     : 0 15px;
+  flex-shrink : 0;
 
   &:hover {
     background : var(--buttonHover);
   }
+}
+
+.dsb-clear-downloads-left {
+  @extend .dsb-clear-downloads;
+  margin             : 0 5px 0 0;
+  border-right-width : 1px;
+}
+
+.dsb-clear-downloads-right {
+  @extend .dsb-clear-downloads;
+  margin       : 0 5px;
+  position     : relative;
+  right        : 0;
+  border-width : 0 1px;
 }
 
 .dsb-icon-button {

@@ -109,6 +109,18 @@
     "message": "This will reset all options to the default and cannot be undone, please confirm.",
     "description": "The confirmation message for resetting the options"
   },
+  "optionsClearButtonPositionLabel": {
+    "message": "Clear Button Position",
+    "description": "Label for the clear button position option"
+  },
+  "optionsClearButtonPositionLeftLabel": {
+    "message": "Left Side",
+    "description": "Label for the left side radio button"
+  },
+  "optionsClearButtonPositionRightLabel": {
+    "message": "Right Side",
+    "description": "Label for the right side radio button"
+  },
   "optionsTheme": {
     "message": "Theme",
     "description": "Label for the base theme selection"

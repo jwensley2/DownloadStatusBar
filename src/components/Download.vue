@@ -289,7 +289,7 @@ export default defineComponent({
   position       : relative;
 
   + .dsb-text-line {
-    margin-top : 0.2em
+    margin-top : 0.3em
   }
 }
 

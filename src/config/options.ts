@@ -24,6 +24,7 @@ export interface SyncOptions extends StorageObject {
     clearFailed: boolean;
     clearAfterOpening: boolean;
     fontSize: number;
+    clearPosition: 'left' | 'right';
 }
 
 export const defaultSyncOptions = (): SyncOptions => ({
@@ -45,6 +46,7 @@ export const defaultSyncOptions = (): SyncOptions => ({
     clearFailed: false,
     clearAfterOpening: false,
     fontSize: 16,
+    clearPosition: 'left',
 });
 
 /**

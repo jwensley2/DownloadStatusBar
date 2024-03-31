@@ -22,6 +22,20 @@
                                 <label class="form-check-label" for="optionsShowDownloadInfo">{{ l('optionsShowDownloadInfo') }}</label>
                             </div>
 
+                            <div class="mt-3">
+                                <p class="mb-1">{{ l('optionsClearButtonPositionLabel') }}</p>
+
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="optionsClearButtonPositionLeft" v-model="syncOptions.clearPosition" value="left">
+                                    <label class="form-check-label" for="optionsClearButtonPositionLeft">{{ l('optionsClearButtonPositionLeftLabel') }}</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="optionsClearButtonPositionRight" v-model="syncOptions.clearPosition" value="right">
+                                    <label class="form-check-label" for="optionsClearButtonPositionRight">{{ l('optionsClearButtonPositionRightLabel') }}</label>
+                                </div>
+                            </div>
+
                             <div class="mt-2 row row-cols-auto g-3 align-items-center">
                                 <div class="col-auto">
                                     <label class="form-label" for="optionsFontSize">{{ l('optionsFontSize') }}</label>
