@@ -155,11 +155,11 @@
   },
   "customizeThemeLabelBackground": {
     "message": "Background",
-    "description": "Label for the dowmload bar's background"
+    "description": "Label for the download bar's background"
   },
   "customizeThemeLabelBackgroundHover": {
     "message": "Background Hover",
-    "description": "Label for the dowmload bar's menu background when mouse hover"
+    "description": "Label for the download bar's menu background when mouse hover"
   },
   "customizeThemeLabelButton": {
     "message": "Button",
@@ -175,23 +175,27 @@
   },
   "customizeThemeLabelBorder": {
     "message": "Border",
-    "description": "Label for the dowmload bar's border"
+    "description": "Label for the download bar's border"
   },
   "customizeThemeLabelDownload": {
     "message": "Download",
-    "description": "Label for the dowmload progress's background"
+    "description": "Label for the download progress's background"
   },
   "customizeThemeLabelProgress": {
     "message": "Progress",
-    "description": "Label for the dowmload progress's foreground"
+    "description": "Label for the download progress's foreground"
   },
   "customizeThemeLabelText": {
     "message": "Text",
-    "description": "Label for the dowmload bar's text"
+    "description": "Label for the download bar's text"
+  },
+  "customizeThemeLabelComplete": {
+    "message": "Complete",
+    "description": "Label for progress's background when the download is complete"
   },
   "customizeThemeLabelError": {
     "message": "Error",
-    "description": "Label for progress's background when the dowmload has error"
+    "description": "Label for progress's background when the download has an error"
   },
   "optionsAlwaysShowBar": {
     "message": "Always show the status bar"

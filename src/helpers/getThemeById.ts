@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {defaultThemes, lightTheme, Theme} from '@/config/themes';
 
 /**
@@ -13,8 +14,10 @@ export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
     }
 
     for (let customTheme of customThemes) {
+        const baseTheme = _.find(defaultThemes, {id: customTheme.base}) ?? lightTheme();
+
         if (customTheme.id === id) {
-            return Object.assign(customTheme, Object.assign({}, lightTheme(), customTheme));
+            return _.merge(customTheme, _.merge({}, baseTheme, customTheme));
         }
     }
 

@@ -271,7 +271,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, watch} from 'vue';
+import {computed, defineComponent, reactive, watch} from 'vue';
 import _ from 'lodash';
 import {localize} from '@/helpers/localize';
 import fileTypes, {FileType, FileTypeList} from '@/config/filetypes';
@@ -451,6 +451,7 @@ export default defineComponent({
                 newTheme.name = localize('customizeThemeDefaultName');
                 newTheme.id = uuidv4();
                 newTheme.custom = true;
+                newTheme.base = currentTheme.value.base ?? currentTheme.value.id;
 
                 syncOptions.customThemes.push(newTheme);
                 syncOptions.theme = newTheme.id;

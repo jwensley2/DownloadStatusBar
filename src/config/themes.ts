@@ -1,23 +1,25 @@
 import {localize} from '@/helpers/localize';
 
 type Colors = {
-    background: string,
-    backgroundHover: string,
-    button: string,
-    buttonHover: string,
-    buttonBorder: string,
-    border: string,
-    download: string,
-    progress: string,
-    text: string,
-    error: string,
+    text: string;
+    background: string;
+    backgroundHover: string;
+    button: string;
+    buttonHover: string;
+    buttonBorder: string;
+    border: string;
+    download: string;
+    progress: string;
+    complete: string;
+    error: string;
 };
 
 export type Theme = {
-    id: string,
-    name: string,
-    custom: boolean,
-    colors: Colors
+    id: string;
+    name: string;
+    custom: boolean;
+    colors: Colors;
+    base?: string;
 }
 
 export const darkTheme = (): Theme => ({
@@ -25,6 +27,7 @@ export const darkTheme = (): Theme => ({
     name: localize('themeDark'),
     custom: false,
     colors: {
+        text: '#EEEEEE',
         background: '#333333',
         backgroundHover: '#666666',
         button: 'transparent',
@@ -33,7 +36,7 @@ export const darkTheme = (): Theme => ({
         border: '#111111',
         download: '#666666',
         progress: '#222222',
-        text: '#EEEEEE',
+        complete: '#222222',
         error: '#73100D',
     },
 });
@@ -43,6 +46,7 @@ export const lightTheme = (): Theme => ({
     name: localize('themeLight'),
     custom: false,
     colors: {
+        text: '#111111',
         background: '#EFEFEF',
         backgroundHover: '#FFFFFF',
         button: 'transparent',
@@ -51,12 +55,13 @@ export const lightTheme = (): Theme => ({
         border: '#888888',
         download: '#AAAAAA',
         progress: '#2A911F',
-        text: '#111111',
+        complete: '#2A911F',
         error: '#FF574F',
     },
 });
 
 export const colorLabels = (): Colors => ({
+    text: localize('customizeThemeLabelText'),
     background: localize('customizeThemeLabelBackground'),
     backgroundHover: localize('customizeThemeLabelBackgroundHover'),
     button: localize('customizeThemeLabelButton'),
@@ -65,7 +70,7 @@ export const colorLabels = (): Colors => ({
     border: localize('customizeThemeLabelBorder'),
     download: localize('customizeThemeLabelDownload'),
     progress: localize('customizeThemeLabelProgress'),
-    text: localize('customizeThemeLabelText'),
+    complete: localize('customizeThemeLabelComplete'),
     error: localize('customizeThemeLabelError'),
 });
 

@@ -132,7 +132,7 @@ export default defineComponent({
   left                    : 0;
   letter-spacing          : normal;
   line-height             : 1;
-  min-height              : 25px;
+  min-height              : 15px;
   padding                 : 0;
   position                : fixed;
   text-align              : left;
@@ -208,21 +208,20 @@ export default defineComponent({
   padding     : 0;
   position    : relative;
   text-indent : -999px;
-  width       : 30px;
+  width       : auto;
+  font-size   : 0;
+  display     : flex;
+  align-items : center;
 
   [class^="icon-"] {
     color       : var(--text);
     display     : block;
-    font-size   : 20px;
-    height      : 100%;
-    left        : 0;
+    font-size   : calc(var(--font-size) * 1.25);
+    height      : auto;
+    margin      : 5px 10px;
     line-height : 100%;
-    margin-top  : -10px;
-    position    : absolute;
-    right       : 0;
     text-indent : 0;
-    top         : 50%;
-    width       : 100%;
+    width       : auto;
   }
 }
 

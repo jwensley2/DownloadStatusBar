@@ -234,11 +234,10 @@ export default defineComponent({
   justify-content : center;
   letter-spacing  : normal;
   margin          : 5px 5px 0 5px;
-  max-width       : 300px;
-  min-height      : 30px;
-  min-width       : 125px;
+  min-width       : 15ch;
+  min-height      : 10px;
   overflow        : hidden;
-  padding         : 3px 6px;
+  padding         : 0.25em 0.5em;
   position        : relative;
   text-shadow     : none;
   width           : auto;
@@ -249,7 +248,7 @@ export default defineComponent({
   }
 
   &.dsb-complete {
-    background : var(--progress);
+    background : var(--complete);
   }
 
   &.dsb-error {
@@ -297,17 +296,21 @@ export default defineComponent({
 .dsb-filename {
   @extend .dsb-text-line;
   text-align  : left;
-  flex-grow   : 1;
+  flex        : 2 1 auto;
   overflow-x  : hidden;
   white-space : nowrap;
   font-size   : 0.9em;
   line-height : 0.9em;
   padding     : 0.2em 0;
+  min-width   : 10ch;
+  max-width   : 30ch;
 }
 
 .dsb-download-info {
   max-height : 100%;
+  min-width  : min-content;
   margin     : 0 0 0 10px;
+  flex       : 1 0 auto;
 }
 
 .dsb-progress, .dsb-speed, .dsb-percent {
