@@ -7,13 +7,13 @@ import {defaultThemes, lightTheme, Theme} from '@/config/themes';
  * @param {Theme} customThemes
  */
 export function getThemeById(id: string, customThemes: Theme[] = []): Theme {
-    for (let theme of defaultThemes) {
+    for (const theme of defaultThemes) {
         if (theme.id === id) {
             return theme;
         }
     }
 
-    for (let customTheme of customThemes) {
+    for (const customTheme of customThemes) {
         const baseTheme = _.find(defaultThemes, {id: customTheme.base}) ?? lightTheme();
 
         if (customTheme.id === id) {

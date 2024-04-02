@@ -1,5 +1,5 @@
 import {ComponentPublicInstance, createApp, watch} from 'vue';
-import {createPinia} from 'pinia'
+import {createPinia} from 'pinia';
 import * as _ from 'lodash';
 import {DSBDownload} from '@/DSBDownload';
 import {useDownloadsStore} from '@/stores/downloads';
@@ -30,7 +30,7 @@ export default class DownloadStatusBar {
         watch(() => syncOptionsStore.options, (value) => {
             // Set styles when the options change
             this.setStyles(value);
-        }, {deep: true})
+        }, {deep: true});
     }
 
     set downloads(downloads: DSBDownload[]) {
@@ -50,33 +50,33 @@ export default class DownloadStatusBar {
 
         events.on('clearDownload', (download: DSBDownload) => {
             // Tell the background process to clear the download
-            browser.runtime.sendMessage({event: 'clearDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'clearDownload', download: download.toJSON()});
         });
 
         events.on('openDownload', (download: DSBDownload) => {
             // Tell the background process to open the download
-            browser.runtime.sendMessage({event: 'openDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'openDownload', download: download.toJSON()});
         });
 
         events.on('showDownload', (download: DSBDownload) => {
             // Tell the background process to show the download
-            browser.runtime.sendMessage({event: 'showDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'showDownload', download: download.toJSON()});
         });
 
         events.on('cancelDownload', (download: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'cancelDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'cancelDownload', download: download.toJSON()});
         });
 
         events.on('pauseDownload', (download: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'pauseDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'pauseDownload', download: download.toJSON()});
         });
 
         events.on('resumeDownload', (download: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'resumeDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'resumeDownload', download: download.toJSON()});
         });
 
         events.on('deleteDownload', (download: DSBDownload) => {
-            browser.runtime.sendMessage({event: 'deleteDownload', download: JSON.stringify(download)});
+            browser.runtime.sendMessage({event: 'deleteDownload', download: download.toJSON()});
         });
 
         events.on('openOptions', () => {
@@ -91,7 +91,7 @@ export default class DownloadStatusBar {
             return document.getElementById(containerId) as HTMLElement;
         }
 
-        let container = document.createElement('div');
+        const container = document.createElement('div');
         container.id = containerId;
 
         return container;
@@ -115,7 +115,7 @@ export default class DownloadStatusBar {
     }
 
     public setStyles(options: SyncOptions) {
-        const theme = getThemeById(options.theme, options.customThemes)
+        const theme = getThemeById(options.theme, options.customThemes);
         const element = DownloadStatusBar.getStatusBarContainer();
 
         // Prevent some sites from breaking
@@ -127,6 +127,6 @@ export default class DownloadStatusBar {
 
         _.forEach(theme.colors, (colour, prop) => {
             element.style.setProperty(`--${prop}`, colour);
-        })
+        });
     }
 }

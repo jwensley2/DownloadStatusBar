@@ -81,7 +81,7 @@ export function makeFakeDownload(downloadInfo: Partial<DownloadItem>): DownloadI
     const size = 1024 * 1024 * 1024;
     const now = moment();
 
-    let download = new DSBDownload(Object.assign({}, {
+    const download = new DSBDownload(Object.assign({}, {
         id: _.random(),
         url: 'https://google.com',
         referrer: 'https://google.com',

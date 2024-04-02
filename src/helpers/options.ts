@@ -1,9 +1,9 @@
+import {reactive, ref, UnwrapNestedRefs} from 'vue';
+import {defineStore} from 'pinia';
+import _ from 'lodash';
 import {defaultLocalOptions, defaultSyncOptions, LocalOptions, SyncOptions} from '@/config/options';
 import {getFileTypeByName} from '@/helpers/getFileTypeByName';
-import {defineStore} from 'pinia';
-import {reactive, ref, UnwrapNestedRefs} from 'vue';
 import {forceUnref} from '@/helpers/forceUnref';
-import _ from 'lodash';
 import StorageName = browser.storage.StorageName;
 import StorageObject = browser.storage.StorageObject;
 import ChangeDict = browser.storage.ChangeDict;
@@ -28,7 +28,7 @@ export const mergeLocalDefaultOptions: MergeFunction<LocalOptions> = (options: P
  * @returns {SyncOptions}
  */
 export const mergeSyncDefaultOptions: MergeFunction<SyncOptions> = (options: Partial<SyncOptions>): SyncOptions => {
-    let merged = Object.assign({}, defaultSyncOptions(), options);
+    const merged = Object.assign({}, defaultSyncOptions(), options);
 
     // Replace the saved types with the one in the config if it exists
     merged.autohideFileTypes = merged.autohideFileTypes.map((fileType) => {

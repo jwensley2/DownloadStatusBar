@@ -1,9 +1,9 @@
-const webpack = require('webpack');
-const {merge} = require('webpack-merge');
-const common = require('./webpack.config');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+import webpack from 'webpack';
+import {merge} from 'webpack-merge';
+import common from './webpack.config.js';
+import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 
-module.exports = merge(common, {
+export default merge(common, {
     plugins: [
         new CleanWebpackPlugin(),
         new webpack.DefinePlugin({

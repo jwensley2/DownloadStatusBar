@@ -3,12 +3,18 @@ import * as _ from 'lodash';
 import moment, {Moment} from 'moment';
 import {formatFileSize} from '@/helpers/formatFileSize';
 import {localize} from '@/helpers/localize';
+import {toRaw} from 'vue';
 
 type DownloadProgress = { time: Moment, bytesReceived: number };
 
 export interface DownloadInterface {
     downloadItem: DownloadItem,
     downloadProgress: DownloadProgress[],
+}
+
+export interface SerializedDownloadInterface {
+    downloadItem: DownloadItem,
+    downloadProgress: { time: string, bytesReceived: number }[],
 }
 
 export class DSBDownload implements DownloadInterface {
@@ -24,23 +30,25 @@ export class DSBDownload implements DownloadInterface {
         });
     }
 
-    static fromJson(json: DownloadInterface) {
-        let download = new this(json.downloadItem);
+    static fromJson(serialized: SerializedDownloadInterface) {
+        const download = new this(serialized.downloadItem);
 
         // Convert the serialized progress to the proper form
-        download._downloadProgress = json.downloadProgress.map((progress) => {
-            progress.time = moment(progress.time);
-            return progress;
+        download._downloadProgress = serialized.downloadProgress.map((progress) => {
+            return {...progress, time: moment(progress.time)};
         });
 
         return download;
     }
 
-    toJSON(): DownloadInterface {
+    toJSON(): SerializedDownloadInterface {
         return {
-            downloadItem: this.downloadItem,
-            downloadProgress: this.downloadProgress,
-        }
+            downloadItem: toRaw(this.downloadItem),
+            downloadProgress: this.downloadProgress.map((progress) => ({
+                bytesReceived: progress.bytesReceived,
+                time: progress.time.toJSON(),
+            })),
+        };
     }
 
     get downloadItem() {
@@ -97,7 +105,7 @@ export class DSBDownload implements DownloadInterface {
      * @returns {string}
      */
     filename(): string {
-        let m = this.downloadItem.filename.toString().match(/.*[\/\\](.+)/);
+        const m = this.downloadItem.filename.toString().match(/.*[/\\](.+)/);
 
         if (m && m.length > 1) {
             return m[m.length - 1];
@@ -116,7 +124,7 @@ export class DSBDownload implements DownloadInterface {
             return false;
         }
 
-        return this.downloadItem.state === 'interrupted' && (this.downloadItem.error === 'USER_CANCELED' || this.downloadItem.error === 'USER_SHUTDOWN')
+        return this.downloadItem.state === 'interrupted' && (this.downloadItem.error === 'USER_CANCELED' || this.downloadItem.error === 'USER_SHUTDOWN');
     }
 
     /**
@@ -152,7 +160,7 @@ export class DSBDownload implements DownloadInterface {
         }
 
         if (this.downloadItem.totalBytes === -1) {
-            return `${downloaded} / Unknown`
+            return `${downloaded} / Unknown`;
         }
 
         return `${downloaded} / ${totalSize} - ${this.percentDownloaded()}%`;
@@ -188,7 +196,7 @@ export class DSBDownload implements DownloadInterface {
         }
 
         if (this.isCancelled()) {
-            return localize('downloadStatusCancelled')
+            return localize('downloadStatusCancelled');
         }
 
         if (this.downloadItem.error) {
@@ -196,11 +204,11 @@ export class DSBDownload implements DownloadInterface {
         }
 
         if (this.downloadItem.totalBytes === -1 || !this.downloadItem.estimatedEndTime) {
-            return localize('downloadStatusInProgress')
+            return localize('downloadStatusInProgress');
         }
 
-        let now = moment();
-        let finish = moment(this.downloadItem.estimatedEndTime, moment.ISO_8601);
+        const now = moment();
+        const finish = moment(this.downloadItem.estimatedEndTime, moment.ISO_8601);
 
         return moment.duration(finish.diff(now), 'ms').humanize();
     }
@@ -216,7 +224,6 @@ export class DSBDownload implements DownloadInterface {
 
     /**
      * Resume the download
-
      */
     resume(): Promise<void> {
         return browser.downloads.resume(this.downloadItem.id);

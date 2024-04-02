@@ -1,8 +1,8 @@
-const {merge} = require('webpack-merge');
-const webpack = require('webpack');
-const common = require('./webpack.config');
+import {merge} from 'webpack-merge';
+import webpack from 'webpack';
+import common from './webpack.config.js';
 
-module.exports = merge(common, {
+export default merge(common, {
     devtool: 'inline-source-map',
     plugins: [
         new webpack.DefinePlugin({

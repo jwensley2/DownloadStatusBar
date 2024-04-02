@@ -3,15 +3,6 @@ import ContextMenuComponent from './ContextMenu.vue';
 import events from './events';
 import {ContextMenuItem, ContextMenuPosition} from './types';
 
-declare module '@vue/runtime-core' {
-    export interface ComponentCustomProperties {
-        $contextMenu: {
-            open: Function,
-            close: Function
-        }
-    }
-}
-
 export default {
     install(app: App) {
         app.component('context-menu', ContextMenuComponent);

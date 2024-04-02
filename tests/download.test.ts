@@ -1,6 +1,7 @@
 import {DSBDownload} from '@/DSBDownload';
 import moment from 'moment';
 import * as utils from './utils';
+import DownloadItem = browser.downloads.DownloadItem;
 
 test('test download speed', () => {
     const now = moment();
@@ -82,4 +83,57 @@ test('test percent downloaded', () => {
 
     download.downloadItem.state = 'complete';
     expect(download.percentDownloaded()).toBe(100);
+});
+
+const downloadStatuses: { name: string; status: string; state: Partial<DownloadItem> }[] = [
+    {
+        name: 'complete',
+        state: {state: 'complete'},
+        status: 'downloadStatusComplete',
+    },
+    {
+        name: 'paused',
+        state: {state: 'in_progress', paused: true},
+        status: 'downloadStatusPaused',
+    },
+    {
+        name: 'cancelled',
+        state: {state: 'interrupted', paused: false, error: 'USER_CANCELED'},
+        status: 'downloadStatusCancelled',
+    },
+    {
+        name: 'error',
+        state: {state: 'interrupted', error: 'SOME ERROR'},
+        status: 'downloadStatusError: SOME ERROR',
+    },
+    {
+        name: 'in progress',
+        state: {state: 'in_progress', totalBytes: -1},
+        status: 'downloadStatusInProgress',
+    },
+];
+
+describe.each(downloadStatuses)('test download status', (status) => {
+    test(`test ${status.name}`, () => {
+        const download = new DSBDownload(utils.makeDownloadItem(status.state));
+        expect(download.status()).toBe(status.status);
+    });
+});
+
+test('test download progress', () => {
+    const download = new DSBDownload(utils.makeDownloadItem({totalBytes: 1024, fileSize: 1024}));
+
+    expect(download.progress()).toBe('0B / 1KB - 0%');
+
+    download.downloadItem.bytesReceived = 512;
+    expect(download.progress()).toBe('512B / 1KB - 50%');
+
+    download.downloadItem.bytesReceived = 1024;
+    expect(download.progress()).toBe('1KB / 1KB - 100%');
+
+    download.downloadItem.totalBytes = -1;
+    expect(download.progress()).toBe('1KB / Unknown');
+
+    download.downloadItem.state = 'complete';
+    expect(download.progress()).toBe('1KB');
 });

@@ -2,7 +2,7 @@ import moment from 'moment';
 import {createPinia} from 'pinia';
 import * as _ from 'lodash';
 import {LocalOptions, SyncOptions} from './config/options';
-import {DSBDownload} from './DSBDownload';
+import {DSBDownload, SerializedDownloadInterface} from './DSBDownload';
 import {useSyncOptionsStore} from '@/stores/syncOptions';
 import {filterFinishedDownloads, getInProgressDownloads, removeSelectedDownload, shouldHideDownload, shouldIgnoreDownload} from '@/helpers/downloads';
 import DownloadQuery = browser.downloads.DownloadQuery;
@@ -25,8 +25,6 @@ export default class DownloadStatus {
      * Start event listeners
      */
     listen(): void {
-        const self = this;
-
         // Listen for download created events
         browser.downloads.onCreated.addListener((downloadItem) => {
             const download = new DSBDownload(downloadItem);
@@ -38,28 +36,28 @@ export default class DownloadStatus {
                 return;
             }
 
-            self.downloads.push(download);
-            self.startInterval();
+            this.downloads.push(download);
+            this.startInterval();
         });
 
         // Listen for changes to the downloads
         browser.downloads.onChanged.addListener((downloadDelta) => {
             if (downloadDelta.state && downloadDelta.state.current === 'complete') {
-                let download = _.find(this.downloads, (dl) => {
+                const download = _.find(this.downloads, (dl) => {
                     return dl.downloadItem.id === downloadDelta.id;
                 });
 
                 if (!download) return;
 
                 // Update changed properties
-                for (let [property, change] of Object.entries(downloadDelta)) {
-                    const downloadItem = download.downloadItem as any
+                for (const [property, change] of Object.entries(downloadDelta)) {
+                    const downloadItem = download.downloadItem;
                     if (property === 'id') continue; // Ignore id
                     downloadItem[property] = (change as StringDelta | BooleanDelta | DoubleDelta).current;
                 }
 
                 // This downloadItem object is a delta of what changed so we need to query for the full downloadItem item
-                let startTime = moment(download.downloadItem.startTime);
+                const startTime = moment(download.downloadItem.startTime);
 
                 // Add the final progress
                 download.downloadProgress.push({
@@ -74,49 +72,53 @@ export default class DownloadStatus {
 
                 if (shouldHideDownload(download, this.syncOptions)) {
                     setTimeout(() => {
-                        self.clearDownload(download as DSBDownload);
+                        this.clearDownload(download as DSBDownload);
                     }, this.syncOptions.autohideDuration * 1000);
                 }
 
                 this.updateTabs(this.downloads);
             } else {
-                self.startInterval();
+                this.startInterval();
             }
         });
 
         // Listen for messages from the content script
-        browser.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
-            if (request.download) {
-                const download = DSBDownload.fromJson(JSON.parse(request.download) as DSBDownload);
+        browser.runtime.onMessage.addListener((request): void => {
+            if (!('event' in request && typeof request.event === 'string')) {
+                return;
+            }
+
+            if ('download' in request) {
+                const download = DSBDownload.fromJson(request.download as SerializedDownloadInterface);
 
                 switch (request.event) {
                     case 'clearDownload':
-                        self.clearDownload(download);
+                        this.clearDownload(download);
                         break;
                     case 'openDownload':
-                        self.openDownload(download);
+                        this.openDownload(download);
                         break;
                     case 'showDownload':
-                        self.showDownload(download);
+                        this.showDownload(download);
                         break;
                     case 'cancelDownload':
-                        self.cancelDownload(download);
+                        this.cancelDownload(download);
                         break;
                     case 'pauseDownload':
-                        self.pauseDownload(download);
+                        this.pauseDownload(download);
                         break;
                     case 'resumeDownload':
-                        self.resumeDownload(download);
+                        this.resumeDownload(download);
                         break;
                     case 'deleteDownload':
-                        self.deleteDownload(download);
+                        this.deleteDownload(download);
                         break;
                 }
             }
 
             switch (request.event) {
                 case 'clearDownloads':
-                    self.clearDownloads();
+                    this.clearDownloads();
                     break;
                 case 'openOptions':
                     browser.runtime.openOptionsPage();
@@ -125,13 +127,13 @@ export default class DownloadStatus {
         });
 
         // Send the downloads to a tab when it loads
-        browser.webNavigation.onCompleted.addListener(function (arg: any) {
-            browser.tabs.sendMessage(arg.tabId, JSON.stringify(self.downloads));
+        browser.webNavigation.onCompleted.addListener((arg) => {
+            browser.tabs.sendMessage(arg.tabId, {event: 'updateDownloads', downloads: this.downloads.map(d => d.toJSON())});
         });
 
         // When the active tab changes update it with the current downloads
-        browser.tabs.onActivated.addListener(function (activeInfo: any) {
-            browser.tabs.sendMessage(activeInfo.tabId, JSON.stringify(self.downloads));
+        browser.tabs.onActivated.addListener((activeInfo) => {
+            browser.tabs.sendMessage(activeInfo.tabId, {event: 'updateDownloads', downloads: this.downloads.map(d => d.toJSON())});
         });
     }
 
@@ -185,31 +187,29 @@ export default class DownloadStatus {
      * @returns {Promise<void>}
      */
     updateTabs(downloads: DSBDownload[], activeOnly: boolean = true) {
-        const query: any = {};
+        const query: { [propName: string]: unknown } = {};
 
         if (activeOnly) {
             query.active = true;
         }
 
-        let querying = browser.tabs.query(query);
+        const querying = browser.tabs.query(query);
 
         return querying.then((tabs) => {
-            const json = JSON.stringify(downloads);
-
-            for (let tab of tabs) {
+            for (const tab of tabs) {
                 if (tab.id) {
-                    browser.tabs.sendMessage(tab.id, json);
+                    browser.tabs.sendMessage(tab.id, {event: 'updateDownloads', downloads: this.downloads.map(d => d.toJSON())});
                 }
             }
         });
-    };
+    }
 
     /**
      * Update a single download
      * @param {DSBDownload} download
      */
     updateDownload(download: DSBDownload): Promise<DSBDownload> {
-        let query: DownloadQuery = {
+        const query: DownloadQuery = {
             id: download.downloadItem.id,
         };
 
@@ -223,7 +223,7 @@ export default class DownloadStatus {
                 } else {
                     reject();
                 }
-            })
+            });
         });
     }
 
@@ -233,9 +233,9 @@ export default class DownloadStatus {
      * @returns {Promise<DSBDownload[]>}
      */
     updateDownloads(): Promise<DSBDownload[]> {
-        let promises: Promise<DSBDownload>[] = [];
+        const promises: Promise<DSBDownload>[] = [];
 
-        for (let download of this.downloads) {
+        for (const download of this.downloads) {
             promises.push(this.updateDownload(download));
         }
 
@@ -331,7 +331,7 @@ export default class DownloadStatus {
         }
 
         browser.storage.local.get('customSound').then((options: Partial<LocalOptions>) => {
-            let audio = new Audio();
+            const audio = new Audio();
 
             if (options.customSound) {
                 audio.src = browser.runtime.getURL(options.customSound.data);

@@ -1,10 +1,15 @@
-const path = require('path');
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {VueLoaderPlugin} = require('vue-loader');
+import webpack from 'webpack';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import path from 'path';
+import {fileURLToPath} from 'url';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import {VueLoaderPlugin} from 'vue-loader';
+import {createRequire} from 'module';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
+
+export default {
     stats: {
         errorDetails: true
     },
@@ -81,6 +86,7 @@ module.exports = {
             patterns: [
                 {
                     from: 'manifest.json', to: './', transform(content) {
+                        const require = createRequire(import.meta.url);
                         const pkg = require('./package.json');
                         const manifest = JSON.parse(content.toString());
 
