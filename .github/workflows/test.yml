@@ -24,6 +24,8 @@ jobs:
     - run: npm ci
     - run: npm run coverage
     - name: Test & publish code coverage
-      uses: paambaati/codeclimate-action@v2.7.4
+      uses: paambaati/codeclimate-action@v5.0.0
       env:
         CC_TEST_REPORTER_ID: ff7164f0824f0f368f2da7e9f2de49badffcd68ed0b2043c20eaaea2d96c53c0
+      with:
+        coverageCommand: npm run coverage
