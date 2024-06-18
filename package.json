@@ -36,7 +36,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.4.19",
     "vue-loader": "^17.4.2",
-    "web-ext": "^7.11.0",
+    "web-ext": "^8.1.0",
     "web-ext-types": "^3.2.1",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4",
