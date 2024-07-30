@@ -93,9 +93,33 @@
     "message": "Effacer le téléchargement",
     "description": "Clear the download info on bar and delete download file."
   },
+  "optionsPageTitle": {
+    "message": "Options - WX Download Status Bar",
+    "description": "The title for the options page"
+  },
   "optionsDisplayPanelTitle": {
     "message": "Options",
     "description": "Title of the display options panel."
+  },
+  "optionsResetButton": {
+    "message": "RàZ Options",
+    "description": "The button text for the reset options button"
+  },
+  "optionsResetConfirmation": {
+    "message": "Cela réinitialisera toutes les options par défaut et ne pourra pas être annulé, veuillez confirmer.",
+    "description": "The confirmation message for resetting the options"
+  },
+  "optionsClearButtonPositionLabel": {
+    "message": "Effacer la position du bouton",
+    "description": "Label for the clear button position option"
+  },
+  "optionsClearButtonPositionLeftLabel": {
+    "message": "Côté gauche",
+    "description": "Label for the left side radio button"
+  },
+  "optionsClearButtonPositionRightLabel": {
+    "message": "Côté droit",
+    "description": "Label for the right side radio button"
   },
   "optionsTheme": {
     "message": "Thème",
@@ -163,7 +187,11 @@
   },
   "customizeThemeLabelText": {
     "message": "Texte",
-    "description": "Label for the dowmload bar's text"
+    "description": "Label for the download bar's text"
+  },
+  "customizeThemeLabelComplete": {
+    "message": "Complète",
+    "description": "Label for progress's background when the download is complete"
   },
   "customizeThemeLabelError": {
     "message": "Erreur",
@@ -174,6 +202,10 @@
   },
   "optionsShowDownloadInfo": {
     "message": "Afficher les informations du téléchargement"
+  },
+  "optionsFontSize": {
+    "message": "Taille de police de base",
+    "description": "The label for the base font size field"
   },
   "optionsAutoHidePanelTitle": {
     "message": "Masquage automatique",
@@ -229,8 +261,16 @@
     "description": "Title of the completion sound section"
   },
   "optionsPlaySound": {
-    "message": "Joue un son quand un téléchargement est terminé",
+    "message": "Joue un son lorsque un téléchargement est terminé",
     "description": "Play completion sound checkbox label"
+  },
+  "optionsPlaySoundDownloadDurationBeforeText": {
+    "message": "Joue un son lorsque le téléchargement dure plus de",
+    "description": "Text before the play sound download duration input"
+  },
+  "optionsPlaySoundDownloadDurationAfterText": {
+    "message": "secondes",
+    "description": "Text after the play sound download duration input"
   },
   "optionsCustomSoundNote": {
     "message": "Optionnel : vous pouvez choisir un de vos fichiers sonores (1Mo MAX)",
@@ -267,5 +307,9 @@
   "optionsClearFailedLabel": {
     "message": "Le bouton Effacer efface également les téléchargement en échec",
     "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
+  },
+  "optionsClearAfterOpeningLabel": {
+    "message": "Effacer les téléchargements après les avoir ouverts",
+    "description": "Label for the checkbox to enable clearing downloads after opening them"
   }
 }
