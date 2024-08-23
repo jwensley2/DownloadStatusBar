@@ -36,7 +36,7 @@
     "message": "Url"
   },
   "tooltipReferrerHeading": {
-    "message": "Referrer"
+    "message": "Référent"
   },
   "tooltipReferrerNone": {
     "message": "Aucun",
@@ -65,11 +65,11 @@
     "message": "Prévisualisation"
   },
   "tooltipShowInExplorer": {
-    "message": "Afficher dans l'explorateur de fichiers",
+    "message": "Afficher dans l’explorateur de fichiers",
     "description": "Show Folder in Windows."
   },
   "tooltipRevealInFinder": {
-    "message": "Afficher dans l'application Finder",
+    "message": "Afficher dans l’application Finder",
     "description": "Show Folder in Mac."
   },
   "tooltipShowInFolder": {
@@ -93,9 +93,33 @@
     "message": "Effacer le téléchargement",
     "description": "Clear the download info on bar and delete download file."
   },
+  "optionsPageTitle": {
+    "message": "Options - WX Download Status Bar",
+    "description": "The title for the options page"
+  },
   "optionsDisplayPanelTitle": {
     "message": "Options",
     "description": "Title of the display options panel."
+  },
+  "optionsResetButton": {
+    "message": "Réinitialiser les options",
+    "description": "The button text for the reset options button"
+  },
+  "optionsResetConfirmation": {
+    "message": "Toutes les options seront réinitialisées à leur valeur par défaut sans possibilité d’être annulé, veuillez confirmer !",
+    "description": "The confirmation message for resetting the options"
+  },
+  "optionsClearButtonPositionLabel": {
+    "message": "Effacer la position du bouton",
+    "description": "Label for the clear button position option"
+  },
+  "optionsClearButtonPositionLeftLabel": {
+    "message": "Côté gauche",
+    "description": "Label for the left side radio button"
+  },
+  "optionsClearButtonPositionRightLabel": {
+    "message": "Côté droit",
+    "description": "Label for the right side radio button"
   },
   "optionsTheme": {
     "message": "Thème",
@@ -134,7 +158,7 @@
     "description": "Label for the dowmload bar's background"
   },
   "customizeThemeLabelBackgroundHover": {
-    "message": "Survol de l'arrière-plan",
+    "message": "Survol de l’arrière-plan",
     "description": "Label for the dowmload bar's menu background when mouse hover"
   },
   "customizeThemeLabelButton": {
@@ -163,7 +187,11 @@
   },
   "customizeThemeLabelText": {
     "message": "Texte",
-    "description": "Label for the dowmload bar's text"
+    "description": "Label for the download bar's text"
+  },
+  "customizeThemeLabelComplete": {
+    "message": "Terminé",
+    "description": "Label for progress's background when the download is complete"
   },
   "customizeThemeLabelError": {
     "message": "Erreur",
@@ -174,6 +202,10 @@
   },
   "optionsShowDownloadInfo": {
     "message": "Afficher les informations du téléchargement"
+  },
+  "optionsFontSize": {
+    "message": "Taille de police par défaut",
+    "description": "The label for the base font size field"
   },
   "optionsAutoHidePanelTitle": {
     "message": "Masquage automatique",
@@ -186,7 +218,7 @@
     "message": "Types de fichiers à masquer"
   },
   "optionsAutoHideOptional": {
-    "message": "Optionnel. Si rien n'est sélectionné, tous les types de fichiers seront automatiquement masqués."
+    "message": "Optionnel. Si rien n’est sélectionné, tous les fichiers seront masqués quelque soit leur type."
   },
   "optionsAutoHideSecondsInputBeforeText": {
     "message": "Masquer après",
@@ -215,7 +247,7 @@
     "description": "Title of the auto hiding options panel"
   },
   "optionsIgnoreFilesDescription": {
-    "message": "Ces types de fichiers n'apparaîtront pas dans la barre"
+    "message": "Ces types de fichiers n’apparaîtront pas dans la barre"
   },
   "optionsIgnoreFileTypes": {
     "message": "Types de fichiers à ignorer"
@@ -229,11 +261,19 @@
     "description": "Title of the completion sound section"
   },
   "optionsPlaySound": {
-    "message": "Joue un son quand un téléchargement est terminé",
+    "message": "Joue un son lorsque un téléchargement est terminé",
     "description": "Play completion sound checkbox label"
   },
+  "optionsPlaySoundDownloadDurationBeforeText": {
+    "message": "Joue un son lorsque le téléchargement dure plus de :",
+    "description": "Text before the play sound download duration input"
+  },
+  "optionsPlaySoundDownloadDurationAfterText": {
+    "message": "secondes",
+    "description": "Text after the play sound download duration input"
+  },
   "optionsCustomSoundNote": {
-    "message": "Optionnel : vous pouvez choisir un de vos fichiers sonores (1Mo MAX)",
+    "message": "Optionnel : vous pouvez choisir votre propre fichier sonore (1Mo MAX)",
     "description": "Message about choosing a custom sound"
   },
   "optionsCustomSoundPlaceholder": {
@@ -257,7 +297,7 @@
     "description": "Title of the history section"
   },
   "optionsHistoryLabel": {
-    "message": "Effacer également l'historique de téléchargement du navigateur lors de l'effacement de la barre",
+    "message": "Effacer également l’historique de téléchargement du navigateur lors de l’effacement de la barre",
     "description": "Label for the checkbox to enable browser history clearing"
   },
   "optionsClearingTitle": {
@@ -267,5 +307,9 @@
   "optionsClearFailedLabel": {
     "message": "Le bouton Effacer efface également les téléchargement en échec",
     "description": "Label for the checkbox to enable clearing failed downloads with the clear button"
+  },
+  "optionsClearAfterOpeningLabel": {
+    "message": "Effacer les téléchargements après les avoir ouverts",
+    "description": "Label for the checkbox to enable clearing downloads after opening them"
   }
 }
